@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/display_snackbar"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logo_spred"
+                android:layout_marginTop="20dp"/>
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/intro_signIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:padding="10dp"
+                fancy:fb_text="@string/sigin"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                style="@style/SubmitButton"/>
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/intro_signUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                fancy:fb_text="@string/sigup"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                style="@style/SubmitButton"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="ou"/>
+
+            <TextView
+                android:id="@+id/intro_skip"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/without"
+                android:textSize="14dp"
+                android:textStyle="bold"/>
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/help"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_margin="30dp"
+        android:textStyle="italic"
+        android:textSize="12dp"/>
+</RelativeLayout>

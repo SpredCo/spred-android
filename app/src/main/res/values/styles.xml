@@ -1,0 +1,31 @@
+<resources
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/navbar_background</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="EditText">
+        <item name="met_floatingLabel">normal</item>
+        <item name="met_primaryColor">@color/editText_line</item>
+    </style>
+
+    <style name="SubmitButton">
+    <item name="fb_borderWidth">2dp</item>
+    <item name="fb_defaultColor">@color/background_submit</item>
+    <item name="fb_focusColor">#8cc9f8</item>
+    <item name="fb_borderColor">#fff</item>
+    <item name="fb_radius">0dp</item>
+    <item name="fb_textColor">#000</item>
+
+    </style>
+
+    <color name="navbar_background">#116611</color>
+    </resources>

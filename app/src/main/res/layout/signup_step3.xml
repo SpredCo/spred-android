@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/display_snackbar"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_spred"
+            android:layout_marginTop="20dp"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/signup_step3_pseudo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signup_step3_pseudo"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            app:met_floatingLabel="highlight"
+            app:met_singleLineEllipsis="true"
+            style="@style/EditText"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/signup_step3_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            fancy:fb_text="@string/signup_step3_submit"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            style="@style/SubmitButton"/>
+
+    </LinearLayout>
+</RelativeLayout>

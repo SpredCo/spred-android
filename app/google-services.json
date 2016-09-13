@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "220029720276",
+    "project_id": "share-my-screen"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220029720276:android:d4ba16d1f277c403",
+        "android_client_info": {
+          "package_name": "com.eip.roucou_c.spred"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "220029720276-a8okmd49jv5ft5638smpvn58781gjc50.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eip.roucou_c.spred",
+            "certificate_hash": "5593A0F28BFB9DFDFB35EA972BC9ED807618E00A"
+          }
+        },
+        {
+          "client_id": "220029720276-i645qsqh7omqt5e46q6si9ue20875p0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC23nBPdR59SGODKyX5CqrVN0nsNDmZgqQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

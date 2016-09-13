@@ -1,0 +1,27 @@
+<resources>
+    <string name="facebook_app_id">565509136962999</string>
+    <string name="server_client_id">220029720276-a8okmd49jv5ft5638smpvn58781gjc50.apps.googleusercontent.com</string>
+
+    <string name="app_name">Spred</string>
+    <string name="sigin">J\'ai déjà un compte</string>
+    <string name="sigup">Je souhaite créer un compte</string>
+    <string name="without">Continuer sans être authentifié*</string>
+    <string name="help">*Une personne non authentifiée possède des fonctionnalités réduites</string>
+    <string name="signup_step1_email">Entrez votre adresse email</string>
+    <string name="signup_step1_prenom">Entrez votre prénom</string>
+    <string name="signup_step1_password">Entrez votre mot de passe</string>
+    <string name="signup_step1_submit">Inscription</string>
+    <string name="signup_step2_submit">Valider</string>
+    <string name="signup_step2_confirm_password">Confirmer votre mot de passe</string>
+    <string name="signup_step2_auto_connect">Connexion automatique</string>
+    <string name="signup_step3_pseudo">Votre pseudo</string>
+    <string name="signup_step1_nom">Entrez votre nom</string>
+    <string name="signup_step1_error_email">error</string>
+    <string name="empty_input">Veuillez remplir ce champs</string>
+    <string name="invalid_email">Email invalide</string>
+    <string name="signup_step3_submit">Valider</string>
+    <string name="signup_step2_confirm_password_error">Le mot de passe ne correspond pas</string>
+    <string name="signin_email">Votre adresse email</string>
+    <string name="signin_password">Votre mot de passe</string>
+    <string name="signin_submit">Connexion</string>
+</resources>

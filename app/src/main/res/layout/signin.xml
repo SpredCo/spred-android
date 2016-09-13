@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/display_snackbar"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_spred"
+            android:layout_marginTop="20dp"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/signin_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signin_email"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            app:met_floatingLabel="highlight"
+            app:met_singleLineEllipsis="true"
+            style="@style/EditText"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/signin_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signin_password"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            app:met_singleLineEllipsis="true"
+            app:met_minCharacters="4"
+            app:met_maxCharacters="20"
+            style="@style/EditText"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/signin_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            style="@style/SubmitButton"
+            app:fb_text="@string/signin_submit" />
+
+        <TextView
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="ou"/>
+
+
+        <!--<com.facebook.login.widget.LoginButton-->
+        <!--android:id="@+id/signin_facebook"-->
+        <!--android:layout_width="0.0dip"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginTop="30dp"-->
+        <!--android:layout_marginBottom="30dp"-->
+        <!--android:layout_weight="1.0"/>-->
+
+    </LinearLayout>
+</RelativeLayout>
