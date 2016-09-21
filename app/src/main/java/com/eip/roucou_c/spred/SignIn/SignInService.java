@@ -6,11 +6,13 @@ import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Errors.ApiError;
 import com.eip.roucou_c.spred.ISignInSignUpView;
+import com.eip.roucou_c.spred.Interceptor.AuthInterceptor;
 import com.eip.roucou_c.spred.MyService;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
 import com.eip.roucou_c.spred.SignUp.ISignUpView;
 import com.eip.roucou_c.spred.SignUp.SignUpPresenter;
 import com.eip.roucou_c.spred.SignUp.SignUpService;
+import com.facebook.login.LoginManager;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -75,6 +77,7 @@ public class SignInService extends MyService {
         TokenEntity tokenEntity = response.body();
 
         if (tokenEntity != null) {
+            AuthInterceptor.updateTokenExpire(tokenEntity);
             _manager._tokenManager.add(tokenEntity);
             _view.signinSuccess();
         }
@@ -123,16 +126,17 @@ public class SignInService extends MyService {
                     }
                     else {
                         ApiError apiError = new ApiError(response.errorBody(), response.code(), "signIn");
-                        if (Objects.equals(api, "google")) {
-                            if (apiError.get_httpCode() == 404) {
-                                signUpExternalApi(params, api);
+                        if (apiError.get_httpCode() == 404) {
+                            _view.changeStep("step2");
+                        }
+                        else if (apiError.get_httpCode() == 403) {
+                            _view.setError(apiError.get_target_message());
+                            if (Objects.equals(api, "facebook")) {
+                                LoginManager.getInstance().logOut();
                             }
+                        }
 
 //                            _signUpPresenter.onGoogleClicked(params.get("access_token"));
-                        }
-                        else if (Objects.equals(api, "facebook")) {
-//                            _signUpPresenter.onFacebookClicked(params.get("access_token"));
-                        }
                     }
                 }
 
@@ -146,7 +150,7 @@ public class SignInService extends MyService {
         }
     }
 
-    private void signUpExternalApi(HashMap<String, String> params, String api) {
+    public void signUpExternalApi(HashMap<String, String> params, String api) {
         Call call = null;
         switch (api) {
             case "facebook" :

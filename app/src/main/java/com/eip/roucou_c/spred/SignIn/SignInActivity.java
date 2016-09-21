@@ -2,6 +2,8 @@ package com.eip.roucou_c.spred.SignIn;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,6 +14,7 @@ import com.eip.roucou_c.spred.Home.HomeActivity;
 import com.eip.roucou_c.spred.IntroActivity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.Api.ApiLogin;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -31,15 +34,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private FancyButton _signin_step1_submit;
 
-    //    EditText signin_email = null;
-//    EditText signin_password = null;
-//
-//    ActionProcessButton signin_submitLogin = null;
-//    Button signin_signup = null;
-//
+    private String _token_facebook;
+    private String _token_google;
+    private String _step;
+    private String _pseudo;
+
     public SignInPresenter _signInPresenter;
     private Manager _manager;
     private ApiLogin _apiLogin;
+    private CoordinatorLayout _coordinatorLayout;
+    private FancyButton _signin_step2_submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +57,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
 
         changeStep("step1");
-//        this._signInPresenter.isLoginWithRefreshToken();
+        _apiLogin.launch();
 
+//        this._signInPresenter.isLoginWithRefreshToken();
     }
 
     @Override
@@ -69,6 +74,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.signin_step1_submit:
                 this._signInPresenter.onLoginClicked();
                 break;
+            case R.id.signin_step2_submit:
+                _pseudo = _signin_step2_pseudo.getText().toString();
+
+                this._signInPresenter.onSignUpClicked();
+                break;
+
             case R.id.signin_google:
                 _apiLogin.login("google");
                 break;
@@ -76,9 +87,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void changeStep(String step) {
+        _step = step;
         switch (step) {
             case "step1":
                 setContentView(R.layout.signin_step1);
+
+                LoginManager.getInstance().logOut();
+
+                _coordinatorLayout = (CoordinatorLayout) findViewById(R.id.display_snackbar);
 
                 _signin_step1_email = (MaterialEditText) findViewById(R.id.signin_step1_email);
                 _signin_step1_password = (MaterialEditText) findViewById(R.id.signin_step1_password);
@@ -98,8 +114,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 _signin_step2_pseudo = (MaterialEditText) findViewById(R.id.signin_step2_pseudo);
 
-                _signin_step1_submit = (FancyButton) findViewById(R.id.signin_step2_submit);
-                _signin_step1_submit.setOnClickListener(this);
+                _signin_step2_submit = (FancyButton) findViewById(R.id.signin_step2_submit);
+                _signin_step2_submit.setOnClickListener(this);
 
                 break;
         }
@@ -156,11 +172,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onFacebookClicked(String access_token_facebook) {
+        _token_facebook = access_token_facebook;
         _signInPresenter.onLoginFacebookClicked(access_token_facebook);
     }
 
     @Override
     public void onGoogleClicked(String token) {
+        _token_google = token;
         _signInPresenter.onLoginGoogleClicked(token);
     }
 
@@ -169,7 +187,43 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         return (AppCompatActivity) this;
     }
 
+    @Override
+    public void signUpSuccess() {
+        this.finish();
+        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void setErrorPseudo(int resId) {
+        _signin_step2_pseudo.setError(resId == 0 ? null : getString(resId));
+    }
+
+    @Override
+    public String getPseudo() {
+
+        return _pseudo;
+    }
+
+    @Override
+    public void setError(int resId) {
+        if (_coordinatorLayout != null) {
+            Snackbar snackbar = Snackbar
+                    .make(_coordinatorLayout, resId, Snackbar.LENGTH_LONG);
+
+            snackbar.show();
+        }
+    }
+
     public MaterialEditText get_signin_step1_password() {
         return _signin_step1_password;
+    }
+
+    public String get_token_facebook() {
+        return _token_facebook;
+    }
+
+    public String get_token_google() {
+        return _token_google;
     }
 }

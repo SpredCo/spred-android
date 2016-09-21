@@ -202,6 +202,9 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
                 _signup_step1_password = (MaterialEditText) findViewById(R.id.signup_step1_password);
 
                 _signup_step1_email.setOnFocusChangeListener(this);
+
+                _token_facebook = null;
+                _token_google = null;
 //                _signup_step1_email.setText("clement.roucour25@gmail.com");
 //                _signup_step1_nom.setText("Roucour");
 //                _signup_step1_prenom.setText("clement");
@@ -294,7 +297,12 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
                 changeStep("step1");
                 break;
             case "step3":
-                changeStep("step2");
+                if (_token_google != null && _token_facebook != null) {
+                    changeStep("step2");
+                }
+                else {
+                    changeStep("step1");
+                }
                 break;
         }
     }

@@ -23,4 +23,6 @@ public interface ISignInSignUpView {
     void signUpSuccess();
 
     void setErrorPseudo(int resId);
+
+    String getPseudo();
 }

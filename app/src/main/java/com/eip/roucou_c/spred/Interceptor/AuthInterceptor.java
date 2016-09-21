@@ -46,15 +46,13 @@ public class AuthInterceptor implements Interceptor {
 
     private static void setAuthorization(Request.Builder requestBuilder, TokenEntity tokenEntity) {
         if (tokenEntity == null || Objects.equals(tokenEntity.get_token_type(), "Basic")) {
-//            Log.d("basic", Credentials.basic(ServiceGeneratorApi.CLIENT, ServiceGeneratorApi.SECRET));
             requestBuilder.header("Authorization", Credentials.basic(ServiceGeneratorApi.CLIENT, ServiceGeneratorApi.SECRET));
         } else if (tokenEntity.get_access_token() != null && Objects.equals(tokenEntity.get_token_type(), "Bearer")){
             requestBuilder.header("Authorization", "Bearer " + tokenEntity.get_access_token());
-//            Log.d("token acces", tokenEntity.get_access_token());
         }
     }
 
-    private static void updateTokenExpire(TokenEntity tokenEntity) {
+    public static void updateTokenExpire(TokenEntity tokenEntity) {
         Date date = new Date();
         String expire_in = tokenEntity.get_expire_in();
         long expireToken = date.getTime() + (Long.parseLong(expire_in) * 1000);

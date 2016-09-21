@@ -33,6 +33,7 @@ public class ApiFacebook {
 
     public void init() {
         FacebookSdk.sdkInitialize(_context);
+
         AppEventsLogger.activateApp(_context);
     }
 

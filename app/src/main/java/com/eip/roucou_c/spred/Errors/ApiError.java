@@ -54,9 +54,11 @@ public class ApiError {
                 searchMessageBy403();
                 break;
             case 404:
+                searchMessageBy404();
                 break;
         }
     }
+
 
     private void searchMessageBy403() {
         switch (_code) {
@@ -67,6 +69,30 @@ public class ApiError {
                 break;
             default:
                 searchMessageBy400WithoutCode();
+                break;
+        }
+    }
+
+    private void searchMessageBy404() {
+        switch (_code) {
+            case 1:
+                break;
+            case 2:
+                searchMessageBy404Code2();
+                break;
+            default:
+//                searchMessageBy404WithoutCode();
+                break;
+        }
+    }
+
+    private void searchMessageBy404Code2() {
+        switch (_scope) {
+            case "signIn":
+                switch (_sub_code) {
+                    case 1:
+                        break;
+                }
                 break;
         }
     }
@@ -91,6 +117,14 @@ public class ApiError {
                     case 2:
                         _target = "pseudo";
                         _target_message = R.string.pseudo_already_use;
+                        break;
+                }
+                break;
+            case "signIn":
+                switch (_sub_code) {
+                    case 1:
+                        _target = "snackbar";
+                        _target_message = R.string.email_address_already_use_by_spred;
                         break;
                 }
                 break;

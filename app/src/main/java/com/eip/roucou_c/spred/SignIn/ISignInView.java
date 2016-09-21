@@ -23,4 +23,12 @@ public interface ISignInView extends ISignInSignUpView {
     LoginButton getSignInButtonFacebook();
 
     MaterialEditText get_signin_step1_password();
+
+    void setError(int resId);
+
+    void changeStep(String step);
+
+    String get_token_google();
+
+    String get_token_facebook();
 }

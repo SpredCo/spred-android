@@ -110,4 +110,29 @@ public class SignInPresenter{
         return true;
     }
 
+    private String getPseudo() {
+        String pseudo = this._view.getPseudo();
+
+        if (pseudo.isEmpty()) {
+            _view.setErrorPseudo(R.string.empty_input);
+            return null;
+        }
+        return pseudo;
+    }
+
+    public void onSignUpClicked() {
+        String token = _view.get_token_facebook() != null ? _view.get_token_facebook() : _view.get_token_google();
+
+        String pseudo = this.getPseudo();
+
+        if (token != null && pseudo != null) {
+
+            HashMap<String, String> params = new HashMap<>();
+
+            params.put("access_token", token);
+            params.put("pseudo", pseudo);
+
+            _signInService.signUpExternalApi(params, _view.get_token_facebook() != null ? "facebook" : "google");
+        }
+    }
 }

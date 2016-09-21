@@ -4,8 +4,10 @@ import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Errors.ApiError;
+import com.eip.roucou_c.spred.Interceptor.AuthInterceptor;
 import com.eip.roucou_c.spred.MyService;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
+import com.eip.roucou_c.spred.SignIn.SignInService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,11 +40,11 @@ public class SignUpService extends MyService {
 
         @Headers("Content-Type: application/json")
         @POST("users/facebook")
-        Call<TokenEntity> signUpFacebook(@Body Map<String, String> params);
+        Call<UserEntity> signUpFacebook(@Body Map<String, String> params);
 
         @Headers("Content-Type: application/json")
         @POST("users/google")
-        Call<TokenEntity> signUpGoogle(@Body Map<String, String> params);
+        Call<UserEntity> signUpGoogle(@Body Map<String, String> params);
     }
 
 //    private final SignInService _signInService;
@@ -52,6 +54,7 @@ public class SignUpService extends MyService {
         super(manager);
         this._view = view;
         this._api = ServiceGeneratorApi.createService(ISignUpService.class, "login", manager);
+//        _signInService = new SignInService(_view, _manager);
     }
 
     public void signUp(HashMap<String, String> userParams) {
@@ -96,15 +99,14 @@ public class SignUpService extends MyService {
         }
 
         if (call != null) {
-            call.enqueue(new Callback<TokenEntity>() {
+            call.enqueue(new Callback<UserEntity>() {
                 @Override
-                public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
+                public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
 
                     if (response.isSuccess()) {
-                        TokenEntity tokenEntity = response.body();
+                        UserEntity userEntity = response.body();
 
-                       if (tokenEntity != null) {
-                            _manager._tokenManager.add(tokenEntity);
+                       if (userEntity != null) {
                             _view.signUpSuccess();
                         }
                     }
@@ -117,7 +119,7 @@ public class SignUpService extends MyService {
                 }
 
                 @Override
-                public void onFailure(Call<TokenEntity> call, Throwable t) {
+                public void onFailure(Call<UserEntity> call, Throwable t) {
                 }
 
             });
