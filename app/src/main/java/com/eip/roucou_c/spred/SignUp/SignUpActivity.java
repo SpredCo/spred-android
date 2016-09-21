@@ -9,6 +9,7 @@ import android.view.View;
 import com.eip.roucou_c.spred.Api.ApiLogin;
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Home.HomeActivity;
+import com.eip.roucou_c.spred.IntroActivity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.SignIn.SignInActivity;
 import com.facebook.login.widget.LoginButton;
@@ -21,7 +22,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 /**
  * Created by roucou_c on 01/09/2016.
  */
-public final class SignUpActivity extends AppCompatActivity implements View.OnClickListener, ISignUpView {
+public final class SignUpActivity extends AppCompatActivity implements View.OnClickListener, ISignUpView, View.OnFocusChangeListener {
 
     private String _email;
     private String _prenom;
@@ -47,6 +48,7 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
     private ApiLogin _apiLogin;
     private String _token_facebook;
     private String _token_google;
+    private String _step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +65,10 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
+        clearError(_step);
+
         switch (v.getId()) {
             case R.id.signup_step1_submit:
-
-                clearError("step1");
 
                 _email = _signup_step1_email.getText().toString();
                 _password = _signup_step1_password.getText().toString();
@@ -77,11 +79,12 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
 
                 break;
             case R.id.signup_step2_submit:
+                _confirm_password = _signup_step2_confirm_password.getText().toString();
+
                 _signupPresenter.step2();
 
                 break;
             case R.id.signup_step3_submit:
-
                 _pseudo = _signup_step3_pseudo.getText().toString();
 
                 if (_token_facebook != null) {
@@ -105,7 +108,15 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
     private void clearError(String step) {
         switch (step) {
             case "step1":
-                setErrorEmail(0);
+                setErrorLastName(0);
+                setErrorFirstName(0);
+                setErrorPassword(0);
+                break;
+            case "step2":
+                setErrorConfirmPassword(0);
+                break;
+            case "step3":
+                setErrorPseudo(0);
                 break;
         }
     }
@@ -174,6 +185,7 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void changeStep(String step) {
+        _step = step;
         switch (step) {
             case "step1":
                 setContentView(R.layout.signup_step1);
@@ -189,10 +201,11 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
                 _signup_step1_prenom = (MaterialEditText) findViewById(R.id.signup_step1_prenom);
                 _signup_step1_password = (MaterialEditText) findViewById(R.id.signup_step1_password);
 
-                _signup_step1_email.setText("clement.roucour2@gmail.com");
-                _signup_step1_nom.setText("Roucour");
-                _signup_step1_prenom.setText("clement");
-                _signup_step1_password.setText("1234");
+                _signup_step1_email.setOnFocusChangeListener(this);
+//                _signup_step1_email.setText("clement.roucour25@gmail.com");
+//                _signup_step1_nom.setText("Roucour");
+//                _signup_step1_prenom.setText("clement");
+//                _signup_step1_password.setText("1234");
 
                 break;
             case "step2":
@@ -204,8 +217,6 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
                 _signup_step2_confirm_password = (MaterialEditText) findViewById(R.id.signup_step2_confirm_password);
 
                 _signup_step2_confirm_password.setText("1234");
-
-                _confirm_password = _signup_step2_confirm_password.getText().toString();
 
                 break;
             case "step3":
@@ -236,14 +247,12 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
     public void onFacebookClicked(String access_token_facebook) {
         _token_facebook = access_token_facebook;
         changeStep("step3");
-//        _signupPresenter.onFacebookClicked(access_token_facebook);
     }
 
     @Override
     public void onGoogleClicked(String token) {
         _token_google = token;
         changeStep("step3");
-//        _signupPresenter.onGoogleClicked(token);
     }
 
     @Override
@@ -255,5 +264,38 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
     @Override
     public AppCompatActivity getActivity() {
         return (AppCompatActivity) this;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (v.getId() == R.id.signup_step1_email) {
+            _email = _signup_step1_email.getText().toString();
+            _signupPresenter.checkEmail();
+        }
+    }
+
+    @Override
+    public MaterialEditText get_signup_step1_password() {
+        return _signup_step1_password;
+    }
+
+    @Override
+    public MaterialEditText get_signup_step1_email() {
+        return _signup_step1_email;
+    }
+
+    @Override
+    public void onBackPressed() {
+        switch (_step) {
+            case "step1":
+                super.onBackPressed();
+                break;
+            case "step2":
+                changeStep("step1");
+                break;
+            case "step3":
+                changeStep("step2");
+                break;
+        }
     }
 }

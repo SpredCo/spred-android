@@ -19,4 +19,8 @@ public interface ISignInSignUpView {
     void startActivityForResult(Intent intent, int requestCodeGoogle);
 
     AppCompatActivity getActivity();
+
+    void signUpSuccess();
+
+    void setErrorPseudo(int resId);
 }

@@ -1,6 +1,7 @@
 package com.eip.roucou_c.spred.SignUp;
 
 import com.eip.roucou_c.spred.ISignInSignUpView;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 /**
  * Created by cleme_000 on 27/02/2016.
@@ -29,9 +30,9 @@ public interface ISignUpView extends ISignInSignUpView{
 
     void setErrorConfirmPassword(int resId);
 
-    void setErrorPseudo(int resId);
-
     void changeStep(String step);
 
-    void signUpSuccess();
+    MaterialEditText get_signup_step1_password();
+
+    MaterialEditText get_signup_step1_email();
 }

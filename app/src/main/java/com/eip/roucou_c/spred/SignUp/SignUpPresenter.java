@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.R;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -103,7 +104,15 @@ public class SignUpPresenter {
             isError = true;
         }
 
-        if (isError == false) {
+        MaterialEditText materialEditTextPassword = _view.get_signup_step1_password();
+        if (!materialEditTextPassword.isCharactersCountValid()) {
+            _view.setErrorPassword(R.string.wrong_length_password);
+            isError = true;
+        }
+
+        MaterialEditText materialEditTextEmail = _view.get_signup_step1_email();
+
+        if (materialEditTextEmail.getError() == null && !isError) {
             _view.changeStep("step2");
         }
     }
@@ -172,6 +181,14 @@ public class SignUpPresenter {
             params.put("pseudo", pseudo);
 
             this._signUpService.signUpExternalApi(params, "facebook");
+        }
+    }
+
+    public void checkEmail() {
+        String email = _view.getEmail();
+
+        if (email != null && !email.isEmpty()) {
+            this._signUpService.checkEmail(email);
         }
     }
 }

@@ -65,7 +65,9 @@ public class ApiGoogle extends AsyncTask {
      */
     protected String fetchToken()throws IOException{
         try{
+
             AppCompatActivity activity = _view.getActivity();
+
             return GoogleAuthUtil.getToken(activity, mEmail, SCOPE);
         }catch(UserRecoverableAuthException userRecoverableException){
             _view.startActivityForResult(userRecoverableException.getIntent(), ApiLogin.REQUEST_AUTHORIZATION);

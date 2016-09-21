@@ -20,10 +20,10 @@
             android:layout_marginTop="20dp"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/signup_step3_pseudo"
+            android:id="@+id/signin_step2_pseudo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/signup_step3_pseudo"
+            android:hint="@string/signin_step2_pseudo"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="40dp"
@@ -32,11 +32,11 @@
             style="@style/EditText"/>
 
         <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/signup_step3_submit"
+            android:id="@+id/signin_step2_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            fancy:fb_text="@string/signup_step3_submit"
+            fancy:fb_text="@string/signin_step2_submit"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="40dp"

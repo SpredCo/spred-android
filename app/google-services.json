@@ -1,19 +1,50 @@
 {
   "project_info": {
-    "project_number": "220029720276",
-    "project_id": "share-my-screen"
+    "project_number": "490184747829",
+    "project_id": "firebase-spred"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:220029720276:android:d4ba16d1f277c403",
+        "mobilesdk_app_id": "1:490184747829:android:1571c6fb213c7fc1",
+        "android_client_info": {
+          "package_name": "eip.roucou_c"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490184747829-vissnkbsduquf2v78mj2bbh3e8htcrt0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA271mRe2Nj6GPrzTjr_Aocve7ANdkfOas"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490184747829:android:debea8f33f92d873",
         "android_client_info": {
           "package_name": "com.eip.roucou_c.spred"
         }
       },
       "oauth_client": [
         {
-          "client_id": "220029720276-a8okmd49jv5ft5638smpvn58781gjc50.apps.googleusercontent.com",
+          "client_id": "490184747829-tcil6aiue58q97k156oakaqju26vm25h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.eip.roucou_c.spred",
@@ -21,13 +52,13 @@
           }
         },
         {
-          "client_id": "220029720276-i645qsqh7omqt5e46q6si9ue20875p0t.apps.googleusercontent.com",
+          "client_id": "490184747829-vissnkbsduquf2v78mj2bbh3e8htcrt0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC23nBPdR59SGODKyX5CqrVN0nsNDmZgqQ"
+          "current_key": "AIzaSyA271mRe2Nj6GPrzTjr_Aocve7ANdkfOas"
         }
       ],
       "services": {

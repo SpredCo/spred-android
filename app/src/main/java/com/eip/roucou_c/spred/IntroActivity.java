@@ -34,10 +34,12 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.intro_signIn:
+                this.finish();
                 Intent intent = new Intent(IntroActivity.this, SignInActivity.class);
                 startActivity(intent);
                 break;
             case R.id.intro_signUp:
+                this.finish();
                 Intent intent2 = new Intent(IntroActivity.this, SignUpActivity.class);
                 startActivity(intent2);
                 break;

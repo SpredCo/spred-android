@@ -2,6 +2,7 @@ package com.eip.roucou_c.spred.SignIn;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.R;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,14 +25,25 @@ public class SignInPresenter{
         boolean isError = false;
         String email = _view.getEmail();
 
-        if (email.isEmpty()) {
-            _view.setErrorEmail(R.string.empty_input);
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            if (email.isEmpty()) {
+                _view.setErrorEmail(R.string.empty_input);
+            }
+            else {
+                _view.setErrorEmail(R.string.invalid_email);
+            }
             isError = true;
         }
 
         String password = _view.getPassword();
         if (password.isEmpty()) {
             _view.setErrorPassword(R.string.empty_input);
+            isError = true;
+        }
+
+        MaterialEditText materialEditTextPassword = _view.get_signin_step1_password();
+        if (!materialEditTextPassword.isCharactersCountValid()) {
+            _view.setErrorPassword(R.string.wrong_length_password);
             isError = true;
         }
 
@@ -58,7 +70,7 @@ public class SignInPresenter{
 
         params.put("access_token", access_token_google);
 
-//        this._signInService.signInExternalApi(params, "google");
+        this._signInService.signInExternalApi(params, "google");
     }
 
     public boolean isLoginWithRefreshToken() {

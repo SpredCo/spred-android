@@ -1,14 +1,21 @@
 package com.eip.roucou_c.spred.SignIn;
 
+import android.util.Log;
+
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
+import com.eip.roucou_c.spred.Errors.ApiError;
 import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.MyService;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
+import com.eip.roucou_c.spred.SignUp.ISignUpView;
+import com.eip.roucou_c.spred.SignUp.SignUpPresenter;
+import com.eip.roucou_c.spred.SignUp.SignUpService;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +43,15 @@ public class SignInService extends MyService {
         @Headers("Content-Type: application/json")
         @POST("oauth2/google-connect")
         Call<TokenEntity> signInGoogle(@Body Map<String, String> params);
+
+        @Headers("Content-Type: application/json")
+        @POST("users/facebook")
+        Call<TokenEntity> signUpFacebook(@Body Map<String, String> params);
+
+        @Headers("Content-Type: application/json")
+        @POST("users/google")
+        Call<TokenEntity> signUpGoogle(@Body Map<String, String> params);
+
 //
 //
 //        @Headers("Content-Type: application/json")
@@ -47,75 +63,13 @@ public class SignInService extends MyService {
 //
     }
     private final ISignInView _view;
+//    private final SignUpPresenter _signUpPresenter;
 //
     public SignInService(ISignInView view, Manager manager) {
         super(manager);
         this._view = view;
         this._api = ServiceGeneratorApi.createService(ISignInService.class, "login", manager);
     }
-//
-//
-//    // TODO immplementer le loginWithoutConnexion
-//    private void signInWithoutConnexion() {
-//        String email = this._view.getEmail();
-//        String password = this._view.getPassword();
-//
-//        ProfileEntity profileEntity = _manager._profileManager.selectByEmail(email);
-//
-//        if (profileEntity == null || !Objects.equals(profileEntity.get_password(), password)) {
-//            this._view.setErrorPassword(R.string.connexionOfflline_errorUsernameOrPassword);
-//            this._view.setProcessLoadingButton(0);
-//            return;
-//        }
-//
-////        if (profileEntity.get_refresh_token() == null) {
-////            // TODO : faire le test sur l'expiration du token refresh
-////            // impossible de se connecter en mote hors ligne
-////            return;
-////        }
-//
-//        TokenEntity tokenEntity = _manager._tokenManager.selectByProfileId(profileEntity.get_public_id());
-//
-//        if (tokenEntity == null) {
-//            this._view.setErrorPassword(R.id.connexionOfflline_error);
-//            this._view.setProcessLoadingButton(0);
-//            return;
-//        }
-////        this._tokenEntity = tokenEntity;
-//        _manager._globalManager.addGlobal("profile_public_id_connected", String.valueOf(tokenEntity.get_id()));
-//        _userEntity.refresh();
-//
-//        this._view.startRoomActivity();
-//    }
-//
-//    public void getProfileAfterSignIn(final String profilePassword, final TokenEntity tokenEntity) {
-//        _api = ServiceGeneratorApi.createService(ISignInService.class, "api", tokenEntity, _manager);
-//
-//        Call call = _api.getProfile();
-//        call.enqueue(new Callback<ProfileEntity>() {
-//            @Override
-//            public void onResponse(Call<ProfileEntity> call, Response<ProfileEntity> response) {
-//                ProfileEntity profileEntity = response.body();
-//
-//                _userEntity.addProfile(profileEntity);
-//                _userEntity._profileEntity.set_password(profilePassword);
-//                _userEntity.update_profileEntity();
-//
-//                _manager._globalManager.addGlobal("profile_public_id_connected", profileEntity.get_public_id());
-//
-//                tokenEntity.set_profile_public_id(profileEntity.get_public_id());
-//                _userEntity.addTokenEntity(tokenEntity);
-//
-//                _view.setProcessLoadingButton(100);
-//
-//                _view.startMainActivity();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ProfileEntity> call, Throwable t) {
-//            }
-//        });
-//    }
 
     protected void signInOnResponse(Response<TokenEntity> response){
         TokenEntity tokenEntity = response.body();
@@ -128,13 +82,16 @@ public class SignInService extends MyService {
 
     public void signIn(HashMap<String, String> userParams) {
         userParams.put("grant_type", "password");
-        userParams.put("scope", "read");
 
         Call call = _api.signIn(userParams);
         call.enqueue(new Callback<TokenEntity>() {
             @Override
             public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
-                signInOnResponse(response);
+                if (response.isSuccess()) {
+                    signInOnResponse(response);
+                }
+                else {
+                }
             }
 
             @Override
@@ -146,7 +103,7 @@ public class SignInService extends MyService {
         });
     }
 
-    public void signInExternalApi(HashMap<String, String> params, String api) {
+    public void signInExternalApi(final HashMap<String, String> params, final String api) {
         Call call = null;
         switch (api) {
             case "facebook" :
@@ -161,7 +118,22 @@ public class SignInService extends MyService {
             call.enqueue(new Callback<TokenEntity>() {
                 @Override
                 public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
-                    signInOnResponse(response);
+                    if (response.isSuccess()) {
+                        signInOnResponse(response);
+                    }
+                    else {
+                        ApiError apiError = new ApiError(response.errorBody(), response.code(), "signIn");
+                        if (Objects.equals(api, "google")) {
+                            if (apiError.get_httpCode() == 404) {
+                                signUpExternalApi(params, api);
+                            }
+
+//                            _signUpPresenter.onGoogleClicked(params.get("access_token"));
+                        }
+                        else if (Objects.equals(api, "facebook")) {
+//                            _signUpPresenter.onFacebookClicked(params.get("access_token"));
+                        }
+                    }
                 }
 
                 @Override
@@ -170,6 +142,46 @@ public class SignInService extends MyService {
     //                    signInWithoutConnexion();
     //                }
                 }
+            });
+        }
+    }
+
+    private void signUpExternalApi(HashMap<String, String> params, String api) {
+        Call call = null;
+        switch (api) {
+            case "facebook" :
+                call = _api.signUpFacebook(params);
+                break;
+            case "google" :
+                call = _api.signUpGoogle(params);
+                break;
+        }
+
+        if (call != null) {
+            call.enqueue(new Callback<TokenEntity>() {
+                @Override
+                public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
+
+                    if (response.isSuccess()) {
+                        TokenEntity tokenEntity = response.body();
+
+                        if (tokenEntity != null) {
+                            _manager._tokenManager.add(tokenEntity);
+                            _view.signUpSuccess();
+                        }
+                    }
+                    else {
+                        ApiError apiError = new ApiError(response.errorBody(), response.code(), "signUp");
+                        if (Objects.equals(apiError.get_target(), "pseudo")) {
+                            _view.setErrorPseudo(apiError.get_target_message());
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TokenEntity> call, Throwable t) {
+                }
+
             });
         }
     }

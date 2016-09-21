@@ -1,6 +1,6 @@
 <resources>
     <string name="facebook_app_id">565509136962999</string>
-    <string name="server_client_id">220029720276-a8okmd49jv5ft5638smpvn58781gjc50.apps.googleusercontent.com</string>
+    <string name="server_client_id">490184747829-tcil6aiue58q97k156oakaqju26vm25h.apps.googleusercontent.com</string>
 
     <string name="app_name">Spred</string>
     <string name="sigin">J\'ai déjà un compte</string>
@@ -24,4 +24,10 @@
     <string name="signin_email">Votre adresse email</string>
     <string name="signin_password">Votre mot de passe</string>
     <string name="signin_submit">Connexion</string>
+    <string name="email_address_already_use">Adresse email déjà utilisé</string>
+    <string name="wrong_length_password">Entre 4-20 caractères</string>
+    <string name="pseudo_already_use">Ce pseudo est déjè utilisé</string>
+    <string name="wrong_email_or_password">Adresse email ou mot de passe incorrect</string>
+    <string name="signin_step2_pseudo">Votre pseudo</string>
+    <string name="signin_step2_submit">Valider</string>
 </resources>

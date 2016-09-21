@@ -14,13 +14,13 @@
         android:gravity="center_horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
             android:src="@drawable/logo_spred"
             android:layout_marginTop="20dp"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/signin_email"
+            android:id="@+id/signin_step1_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/signin_email"
@@ -32,7 +32,7 @@
             style="@style/EditText"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/signin_password"
+            android:id="@+id/signin_step1_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/signin_password"
@@ -41,10 +41,11 @@
             app:met_singleLineEllipsis="true"
             app:met_minCharacters="4"
             app:met_maxCharacters="20"
+            android:inputType="textPassword"
             style="@style/EditText"/>
 
         <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/signin_submit"
+            android:id="@+id/signin_step1_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -61,14 +62,30 @@
             android:hint="ou"/>
 
 
-        <!--<com.facebook.login.widget.LoginButton-->
-        <!--android:id="@+id/signin_facebook"-->
-        <!--android:layout_width="0.0dip"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_vertical"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:layout_marginBottom="30dp"-->
-        <!--android:layout_weight="1.0"/>-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/signin_facebook"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:layout_weight="1.0"/>
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/signin_google"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1.0" />
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>
