@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Home.HomeActivity;
+import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.IntroActivity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.Api.ApiLogin;
@@ -26,7 +27,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
  * Created by roucou-c on 07/12/15.
  */
 
-public class SignInActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, ISignInView {
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, ISignInView, ISignInSignUpView {
 
     private MaterialEditText _signin_step1_email;
     private MaterialEditText _signin_step1_password;
@@ -51,7 +52,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         _manager = Manager.getInstance(getApplicationContext());
 
-        this._signInPresenter = new SignInPresenter(this, _manager);
+        this._signInPresenter = new SignInPresenter(this, this, _manager);
 
         _apiLogin = new ApiLogin(getApplicationContext(), this);
 
@@ -152,7 +153,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void signinSuccess() {
+    public void signInSuccess() {
         this.finish();
         Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
         startActivity(intent);
@@ -185,13 +186,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public AppCompatActivity getActivity() {
         return (AppCompatActivity) this;
-    }
-
-    @Override
-    public void signUpSuccess() {
-        this.finish();
-        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-        startActivity(intent);
     }
 
     @Override

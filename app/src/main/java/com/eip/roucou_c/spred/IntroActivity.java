@@ -26,18 +26,18 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.intro);
-
         _manager = Manager.getInstance(getApplicationContext());
+        autoLogin();
+
+        // todo optimiser le autologin pour afficher directement la home
+        
+        setContentView(R.layout.intro);
 
         _intro_signUp = (FancyButton) findViewById(R.id.intro_signUp);
         _intro_signUp.setOnClickListener(this);
 
         _intro_signIn = (FancyButton) findViewById(R.id.intro_signIn);
         _intro_signIn.setOnClickListener(this);
-
-
-//        autoLogin();
     }
 
     private void autoLogin() {
@@ -47,6 +47,7 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
             if (isValidAccessToken(tokenEntity.get_expire_access_token())) {
                 this.finish();
                 Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             } else {
 

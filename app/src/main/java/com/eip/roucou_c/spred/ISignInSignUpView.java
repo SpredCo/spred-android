@@ -20,9 +20,15 @@ public interface ISignInSignUpView {
 
     AppCompatActivity getActivity();
 
-    void signUpSuccess();
-
     void setErrorPseudo(int resId);
 
     String getPseudo();
+
+    void changeStep(String step);
+
+    String get_token_google();
+
+    String get_token_facebook();
+
+    void signInSuccess();
 }

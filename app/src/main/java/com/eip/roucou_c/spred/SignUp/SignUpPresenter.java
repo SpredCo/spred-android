@@ -3,6 +3,7 @@ package com.eip.roucou_c.spred.SignUp;
 import android.util.Log;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -17,9 +18,9 @@ public class SignUpPresenter {
     private ISignUpView _view;
     protected SignUpService _signUpService;
 
-    public SignUpPresenter(ISignUpView view, Manager manager) {
+    public SignUpPresenter(ISignUpView view, ISignInSignUpView iSignInSignUpView, Manager manager) {
         this._view = view;
-        this._signUpService = new SignUpService(view, manager);
+        this._signUpService = new SignUpService(view, iSignInSignUpView, manager);
     }
 
     public void onSignUpClicked() {

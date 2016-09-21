@@ -8,7 +8,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 /**
  * Created by cleme_000 on 23/02/2016.
  */
-public interface ISignInView extends ISignInSignUpView {
+public interface ISignInView {
 
     String getEmail();
 
@@ -18,17 +18,7 @@ public interface ISignInView extends ISignInSignUpView {
 
     void setErrorPassword(int resId);
 
-    void signinSuccess();
-
-    LoginButton getSignInButtonFacebook();
-
     MaterialEditText get_signin_step1_password();
 
     void setError(int resId);
-
-    void changeStep(String step);
-
-    String get_token_google();
-
-    String get_token_facebook();
 }

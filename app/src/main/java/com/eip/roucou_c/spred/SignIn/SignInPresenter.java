@@ -1,7 +1,9 @@
 package com.eip.roucou_c.spred.SignIn;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.SignUp.SignUpService;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Date;
@@ -14,11 +16,19 @@ import java.util.HashMap;
 public class SignInPresenter{
 
     private ISignInView _view;
+    private ISignInSignUpView _iSignInSignUpView;
     private SignInService _signInService;
+    private SignUpService _signUpService;
 
-    public SignInPresenter(ISignInView view, Manager manager) {
+
+    public SignInPresenter(ISignInView view, ISignInSignUpView iSignInSignUpView, Manager manager) {
         this._view = view;
-        this._signInService = new SignInService(view, manager);
+        _iSignInSignUpView = iSignInSignUpView;
+        this._signInService = new SignInService(view, iSignInSignUpView, manager);
+
+        if (view != null) {
+            this._signUpService = new SignUpService(null, iSignInSignUpView, manager);
+        }
     }
 
     public void onLoginClicked() {
@@ -111,17 +121,18 @@ public class SignInPresenter{
     }
 
     private String getPseudo() {
-        String pseudo = this._view.getPseudo();
+        String pseudo = this._iSignInSignUpView.getPseudo();
 
         if (pseudo.isEmpty()) {
-            _view.setErrorPseudo(R.string.empty_input);
+            _iSignInSignUpView.setErrorPseudo(R.string.empty_input);
             return null;
         }
         return pseudo;
     }
 
     public void onSignUpClicked() {
-        String token = _view.get_token_facebook() != null ? _view.get_token_facebook() : _view.get_token_google();
+        String token = _iSignInSignUpView.get_token_facebook() != null ? _iSignInSignUpView.get_token_facebook() : _iSignInSignUpView.get_token_google();
+        String token_type = _iSignInSignUpView.get_token_facebook() != null ? "facebook" : "google";
 
         String pseudo = this.getPseudo();
 
@@ -132,7 +143,7 @@ public class SignInPresenter{
             params.put("access_token", token);
             params.put("pseudo", pseudo);
 
-            _signInService.signUpExternalApi(params, _view.get_token_facebook() != null ? "facebook" : "google");
+            _signInService.signUpExternalApi(params, token_type);
         }
     }
 }

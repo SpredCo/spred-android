@@ -18,8 +18,6 @@ public interface ISignUpView extends ISignInSignUpView{
 
     String getConfirmPassword();
 
-    String getPseudo();
-
     void setErrorEmail(int resId);
 
     void setErrorPassword(int resId);
@@ -29,8 +27,6 @@ public interface ISignUpView extends ISignInSignUpView{
     void setErrorFirstName(int resId);
 
     void setErrorConfirmPassword(int resId);
-
-    void changeStep(String step);
 
     MaterialEditText get_signup_step1_password();
 

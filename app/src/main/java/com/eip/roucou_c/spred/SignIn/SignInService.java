@@ -1,7 +1,5 @@
 package com.eip.roucou_c.spred.SignIn;
 
-import android.util.Log;
-
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Errors.ApiError;
@@ -9,7 +7,6 @@ import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.Interceptor.AuthInterceptor;
 import com.eip.roucou_c.spred.MyService;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
-import com.eip.roucou_c.spred.SignUp.ISignUpView;
 import com.eip.roucou_c.spred.SignUp.SignUpPresenter;
 import com.eip.roucou_c.spred.SignUp.SignUpService;
 import com.facebook.login.LoginManager;
@@ -65,12 +62,18 @@ public class SignInService extends MyService {
 //
     }
     private final ISignInView _view;
-//    private final SignUpPresenter _signUpPresenter;
-//
-    public SignInService(ISignInView view, Manager manager) {
+    private final ISignInSignUpView _iSignInSignUpView;
+//    private SignUpService _signUpService;
+
+    public SignInService(ISignInView view, ISignInSignUpView iSignInSignUpView, Manager manager) {
         super(manager);
         this._view = view;
+        _iSignInSignUpView = iSignInSignUpView;
         this._api = ServiceGeneratorApi.createService(ISignInService.class, "login", manager);
+
+//        if (_view != null) {
+//            _signUpService = new SignUpService(null, _iSignInSignUpView, _manager);
+//        }
     }
 
     protected void signInOnResponse(Response<TokenEntity> response){
@@ -79,7 +82,7 @@ public class SignInService extends MyService {
         if (tokenEntity != null) {
             AuthInterceptor.updateTokenExpire(tokenEntity);
             _manager._tokenManager.add(tokenEntity);
-            _view.signinSuccess();
+            _iSignInSignUpView.signInSuccess();
         }
     }
 
@@ -127,7 +130,7 @@ public class SignInService extends MyService {
                     else {
                         ApiError apiError = new ApiError(response.errorBody(), response.code(), "signIn");
                         if (apiError.get_httpCode() == 404) {
-                            _view.changeStep("step2");
+                            _iSignInSignUpView.changeStep("step2");
                         }
                         else if (apiError.get_httpCode() == 403) {
                             _view.setError(apiError.get_target_message());
@@ -135,8 +138,6 @@ public class SignInService extends MyService {
                                 LoginManager.getInstance().logOut();
                             }
                         }
-
-//                            _signUpPresenter.onGoogleClicked(params.get("access_token"));
                     }
                 }
 
@@ -150,7 +151,7 @@ public class SignInService extends MyService {
         }
     }
 
-    public void signUpExternalApi(HashMap<String, String> params, String api) {
+    public void signUpExternalApi(final HashMap<String, String> params, final String api) {
         Call call = null;
         switch (api) {
             case "facebook" :
@@ -167,17 +168,12 @@ public class SignInService extends MyService {
                 public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
 
                     if (response.isSuccess()) {
-                        TokenEntity tokenEntity = response.body();
-
-                        if (tokenEntity != null) {
-                            _manager._tokenManager.add(tokenEntity);
-                            _view.signUpSuccess();
-                        }
+                        signInExternalApi(params, api);
                     }
                     else {
                         ApiError apiError = new ApiError(response.errorBody(), response.code(), "signUp");
                         if (Objects.equals(apiError.get_target(), "pseudo")) {
-                            _view.setErrorPseudo(apiError.get_target_message());
+                            _iSignInSignUpView.setErrorPseudo(apiError.get_target_message());
                         }
                     }
                 }

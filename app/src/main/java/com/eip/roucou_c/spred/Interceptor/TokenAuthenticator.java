@@ -30,7 +30,7 @@ public class TokenAuthenticator implements Authenticator {
         if (_tokenEntity == null) {
             throw new IOException();
         }
-        SignInService signInService = new SignInService(null, _manager);
+        SignInService signInService = new SignInService(null, null, _manager);
 
         //TODO faire le test sur l'expiration du refresh Token
 

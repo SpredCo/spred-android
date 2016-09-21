@@ -3,15 +3,13 @@ package com.eip.roucou_c.spred.SignUp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.eip.roucou_c.spred.Api.ApiLogin;
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Home.HomeActivity;
-import com.eip.roucou_c.spred.IntroActivity;
+import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.R;
-import com.eip.roucou_c.spred.SignIn.SignInActivity;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.SignInButton;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -22,7 +20,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 /**
  * Created by roucou_c on 01/09/2016.
  */
-public final class SignUpActivity extends AppCompatActivity implements View.OnClickListener, ISignUpView, View.OnFocusChangeListener {
+public final class SignUpActivity extends AppCompatActivity implements View.OnClickListener, ISignUpView, View.OnFocusChangeListener, ISignInSignUpView {
 
     private String _email;
     private String _prenom;
@@ -57,7 +55,7 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
         _apiLogin = new ApiLogin(getApplicationContext(), this);
 
         _manager = Manager.getInstance(getApplicationContext());
-        _signupPresenter = new SignUpPresenter(this, _manager);
+        _signupPresenter = new SignUpPresenter(this, this, _manager);
 
         changeStep("step1");
         _apiLogin.launch();
@@ -205,10 +203,10 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
 
                 _token_facebook = null;
                 _token_google = null;
-//                _signup_step1_email.setText("clement.roucour25@gmail.com");
-//                _signup_step1_nom.setText("Roucour");
-//                _signup_step1_prenom.setText("clement");
-//                _signup_step1_password.setText("1234");
+                _signup_step1_email.setText("clement.roucour@gmail.com");
+                _signup_step1_nom.setText("Roucour");
+                _signup_step1_prenom.setText("clément");
+                _signup_step1_password.setText("1234");
 
                 break;
             case "step2":
@@ -235,6 +233,20 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    public String get_token_google() {
+        return _token_google;
+    }
+
+    @Override
+    public String get_token_facebook() {
+        return _token_facebook;
+    }
+
+    @Override
+    public void signInSuccess() {
+        signUpSuccess();
+    }
+
     public void signUpSuccess() {
         this.finish();
         Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);

@@ -4,6 +4,7 @@ import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Errors.ApiError;
+import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.Interceptor.AuthInterceptor;
 import com.eip.roucou_c.spred.MyService;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
@@ -47,17 +48,21 @@ public class SignUpService extends MyService {
         Call<UserEntity> signUpGoogle(@Body Map<String, String> params);
     }
 
-//    private final SignInService _signInService;
+    private SignInService _signInService;
     private final ISignUpView _view;
+    private final ISignInSignUpView _iSignInSignUpView;
 
-    public SignUpService(ISignUpView view, Manager manager) {
+    public SignUpService(ISignUpView view, ISignInSignUpView iSignInSignUpView, Manager manager) {
         super(manager);
         this._view = view;
+        _iSignInSignUpView = iSignInSignUpView;
         this._api = ServiceGeneratorApi.createService(ISignUpService.class, "login", manager);
-//        _signInService = new SignInService(_view, _manager);
+        if (_view != null) {
+            _signInService = new SignInService(null, iSignInSignUpView, _manager);
+        }
     }
 
-    public void signUp(HashMap<String, String> userParams) {
+    public void signUp(final HashMap<String, String> userParams) {
 
         Call call = _api.signUp(userParams);
         call.enqueue(new Callback<UserEntity>() {
@@ -68,7 +73,12 @@ public class SignUpService extends MyService {
                     UserEntity userEntity = response.body();
 
                     if (userEntity != null) {
-                        _view.signUpSuccess();
+                        userParams.put("username", userParams.get("email"));
+                        userParams.remove("email");
+                        userParams.remove("pseudo");
+                        userParams.remove("first_name");
+                        userParams.remove("last_name");
+                        _signInService.signIn(userParams);
                     }
                 }
                 else {
@@ -87,7 +97,7 @@ public class SignUpService extends MyService {
         });
     }
 
-    public void signUpExternalApi(HashMap<String, String> params, String api) {
+    public void signUpExternalApi(final HashMap<String, String> params, final String api) {
         Call call = null;
         switch (api) {
             case "facebook" :
@@ -107,7 +117,7 @@ public class SignUpService extends MyService {
                         UserEntity userEntity = response.body();
 
                        if (userEntity != null) {
-                            _view.signUpSuccess();
+                           _signInService.signInExternalApi(params, api);
                         }
                     }
                     else {
