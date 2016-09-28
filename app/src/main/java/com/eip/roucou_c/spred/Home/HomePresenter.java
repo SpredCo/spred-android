@@ -17,8 +17,4 @@ public class HomePresenter {
         _manager = manager;
         this._homeService = new HomeService(view, manager);
     }
-
-    public void deleteUser() {
-        _homeService.deleteUser();
-    }
 }

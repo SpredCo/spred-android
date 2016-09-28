@@ -47,6 +47,7 @@ public class ApiError {
                 searchMessageBy400();
                 break;
             case 401:
+                searchMessageBy401();
                 break;
             case 402:
                 break;
@@ -59,6 +60,26 @@ public class ApiError {
         }
     }
 
+    private void searchMessageBy401() {
+        switch (_code) {
+            case 1:
+                break;
+            case 2:
+                searchMessageBy401Code2();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void searchMessageBy401Code2() {
+        switch (_scope) {
+            case "pathProfile":
+                _target = "fail";
+                _target_message = R.string.pathProfile_external_api_login;
+                break;
+        }
+    }
 
     private void searchMessageBy403() {
         switch (_code) {
@@ -128,6 +149,10 @@ public class ApiError {
                         break;
                 }
                 break;
+            case "pathProfile":
+                _target = "fail";
+                _target_message = R.string.pathProfile_external_api_login;
+                break;
         }
     }
 
@@ -137,6 +162,7 @@ public class ApiError {
                 searchMessageBy400Code1();
                 break;
             case 2:
+                searchMessageBy400Code2();
                 break;
         }
 

@@ -18,6 +18,8 @@ public class UserEntity {
     protected String _first_name = null;
     @SerializedName("last_name")
     protected String _last_name = null;
+    @SerializedName("pseudo")
+    protected String _pseudo = null;
     @SerializedName("picture_url")
     protected String _picture_url = null;
     @SerializedName("following")
@@ -53,6 +55,14 @@ public class UserEntity {
 
     public void set_last_name(String _last_name) {
         this._last_name = _last_name;
+    }
+
+    public String get_pseudo() {
+        return _pseudo;
+    }
+
+    public void set_pseudo(String _pseudo) {
+        this._pseudo = _pseudo;
     }
 
     public String get_picture_url() {

@@ -36,7 +36,7 @@ public class SignUpService extends MyService {
         Call<UserEntity> signUp(@Body Map<String, String> params);
 
         @Headers("Content-Type: application/json")
-        @GET("users/email/check/{email}")
+        @GET("users/check/email/{email}")
         Call<String> checkEmail(@Path("email") String email);
 
         @Headers("Content-Type: application/json")

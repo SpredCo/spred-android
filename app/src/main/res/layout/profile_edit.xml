@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_alignParentTop="true"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/navbar_background"/>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/coordinatorLayout">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/profile_edit_lastname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/profile_edit_lastname"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="40dp"
+                    app:met_floatingLabel="highlight"
+                    app:met_singleLineEllipsis="true"
+                    style="@style/EditText"/>
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/profile_edit_firstname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/profile_edit_firstname"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    app:met_floatingLabel="highlight"
+                    app:met_singleLineEllipsis="true"
+                    style="@style/EditText"/>
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/profile_edit_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/profile_edit_email"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    app:met_floatingLabel="highlight"
+                    app:met_singleLineEllipsis="true"
+                    style="@style/EditText"/>
+
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/profile_edit_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="40dp"
+                    style="@style/SubmitButton"
+                    app:fb_text="@string/profile_edit_submit" />
+            </LinearLayout>
+        </ScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

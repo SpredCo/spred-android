@@ -12,6 +12,14 @@
 
     </style>
 
+    <style name="AppThemeActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/navbar_background</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
     <style name="EditText">
         <item name="met_floatingLabel">normal</item>
         <item name="met_primaryColor">@color/editText_line</item>
@@ -27,5 +35,5 @@
 
     </style>
 
-    <color name="navbar_background">#116611</color>
+    <color name="navbar_background">#55AA55</color>
     </resources>

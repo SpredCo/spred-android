@@ -31,4 +31,11 @@
     <string name="signin_step2_pseudo">Votre pseudo</string>
     <string name="signin_step2_submit">Valider</string>
     <string name="email_address_already_use_by_spred">Votre adresse mail est déjà utilisé par un compte Spred</string>
+    <string name="profile_edit_lastname">Votre nom</string>
+    <string name="profile_edit_firstname">Votre prénom</string>
+    <string name="profile_edit_email">Votre email</string>
+    <string name="profile_edit_submit">Enregistrer</string>
+    <string name="pathProfile_external_api_login">Impossible de modifier l\'adresse email avec une connexion externe (google, facebook, ...)</string>
+    <string name="profile_edit_title">Modification de votre profil</string>
+    <string name="profile_title">Votre profil</string>
 </resources>

@@ -22,39 +22,12 @@ public class HomeService extends MyService{
     private final IHomeView _view;
 
     public interface IHomeService {
-        @Headers("Content-Type: application/json")
-        @DELETE("users/me")
-        Call<String> deleteUser();
+
 
     }
     public HomeService(IHomeView view, Manager manager) {
         super(manager);
         this._view = view;
         this._api = ServiceGeneratorApi.createService(IHomeService.class, "api", manager);
-    }
-
-    public void deleteUser() {
-        Call call = _api.deleteUser();
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
-                if (response.isSuccess()) {
-                    _view.userDeleted();
-                }
-                else {
-//                    ApiError apiError = new ApiError(response.errorBody(), response.code(), "signUp");
-//                    if (Objects.equals(apiError.get_target(), "pseudo")) {
-////                        _view.setErrorPseudo(apiError.get_target_message());
-//                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-//                _view.setProcessLoadingButton(-1);
-            }
-        });
     }
 }

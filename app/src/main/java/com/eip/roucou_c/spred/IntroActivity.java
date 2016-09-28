@@ -30,7 +30,7 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
         autoLogin();
 
         // todo optimiser le autologin pour afficher directement la home
-        
+
         setContentView(R.layout.intro);
 
         _intro_signUp = (FancyButton) findViewById(R.id.intro_signUp);
@@ -42,6 +42,11 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
 
     private void autoLogin() {
         TokenEntity tokenEntity = _manager._tokenManager.select();
+
+//        this.finish();
+//        Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//        startActivity(intent);
 
         if (tokenEntity != null) {
             if (isValidAccessToken(tokenEntity.get_expire_access_token())) {

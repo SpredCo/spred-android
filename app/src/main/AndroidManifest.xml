@@ -21,6 +21,7 @@
         <activity android:name=".SignUp.SignUpActivity"/>
         <activity android:name=".Home.HomeActivity"/>
         <activity android:name=".SignIn.SignInActivity"/>
+        <activity android:name=".Profile.ProfileActivity" />
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=

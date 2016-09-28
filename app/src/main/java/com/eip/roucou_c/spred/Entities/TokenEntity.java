@@ -18,37 +18,6 @@ public class TokenEntity{
     @SerializedName("token_type")
     private String _token_type = null;
 
-    @SerializedName("code")
-    int code = 0;
-    @SerializedName("sub_code")
-    int sub_code = 0;
-    @SerializedName("message")
-    String message = null;
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public int getSub_code() {
-        return sub_code;
-    }
-
-    public void setSub_code(int sub_code) {
-        this.sub_code = sub_code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     private transient long _id = 0;
     private transient String _expire_access_token = null;
     private transient String _expire_refresh_token = null;

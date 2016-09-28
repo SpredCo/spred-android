@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_account2"
+        android:title="">
+        <menu>
+            <group android:checkableBehavior="all">
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/navigation_account"
+        android:title="Menu">
+        <menu>
+            <group android:checkableBehavior="all"
+                android:id="@+id/menu_navigation">
+                <item
+                    android:id="@+id/navigation_profile"
+                    android:title="Profil"/>
+                <item
+                    android:id="@+id/navigation_inbox"
+                    android:title="Messagerie"/>
+                <item
+                    android:id="@+id/navigation_settings"
+                    android:title="Paramètres"/>
+                <item
+                    android:id="@+id/navigation_logout"
+                    android:title="Déconnexion"/>
+            </group>
+        </menu>
+    </item>
+</menu>
