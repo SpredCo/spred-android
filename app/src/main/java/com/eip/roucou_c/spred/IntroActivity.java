@@ -50,7 +50,6 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
 
         if (tokenEntity != null) {
             if (isValidAccessToken(tokenEntity.get_expire_access_token())) {
-                this.finish();
                 Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);

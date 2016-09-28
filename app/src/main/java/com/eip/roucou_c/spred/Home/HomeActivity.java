@@ -169,6 +169,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
                 intent.putExtra("listType", "invitation");
                 startActivity(intent);
                 break;
+            case R.id.navigation_logout:
+                _manager._tokenManager.delete();
+                this.finish();
+                break;
         }
         return true;
     }

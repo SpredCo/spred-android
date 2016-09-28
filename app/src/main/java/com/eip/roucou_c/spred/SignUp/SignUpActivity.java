@@ -1,5 +1,6 @@
 package com.eip.roucou_c.spred.SignUp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -52,13 +53,18 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _apiLogin = new ApiLogin(getApplicationContext(), this);
+        final Context context = getApplicationContext();
+        final ISignInSignUpView iSignInSignUpView = this;
+
+        _apiLogin = new ApiLogin(context, iSignInSignUpView);
+
+        _apiLogin.launch();
 
         _manager = Manager.getInstance(getApplicationContext());
         _signupPresenter = new SignUpPresenter(this, this, _manager);
 
+
         changeStep("step1");
-        _apiLogin.launch();
     }
 
     @Override
@@ -96,6 +102,9 @@ public final class SignUpActivity extends AppCompatActivity implements View.OnCl
                 }
                 break;
             case R.id.signin_google:
+                _apiLogin = new ApiLogin(getApplicationContext(), this);
+
+                _apiLogin.launch();
                 _apiLogin.login("google");
                 break;
         }

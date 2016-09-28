@@ -87,4 +87,8 @@ public class TokenDAO{
     public void reset(long id) {
         _mDb.execSQL("delete from "+ TABLE_NAME);
     }
+
+    public void delete() {
+        _mDb.delete(TABLE_NAME,null,null);
+    }
 }

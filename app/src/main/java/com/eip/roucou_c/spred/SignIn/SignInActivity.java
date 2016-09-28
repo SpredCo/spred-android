@@ -55,10 +55,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         this._signInPresenter = new SignInPresenter(this, this, _manager);
 
         _apiLogin = new ApiLogin(getApplicationContext(), this);
+        _apiLogin.launch();
 
 
         changeStep("step1");
-        _apiLogin.launch();
 
 //        this._signInPresenter.isLoginWithRefreshToken();
     }
@@ -82,6 +82,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.signin_google:
+                _apiLogin = new ApiLogin(getApplicationContext(), this);
+                _apiLogin.launch();
                 _apiLogin.login("google");
                 break;
         }
