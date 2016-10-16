@@ -38,4 +38,8 @@
     <string name="pathProfile_external_api_login">Impossible de modifier l\'adresse email avec une connexion externe (google, facebook, ...)</string>
     <string name="profile_edit_title">Modification de votre profil</string>
     <string name="profile_title">Votre profil</string>
+    <string name="inbox_create_conversation_submit">Envoyer</string>
+    <string name="inbox_create_conversation_empty_receiver">Veuillez ajouter des destinataires</string>
+    <string name="inbox_create_conversation_empty_subject">Veuillez saisir un objet</string>
+    <string name="inbox_create_conversation_empty_message">Veuillez saisir votre message</string>
 </resources>

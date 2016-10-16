@@ -6,10 +6,11 @@ package com.eip.roucou_c.spred.Entities;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class UserEntity {
-
+public class UserEntity implements Serializable{
     @SerializedName("id")
     protected String _id = null;
     @SerializedName("email")
@@ -18,12 +19,33 @@ public class UserEntity {
     protected String _first_name = null;
     @SerializedName("last_name")
     protected String _last_name = null;
-    @SerializedName("pseudo")
-    protected String _pseudo = null;
     @SerializedName("picture_url")
     protected String _picture_url = null;
-    @SerializedName("following")
-    protected List<UserEntity> _following = null;
+    @SerializedName("created_at")
+    protected String _created_at = null;
+    @SerializedName("updated_at")
+    protected String _updated_at = null;
+
+    @SerializedName("pseudo")
+    private String _pseudo = null;
+//    @SerializedName("following") // todo gere le probleme de serialzage du foolowing
+    private List<String> _following = new ArrayList<>();
+
+    public String get_pseudo() {
+        return _pseudo;
+    }
+
+    public void set_pseudo(String _pseudo) {
+        this._pseudo = _pseudo;
+    }
+
+    public List<String> get_following() {
+        return _following;
+    }
+
+    public void set_following(List<String> _following) {
+        this._following = _following;
+    }
 
     public String get_id() {
         return _id;
@@ -57,14 +79,6 @@ public class UserEntity {
         this._last_name = _last_name;
     }
 
-    public String get_pseudo() {
-        return _pseudo;
-    }
-
-    public void set_pseudo(String _pseudo) {
-        this._pseudo = _pseudo;
-    }
-
     public String get_picture_url() {
         return _picture_url;
     }
@@ -73,11 +87,19 @@ public class UserEntity {
         this._picture_url = _picture_url;
     }
 
-    public List<UserEntity> get_following() {
-        return _following;
+    public String get_created_at() {
+        return _created_at;
     }
 
-    public void set_following(List<UserEntity> _following) {
-        this._following = _following;
+    public void set_created_at(String _created_at) {
+        this._created_at = _created_at;
+    }
+
+    public String get_updated_at() {
+        return _updated_at;
+    }
+
+    public void set_updated_at(String _updated_at) {
+        this._updated_at = _updated_at;
     }
 }

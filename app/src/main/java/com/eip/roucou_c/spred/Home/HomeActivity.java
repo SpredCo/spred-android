@@ -15,9 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.TokenEntity;
+import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
+import com.eip.roucou_c.spred.Inbox.InboxActivity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.google.gson.Gson;
 
 /**
  * Created by roucou_c on 09/09/2016.
@@ -35,6 +39,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     private TabLayout.Tab _abo;
     private DrawerLayout _drawerLayout;
     private ActionBarDrawerToggle _drawerToggle;
+    private UserEntity _userEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
 
         _manager = Manager.getInstance(getApplicationContext());
 
-        _homePresenter = new HomePresenter(this, _manager);
+        TokenEntity tokenEntity = _manager._tokenManager.select();
+        _homePresenter = new HomePresenter(this, _manager, tokenEntity);
 
         _tabLayout = (TabLayout) findViewById(R.id.tabs);
         _viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -64,6 +70,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
 
         _viewPager.addOnPageChangeListener(this);
         _tabLayout.setOnTabSelectedListener(this);
+
+        _homePresenter.getProfile();
     }
 
     @Override
@@ -166,8 +174,12 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         switch (item.getItemId()) {
             case R.id.navigation_profile:
                 Intent intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("listType", "invitation");
                 startActivity(intent);
+                break;
+            case R.id.navigation_inbox:
+                Intent intent2 = new Intent(this, InboxActivity.class);
+                intent2.putExtra("userEntity", _userEntity);
+                startActivity(intent2);
                 break;
             case R.id.navigation_logout:
                 _manager._tokenManager.delete();
@@ -175,5 +187,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void setProfile(UserEntity userEntity) {
+        _userEntity = userEntity;
     }
 }

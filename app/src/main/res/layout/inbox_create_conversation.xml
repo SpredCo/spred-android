@@ -1,0 +1,79 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/navbar_background"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inbox_create_conversation_receiver_textInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint=" "
+            >
+
+            <com.eip.roucou_c.spred.Inbox.Tokenfield.ContactsCompletionView
+                android:id="@+id/inbox_create_conversation_receiver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="19sp"
+                android:layout_marginTop="10dp"
+                android:nextFocusDown="@+id/subject"
+                android:inputType="text|textNoSuggestions|textMultiLine"
+                android:focusableInTouchMode="true"
+                android:hint="Ajouter des destinateurs"
+
+                />
+        </android.support.design.widget.TextInputLayout>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="19sp"
+            android:id="@+id/inbox_create_conversation_subject"
+            android:background="@drawable/test"
+            android:layout_margin="5dp"
+            android:hint="Sujet de la nouvelle conversation"
+            android:layout_marginTop="15dp"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_margin="5dp"
+            android:textSize="19sp"
+            android:hint="Votre message"
+            android:id="@+id/inbox_create_conversation_message"
+            android:gravity="top"
+            android:inputType="text|textNoSuggestions|textMultiLine"
+            android:layout_marginTop="15dp"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/inbox_create_conversation_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            style="@style/SubmitButton"
+            app:fb_text="@string/inbox_create_conversation_submit" />
+
+    </LinearLayout>
+</LinearLayout>
