@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.ConversationEntity;
+import com.eip.roucou_c.spred.Entities.MessageEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.MyService;
@@ -33,6 +34,7 @@ public class InboxService extends MyService{
     private final IInboxView _view;
 
 
+
     public interface IHomeService {
         @Headers("Content-Type: application/json")
         @GET("inbox/conversation")
@@ -49,6 +51,10 @@ public class InboxService extends MyService{
         @Headers("Content-Type: application/json")
         @GET("users/search/pseudo/{partial_pseudo}")
         Call<List<UserEntity>> searchPartialPseudo(@Path("partial_pseudo") String partial_pseudo);
+
+        @Headers("Content-Type: application/json")
+        @POST("inbox/conversation/{conversation_id}/message")
+        Call<MessageEntity> replyConversation(@Body HashMap<String, Object> params, @Path("conversation_id") String conversation_id);
     }
     public InboxService(IInboxView view, Manager manager, TokenEntity tokenEntity) {
         super(manager);
@@ -144,6 +150,31 @@ public class InboxService extends MyService{
 
             }
         });
+    }
+
+    public void replyConversation(HashMap<String, Object> params, String conversation_id) {
+        Call<MessageEntity> call = _api.replyConversation(params, conversation_id);
+        call.enqueue(new Callback<MessageEntity>() {
+            @Override
+            public void onResponse(Call<MessageEntity> call, Response<MessageEntity> response) {
+                if (response.isSuccess()) {
+                    MessageEntity messageEntity = response.body();
+
+                    _view.addMessageToConversation(messageEntity);
+                    _view.clearMessageConversation();
+
+//                    _view.setCurrentConversation(conversationEntity);
+//                    _view.changeStep("inbox_conversation");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MessageEntity> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.eip.roucou_c.spred.Inbox;
 
 import com.eip.roucou_c.spred.Entities.ConversationEntity;
+import com.eip.roucou_c.spred.Entities.MessageEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface IInboxView {
 
     void populateSearchPseudo(List<UserEntity> userEntities);
 
-    String getMessageCreateConversation();
+    String getMessageConversation();
 
     String getSubjectCreateConversation();
 
@@ -34,4 +35,8 @@ public interface IInboxView {
     void conversationSelected(String conversation_id);
 
     void setCurrentConversation(ConversationEntity conversationEntity);
+
+    void addMessageToConversation(MessageEntity messageEntity);
+
+    void clearMessageConversation();
 }

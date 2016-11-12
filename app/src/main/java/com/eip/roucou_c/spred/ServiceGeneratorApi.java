@@ -16,13 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGeneratorApi {
 
-//    /**
-//     * Heroku
-//     */
-//    public static final String API_BASE_URL = "http://sharemyscreen-api.herokuapp.com";
-//    public final static String CLIENT = "sqE1rRxhjPbmwgWc";
-//    public final static String SECRET = "TvfCZag4DRfqLsa8anETSxRNWstscQQK";
-
     /**
      * DEDIEE
      */

@@ -21,6 +21,7 @@ import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
 import com.eip.roucou_c.spred.Inbox.InboxActivity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.SpredCast.SpredCastActivity;
 import com.google.gson.Gson;
 
 /**
@@ -97,7 +98,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     public boolean onOptionsItemSelected(MenuItem item) {
         if (_drawerToggle.onOptionsItemSelected(item)) {
             return true;
-
         }
         else {
 
@@ -130,6 +130,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
             navigation.setNavigationItemSelectedListener(this);
         }
     }
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -176,10 +177,15 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
                 Intent intent = new Intent(this, ProfileActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.navigation_inbox:
-                Intent intent2 = new Intent(this, InboxActivity.class);
+            case R.id.navigation_spredcast:
+                Intent intent2 = new Intent(this, SpredCastActivity.class);
                 intent2.putExtra("userEntity", _userEntity);
                 startActivity(intent2);
+                break;
+            case R.id.navigation_inbox:
+                Intent intent3 = new Intent(this, InboxActivity.class);
+                intent3.putExtra("userEntity", _userEntity);
+                startActivity(intent3);
                 break;
             case R.id.navigation_logout:
                 _manager._tokenManager.delete();

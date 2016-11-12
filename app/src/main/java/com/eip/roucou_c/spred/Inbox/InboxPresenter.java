@@ -58,7 +58,7 @@ public class InboxPresenter {
 
         List<UserEntity> receiverUserEntities = _view.getReceiverCreateConversation();
 
-        String message = _view.getMessageCreateConversation();
+        String message = _view.getMessageConversation();
         String subject = _view.getSubjectCreateConversation();
 
         boolean isError = false;
@@ -94,5 +94,17 @@ public class InboxPresenter {
 
     public void conversationSelected(String conversation_id) {
         _inboxService.conversationSelected(conversation_id);
+    }
+
+    public void replyConversation(String conversation_id) {
+        String message = _view.getMessageConversation();
+
+        if (!message.isEmpty()) {
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("content", message);
+
+            _inboxService.replyConversation(params, conversation_id);
+        }
     }
 }

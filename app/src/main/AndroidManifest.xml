@@ -23,6 +23,7 @@
         <activity android:name=".SignIn.SignInActivity"/>
         <activity android:name=".Profile.ProfileActivity" />
         <activity android:name=".Inbox.InboxActivity" />
+        <activity android:name=".SpredCast.SpredCastActivity" />
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=

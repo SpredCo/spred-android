@@ -13,14 +13,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.eip.roucou_c.spred.Entities.MessageEntity;
 import com.eip.roucou_c.spred.Inbox.Tokenfield.ContactsCompletionView;
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.ConversationEntity;
@@ -66,6 +69,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     private Button _inbox_conversation_send;
     private EditText _inbox_conversation_message;
     private ConversationEntity _currentConversation = null;
+    private RecyclerView _inbox_conversation_recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,14 +114,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
 
                 _inbox_floatActionButton = (FloatingActionButton) findViewById(R.id.inbox_floatActionButton);
                 _inbox_floatActionButton.setOnClickListener(this);
-//                ConversationEntity conversationEntity = new ConversationEntity();
-//                conversationEntity.set_last_msg("premier message negro");
-//                conversationEntity.set_object("toto");
-//
-//                List<ConversationEntity> conversationEntities = new ArrayList<>();
-//                conversationEntities.add(conversationEntity);
 
-//                populateInbox(conversationEntities);
                 _inboxPresenter.getInbox();
                 break;
             case "inbox_conversation":
@@ -130,12 +127,20 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
 
                 _inbox_conversation_message = (EditText) findViewById(R.id._inbox_conversation_message);
 
-                RecyclerView recyclerView = (RecyclerView) findViewById(R.id._inbox_conversation_list_view_messages);
+                _inbox_conversation_recyclerView = (RecyclerView) findViewById(R.id._inbox_conversation_list_view_messages);
 
                 RecyclerView.LayoutManager mLayoutManager2 = new LinearLayoutManager(this);
-                recyclerView.setLayoutManager(mLayoutManager2);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setAdapter(_adapterInboxMessage);
+                _inbox_conversation_recyclerView.setLayoutManager(mLayoutManager2);
+                _inbox_conversation_recyclerView.setItemAnimator(new DefaultItemAnimator());
+                _inbox_conversation_recyclerView.setAdapter(_adapterInboxMessage);
+
+                _inbox_conversation_recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                    @Override
+                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                        _inbox_conversation_recyclerView.scrollToPosition(_inbox_conversation_recyclerView.getAdapter().getItemCount()-1);
+                    }
+                });
+                _inbox_conversation_recyclerView.scrollToPosition(_inbox_conversation_recyclerView.getAdapter().getItemCount()-1);
                 break;
             case "inbox_create_conversation":
                 setContentView(R.layout.inbox_create_conversation);
@@ -207,7 +212,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
                 if (Objects.equals(_curentStep, "inbox")) {
                     this.finish();
                 }
-                else if (Objects.equals(_curentStep, "inbox_message")) {
+                else if (Objects.equals(_curentStep, "inbox_conversation")) {
                     changeStep("inbox");
                 }
                 else if (Objects.equals(_curentStep, "inbox_create_conversation")) {
@@ -264,6 +269,9 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
             case R.id.inbox_create_conversation_submit:
                 _inboxPresenter.createConversation();
                 break;
+            case R.id._inbox_conversation_send:
+                _inboxPresenter.replyConversation(_currentConversation.get_id());
+                break;
         }
     }
 
@@ -292,8 +300,16 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     }
 
     @Override
-    public String getMessageCreateConversation() {
-        return _inbox_create_conversation_message.getText().toString();
+    public String getMessageConversation() {
+        String message = null;
+
+        if (_curentStep == "inbox_create_conversation") {
+            message = _inbox_create_conversation_message.getText().toString();
+        }
+        else if (_curentStep == "inbox_conversation") {
+            message = _inbox_conversation_message.getText().toString();
+        }
+        return message;
     }
 
     @Override
@@ -332,5 +348,20 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     @Override
     public void setCurrentConversation(ConversationEntity conversationEntity) {
         _currentConversation = conversationEntity;
+    }
+
+    @Override
+    public void addMessageToConversation(MessageEntity messageEntity) {
+        List<MessageEntity> messageEntities = _currentConversation.get_msg();
+        messageEntities.add(messageEntity);
+        _currentConversation.set_msg(messageEntities);
+        _adapterInboxMessage.notifyDataSetChanged();
+
+        _inbox_conversation_recyclerView.scrollToPosition(_inbox_conversation_recyclerView.getAdapter().getItemCount()-1);
+    }
+
+    @Override
+    public void clearMessageConversation() {
+        _inbox_conversation_message.setText(null);
     }
 }

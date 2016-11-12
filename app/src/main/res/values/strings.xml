@@ -42,4 +42,11 @@
     <string name="inbox_create_conversation_empty_receiver">Veuillez ajouter des destinataires</string>
     <string name="inbox_create_conversation_empty_subject">Veuillez saisir un objet</string>
     <string name="inbox_create_conversation_empty_message">Veuillez saisir votre message</string>
+    <string name="spredcast_name">Nom du spredCast</string>
+    <string name="spredcast_description">Description</string>
+    <string name="spredcast_nameError">Veuillez saisir un nom</string>
+    <string name="spredcast_descriptionError">Veuillez saisir une description</string>
+    <string name="spredcast_membersError">Veuillez ajouter des membres</string>
+    <string name="spredcast_dateError">Veuillez sasir une date valide</string>
+    <string name="spredcast_timeError">Veuillez saisir une heure valide</string>
 </resources>

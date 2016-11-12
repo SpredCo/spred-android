@@ -28,7 +28,7 @@ public class UserEntity implements Serializable{
 
     @SerializedName("pseudo")
     private String _pseudo = null;
-//    @SerializedName("following") // todo gere le probleme de serialzage du foolowing
+    @SerializedName("following") // todo gere le probleme de serialzage du foolowing
     private List<String> _following = new ArrayList<>();
 
     public String get_pseudo() {
