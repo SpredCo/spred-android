@@ -10,11 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
@@ -22,7 +23,8 @@ import com.eip.roucou_c.spred.Inbox.InboxActivity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.SpredCast.SpredCastActivity;
-import com.google.gson.Gson;
+
+import java.util.List;
 
 /**
  * Created by roucou_c on 09/09/2016.
@@ -30,17 +32,19 @@ import com.google.gson.Gson;
 public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
     private Manager _manager;
-    private HomePresenter _homePresenter;
+    public HomePresenter _homePresenter;
 
     private Toolbar _toolbar;
     private TabLayout _tabLayout;
     private ViewPager _viewPager;
     private ViewPagerAdapter _viewPagerAdapter;
-    private TabLayout.Tab _home;
+    private TabLayout.Tab _spredcast_live;
+    private TabLayout.Tab _spredcast_come;
     private TabLayout.Tab _abo;
     private DrawerLayout _drawerLayout;
     private ActionBarDrawerToggle _drawerToggle;
     private UserEntity _userEntity;
+    private NavigationView _navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +59,21 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         _tabLayout = (TabLayout) findViewById(R.id.tabs);
         _viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
         _viewPager.setAdapter(_viewPagerAdapter);
 
-        _home = _tabLayout.newTab();
+        _spredcast_live = _tabLayout.newTab();
+        _spredcast_come = _tabLayout.newTab();
         _abo = _tabLayout.newTab();
 
-        _tabLayout.addTab(_home, 0);
-        _tabLayout.addTab(_abo, 1);
+        _tabLayout.addTab(_spredcast_live, 0);
+        _tabLayout.addTab(_spredcast_come, 1);
+        _tabLayout.addTab(_abo, 2);
 
         _viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(_tabLayout));
 
-        _home.setIcon(R.drawable.ic_home_white_24dp);
+        _spredcast_live.setIcon(R.drawable.ic_home_white_24dp);
+        _spredcast_come.setIcon(R.drawable.ic_home_black_24dp);
         _abo.setIcon(R.drawable.ic_subscriptions_black_24dp);
 
         _viewPager.addOnPageChangeListener(this);
@@ -124,10 +131,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
 
             _drawerLayout.addDrawerListener(_drawerToggle);
 
-            NavigationView navigation = (NavigationView) findViewById(R.id.navigation_view);
-            navigation.inflateHeaderView(R.layout.navigation_header);
-            navigation.inflateMenu(R.menu.navigation);
-            navigation.setNavigationItemSelectedListener(this);
+            _navigation = (NavigationView) findViewById(R.id.navigation_view);
+            _navigation.inflateHeaderView(R.layout.navigation_header);
+            _navigation.inflateMenu(R.menu.navigation);
+            _navigation.setNavigationItemSelectedListener(this);
         }
     }
 
@@ -140,11 +147,18 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     public void onPageSelected(int position) {
         switch (position){
             case 0:
-                _home.setIcon(R.drawable.ic_home_white_24dp);
+                _spredcast_live.setIcon(R.drawable.ic_home_white_24dp);
+                _spredcast_come.setIcon(R.drawable.ic_home_black_24dp);
                 _abo.setIcon(R.drawable.ic_subscriptions_black_24dp);
                 break;
             case 1:
-                _home.setIcon(R.drawable.ic_home_black_24dp);
+                _spredcast_live.setIcon(R.drawable.ic_home_black_24dp);
+                _spredcast_come.setIcon(R.drawable.ic_home_white_24dp);
+                _abo.setIcon(R.drawable.ic_subscriptions_black_24dp);
+                break;
+            case 2:
+                _spredcast_live.setIcon(R.drawable.ic_home_black_24dp);
+                _spredcast_come.setIcon(R.drawable.ic_home_black_24dp);
                 _abo.setIcon(R.drawable.ic_subscriptions_white_24dp);
                 break;
         }
@@ -198,5 +212,34 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     @Override
     public void setProfile(UserEntity userEntity) {
         _userEntity = userEntity;
+
+        TextView name = (TextView) _navigation.getHeaderView(0).findViewById(R.id.user_profile_name);
+        TextView pseudo = (TextView) _navigation.getHeaderView(0).findViewById(R.id.user_profile_pseudo);
+
+        if (name != null && pseudo != null) {
+            name.setText(userEntity.get_last_name() + " " + userEntity.get_first_name());
+            pseudo.setText("@" + userEntity.get_pseudo());
+        }
+    }
+
+    @Override
+    public void populateSpredCasts(List<SpredCastEntity> spredCastEntities) {
+        ViewPagerAdapter.TabFragment fragment = _viewPagerAdapter.getItem(0);
+        fragment.populateSpredCasts(spredCastEntities);
+        fragment = _viewPagerAdapter.getItem(1);
+        fragment.populateSpredCasts(spredCastEntities);
+    }
+
+    @Override
+    public void cancelRefresh() {
+        ViewPagerAdapter.TabFragment fragment = _viewPagerAdapter.getItem(0);
+        fragment.cancelRefresh();
+        fragment = _viewPagerAdapter.getItem(1);
+        fragment.cancelRefresh();
+    }
+
+    @Override
+    public void getSpredCasts() {
+        _homePresenter.getSpredCasts();
     }
 }

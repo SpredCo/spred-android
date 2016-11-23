@@ -30,6 +30,9 @@ public class ConversationEntity {
     @SerializedName("msg")
     private List<MessageEntity> _msg;
 
+    @SerializedName("read")
+    private boolean _read;
+
     public String get_id() {
         return _id;
     }
@@ -84,5 +87,13 @@ public class ConversationEntity {
 
     public void set_msg(List<MessageEntity> _msg) {
         this._msg = _msg;
+    }
+
+    public boolean is_read() {
+        return _read;
+    }
+
+    public void set_read(boolean _read) {
+        this._read = _read;
     }
 }

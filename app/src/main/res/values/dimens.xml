@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="cornerRadius">40dp</dimen>
+
+    <dimen name="input_marginTop">25dp</dimen>
 </resources>

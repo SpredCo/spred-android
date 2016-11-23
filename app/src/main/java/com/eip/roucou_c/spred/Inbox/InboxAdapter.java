@@ -1,9 +1,12 @@
 package com.eip.roucou_c.spred.Inbox;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,13 +33,16 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         public TextView _object;
         public TextView _members_pseudo;
         private String _conversation_id;
+        public ImageView _read;
 
         public MyViewHolder(View view) {
             super(view);
             _object = (TextView) view.findViewById(R.id.inbox_object);
             _members_pseudo = (TextView) view.findViewById(R.id.inbox_members_pseudo);
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.inbox_conversation);
-            relativeLayout.setOnClickListener(this);
+            _read = (ImageView) view.findViewById(R.id.inbox_read);
+
+            LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.inbox_conversation);
+            linearLayout.setOnClickListener(this);
         }
 
         @Override
@@ -78,6 +84,10 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         String members_pseudo = "";
         for (UserEntity userEntity: conversationEntity.get_members()){
             members_pseudo += "@"+userEntity.get_pseudo()+", ";
+        }
+
+        if (conversationEntity.is_read()) {
+            holder._read.setImageResource(R.drawable.ic_drafts_black_24dp);
         }
         members_pseudo = members_pseudo.substring(0, members_pseudo.length()-2);
 

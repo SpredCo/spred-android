@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/coordinatorLayout">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:orientation="vertical">
+
+                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+                <!--android:id="@+id/spredcast_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/spredcast_name"-->
+                <!--android:layout_marginTop="@dimen/input_marginTop"-->
+                <!--app:met_floatingLabel="highlight"-->
+                <!--app:met_singleLineEllipsis="true"-->
+                <!--style="@style/EditText"/>-->
+
+                <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+                <!--android:id="@+id/spredcast_description"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/spredcast_description"-->
+                <!--app:met_floatingLabel="highlight"-->
+                <!--style="@style/EditText"/>-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/input_marginTop"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:id="@+id/spredcast_date_textInputLayout"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:hint="Date"-->
+                <!--android:layout_weight="1.0">-->
+
+                <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/spredcast_date"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="27.nov.2015"-->
+                <!--android:cursorVisible="false"-->
+                <!--android:focusable="false"-->
+                <!--android:focusableInTouchMode="false" />-->
+                <!--</android.support.design.widget.TextInputLayout>-->
+
+                <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:id="@+id/spredcast_time_textInputLayout"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Time"-->
+                <!--android:layout_weight="1.0">-->
+
+                <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/spredcast_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="17:15"-->
+                <!--android:cursorVisible="false"-->
+                <!--android:focusable="false"-->
+                <!--android:focusableInTouchMode="false" />-->
+                <!--</android.support.design.widget.TextInputLayout>-->
+
+                <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:id="@+id/spredcast_duration_textInputLayout"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Duration"-->
+                <!--android:layout_weight="1.0">-->
+
+                <!--<android.support.design.widget.TextInputEditText-->
+                <!--android:id="@+id/spredcast_duration"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="01:30"-->
+                <!--android:cursorVisible="false"-->
+                <!--android:focusable="false"-->
+                <!--android:focusableInTouchMode="false" />-->
+                <!--</android.support.design.widget.TextInputLayout>-->
+                <!--</LinearLayout>-->
+
+                <!--<android.support.design.widget.TextInputLayout-->
+                <!--android:id="@+id/spredcast_tags_textInputLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="@dimen/input_marginTop"-->
+                <!--android:hint="Tags">-->
+
+                <!--<com.eip.roucou_c.spred.SpredCast.Tokenfield.TagsView-->
+                <!--android:id="@+id/spredcast_tags"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:imeOptions="actionDone"-->
+                <!--android:textColor="@android:color/darker_gray"-->
+                <!--android:textSize="19sp"-->
+                <!--android:inputType="text|textNoSuggestions|textMultiLine"-->
+                <!--android:focusableInTouchMode="true"-->
+                <!--/>-->
+                <!--</android.support.design.widget.TextInputLayout>-->
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:layout_centerVertical="true"
+                        android:text="Paramètre avancé" />
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/navbar_background" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/spredcast_isPrivate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SpredCast privé"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Si vous souhaitez rendre privé votre SpredCast (vous serez obligé d'inviter des membres)"
+                        />
+
+                </LinearLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/spredcast_members_textInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Membres privés">
+
+                    <com.eip.roucou_c.spred.SpredCast.Tokenfield.ContactsCompletionView
+                        android:id="@+id/spredcast_members"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="19sp"
+                        android:layout_marginTop="10dp"
+                        android:nextFocusDown="@+id/subject"
+                        android:inputType="text|textNoSuggestions|textMultiLine"
+                        android:focusableInTouchMode="true"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="La sélection des membres est obligatoires lorsque vous souhaitez ne pas rendre publique votre SpredCast"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/spredcast_user_capacity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Capacité de votre SpredCast"
+                    app:met_floatingLabel="highlight"
+                    style="@style/EditText"
+                    android:inputType="numberSigned"
+                    android:ems="10"
+                    app:met_helperText="Afin de mieux gérer les intéractions avec vos spectateurs, il est préférable de limiter ce nombre"
+                    app:met_helperTextAlwaysShown="true"
+                    android:layout_weight="1.0"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

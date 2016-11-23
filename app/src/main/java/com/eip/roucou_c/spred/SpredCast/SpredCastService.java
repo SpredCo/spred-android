@@ -27,9 +27,10 @@ import retrofit2.http.Path;
  * Created by roucou_c on 07/11/2016.
  */
 public class SpredCastService extends MyService{
-    private final ISpredCastView _view;
     private final ISpredCastService _api;
     private final ISpredCastService _login;
+    private final ISpredCastView _iSpredCastView;
+    private final ISpredCastNewView _iSpredCastNewView;
 
     public interface ISpredCastService {
         @Headers("Content-Type: application/json")
@@ -41,27 +42,28 @@ public class SpredCastService extends MyService{
         Call<SpredCastEntity> postSpredCast(@Body HashMap<String, Object> params);
 
         @Headers("Content-Type: application/json")
-        @GET("spredcasts")
+        @GET("spredcast")
         Call<List<SpredCastEntity>> getSpredCasts();
     }
 
-    public SpredCastService(ISpredCastView view, Manager manager, TokenEntity tokenEntity) {
+    public SpredCastService(ISpredCastView iSpredCastView, ISpredCastNewView iSpredCastNewView, Manager manager, TokenEntity tokenEntity) {
         super(manager);
-        this._view = view;
+        this._iSpredCastView = iSpredCastView;
+        this._iSpredCastNewView = iSpredCastNewView;
         this._api = ServiceGeneratorApi.createService(ISpredCastService.class, "api", tokenEntity, manager);
         this._login = ServiceGeneratorApi.createService(ISpredCastService.class, "login", manager);
     }
 
     public void getSpredCast() {
-        Call<List<SpredCastEntity>> call = _login.getSpredCasts();
+        Call<List<SpredCastEntity>> call = _api.getSpredCasts();
         call.enqueue(new Callback<List<SpredCastEntity>>() {
             @Override
             public void onResponse(Call<List<SpredCastEntity>> call, Response<List<SpredCastEntity>> response) {
                 if (response.isSuccess()) {
                     List<SpredCastEntity> spredCastEntities = response.body();
 
-                    _view.populateSpredCasts(spredCastEntities);
-                    _view.cancelRefresh();
+                    _iSpredCastView.populateSpredCasts(spredCastEntities);
+                    _iSpredCastView.cancelRefresh();
                 }
 
             }
@@ -81,7 +83,7 @@ public class SpredCastService extends MyService{
                 if (response.isSuccess()) {
                     List<UserEntity> userEntities = response.body();
 
-                    _view.populateSearchPseudo(userEntities);
+                    _iSpredCastNewView.populateSearchPseudo(userEntities);
                 }
 
             }
@@ -101,9 +103,8 @@ public class SpredCastService extends MyService{
                 if (response.isSuccess()) {
                     SpredCastEntity spredCastEntity = response.body();
 
-                    _view.changeStep("spredcast");
                 }
-
+                _iSpredCastNewView.finish();
             }
 
             @Override

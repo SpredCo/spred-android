@@ -22,4 +22,8 @@ public class HomePresenter {
     public void getProfile() {
         _homeService.getProfile();
     }
+
+    public void getSpredCasts() {
+        _homeService.getSpredCasts();
+    }
 }

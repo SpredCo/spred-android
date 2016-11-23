@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/coordinatorLayout">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:orientation="vertical">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/spredcast_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/spredcast_name"
+                    android:layout_marginTop="@dimen/input_marginTop"
+                    app:met_helperTextAlwaysShown="true"
+                    app:met_floatingLabel="highlight"
+                    app:met_singleLineEllipsis="true"
+                    app:met_helperText="Ce nom serra visible par tous les members de spred ! Essayer de les attirer à votre SpredCast"
+                    style="@style/EditText"/>
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/spredcast_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/spredcast_description"
+                    app:met_floatingLabel="highlight"
+                    app:met_helperText="La description est faîte pour ajouter des précissions sur le contenu de votre SpredCast"
+                    app:met_helperTextAlwaysShown="true"
+                    style="@style/EditText"/>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/spredcast_tags_textInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/input_marginTop"
+                    helper="azdaz"
+                    android:hint="Tags">
+
+                    <com.eip.roucou_c.spred.SpredCast.Tokenfield.TagsView
+                        android:id="@+id/spredcast_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="19sp"
+                        android:inputType="text|textNoSuggestions|textMultiLine"
+                        android:focusableInTouchMode="true"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Les tags ne sont pas obligatoires mais ils permettent aux utilisateurs de trouver plus facilement des SpredCast qui peuvent les intéréser"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

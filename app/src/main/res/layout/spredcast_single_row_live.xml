@@ -3,7 +3,7 @@
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginTop="5dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -17,8 +17,6 @@
             android:layout_height="wrap_content"
             android:padding="20dp"
             android:orientation="vertical">
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,8 +74,8 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="5dp">
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
                             android:src="@drawable/ic_timelapse_black_24dp"/>
                         <TextView
                             android:id="@+id/spredcasts_timelapse"
@@ -98,8 +96,8 @@
                             android:layout_height="wrap_content"
                             android:text="|" />
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
                             android:src="@drawable/ic_person_black_24dp"/>
                         <TextView
                             android:id="@+id/spredcasts_person"
@@ -130,6 +128,7 @@
                     android:id="@+id/spredcasts_tags"
                     android:textColor="#55AA55"
                     android:textStyle="italic"
+                    android:textSize="15dp"
 
                     android:text="#tag1 #tag1 #tag1 #tag1"/>
 

@@ -33,6 +33,15 @@ public class SpredCastEntity {
     @SerializedName("duration")
     protected int _duration;
 
+    @SerializedName("state")
+    protected int _state;
+
+    @SerializedName("creator")
+    protected UserEntity _creator;
+
+    @SerializedName("user_capacity")
+    protected int _user_capacity;
+
     public String get_id() {
         return _id;
     }
@@ -96,4 +105,29 @@ public class SpredCastEntity {
     public void set_duration(int _duration) {
         this._duration = _duration;
     }
+
+    public int get_state() {
+        return _state;
+    }
+
+    public void set_state(int _state) {
+        this._state = _state;
+    }
+
+    public UserEntity get_creator() {
+        return _creator;
+    }
+
+    public void set_creator(UserEntity _creator) {
+        this._creator = _creator;
+    }
+
+    public int get_user_capacity() {
+        return _user_capacity;
+    }
+
+    public void set_user_capacity(int _user_capacity) {
+        this._user_capacity = _user_capacity;
+    }
 }
+
