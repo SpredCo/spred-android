@@ -26,4 +26,8 @@ public class HomePresenter {
     public void getSpredCasts() {
         _homeService.getSpredCasts();
     }
+
+    public void getAbo() {
+        _homeService.getAbo();
+    }
 }

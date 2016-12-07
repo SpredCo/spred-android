@@ -2,12 +2,13 @@ package com.eip.roucou_c.spred.Entities;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by roucou_c on 07/11/2016.
  */
-public class SpredCastEntity {
+public class SpredCastEntity implements Serializable {
 
     @SerializedName("id")
     protected String _id = null;

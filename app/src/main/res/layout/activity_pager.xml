@@ -15,7 +15,7 @@
         android:background="@color/navbar_background"/>
 
 
-    <android.support.v4.view.ViewPager
+    <com.eip.roucou_c.spred.SpredCast.SpredCastViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

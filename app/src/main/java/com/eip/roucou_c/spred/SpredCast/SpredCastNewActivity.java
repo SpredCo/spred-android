@@ -18,7 +18,6 @@ import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.SpredCast.Tokenfield.ContactsCompletionView;
-import com.tokenautocomplete.FilteredArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +28,7 @@ import java.util.Objects;
 /**
  * Created by roucou_c on 19/11/2016.
  */
-public class SpredCastNewActivity extends AppCompatActivity implements ISpredCastNewView,ISpredCastView{
+public class SpredCastNewActivity extends AppCompatActivity implements ISpredCastNewView, ISpredCastView{
 
     private SpredCastPresenter _spredCastPresenter;
     private UserEntity _userEntity;
@@ -37,7 +36,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
 
     PagerAdapter mSectionsPagerAdapter;
 
-    private ViewPager mViewPager;
+    private SpredCastViewPager mViewPager;
     ImageButton mNextBtn;
     Button _cancelBtn, mFinishBtn;
 
@@ -49,9 +48,9 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
     /**
      * Step 1
      */
-    private String _srepcast_name;
-    private String _srepcast_description;
-    private List<String> _srepcast_tags;
+    private String _sredcast_name;
+    private String _sredcast_description;
+    private List<String> _sredcast_tags;
 
     /**
      * Step 2
@@ -95,7 +94,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
 
         indicators = new ImageView[]{zero, one, two};
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (SpredCastViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mViewPager.setCurrentItem(page);
@@ -142,12 +141,12 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
 
             }
         });
+        mViewPager.setPagingEnabled(false);
 
         mNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validatePager(page)) {
-
                     page += 1;
                     mViewPager.setCurrentItem(page, true);
                 }
@@ -164,7 +163,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
         _cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishPostSpredCast();
             }
         });
     }
@@ -174,28 +173,34 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
 
         boolean isError = false;
 
-        switch (fragment.getStep()) {
-            case "1":
-                _srepcast_name = fragment.get_spredcast_name().getText().toString();
-                _srepcast_description = fragment.get_spredcast_description().getText().toString();
-                _srepcast_tags = fragment.get_spredcast_tagsList();
-                isError = _spredCastPresenter.checkNewSpredCastStep1(_srepcast_name, _srepcast_description, _srepcast_tags);
-                break;
-            case "2":
-                _spredcast_now = fragment.get_spredcast_now().isChecked();
-                _spredcast_date = fragment.get_spredcast_date();
-                _spredcast_time = fragment.get_spredcast_time();
-                _spredcast_duration = fragment.get_spredcast_duration_int();
+        try {
+            switch (fragment.getStep()) {
+                case "1":
+                    _sredcast_name = fragment.get_spredcast_name().getText().toString();
+                    _sredcast_description = fragment.get_spredcast_description().getText().toString();
+                    _sredcast_tags = fragment.get_spredcast_tagsList();
+                    isError = _spredCastPresenter.checkNewSpredCastStep1(_sredcast_name, _sredcast_description, _sredcast_tags);
+                    break;
+                case "2":
+                    _spredcast_now = fragment.get_spredcast_now().isChecked();
+                    _spredcast_date = fragment.get_spredcast_date();
+                    _spredcast_time = fragment.get_spredcast_time();
+                    _spredcast_duration = fragment.get_spredcast_duration_int();
 
-                isError = _spredCastPresenter.checkNewSpredCastStep2(_spredcast_now, _spredcast_date, _spredcast_time, _spredcast_duration);
-                break;
-            case "3":
-                _spredcast_isPrivate = fragment.get_spredcast_private().isChecked();
-                _spredcast_user_capacity = fragment.get_spredcast_user_capacity().getText().toString();
-                _spredcast_membersList = fragment.get_spredcast_membersList();
+                    isError = _spredCastPresenter.checkNewSpredCastStep2(_spredcast_now, _spredcast_date, _spredcast_time, _spredcast_duration);
+                    break;
+                case "3":
+                    _spredcast_isPrivate = fragment.get_spredcast_private().isChecked();
+                    _spredcast_user_capacity = fragment.get_spredcast_user_capacity().getText().toString();
+                    _spredcast_membersList = fragment.get_spredcast_membersList();
 
-                isError = _spredCastPresenter.checkNewSpredCastStep3(_spredcast_isPrivate, _spredcast_user_capacity, _spredcast_membersList);
-                break;
+                    isError = _spredCastPresenter.checkNewSpredCastStep3(_spredcast_isPrivate, _spredcast_user_capacity, _spredcast_membersList);
+                    break;
+            }
+        }
+        catch (NullPointerException e) {
+            return false;
+
         }
         return isError;
     }
@@ -327,17 +332,17 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
 
     @Override
     public String getSpredCastName() {
-        return _srepcast_name;
+        return _sredcast_name;
     }
 
     @Override
     public String getSpredCastDescription() {
-        return _srepcast_description;
+        return _sredcast_description;
     }
 
     @Override
     public List<String> getSpredCastTags() {
-        return _srepcast_tags;
+        return _sredcast_tags;
     }
 
     @Override
@@ -345,5 +350,8 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
         return _spredcast_now;
     }
 
-
+    @Override
+    public void finishPostSpredCast() {
+        this.finish();
+    }
 }

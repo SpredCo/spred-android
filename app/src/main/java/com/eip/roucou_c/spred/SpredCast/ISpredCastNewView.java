@@ -42,5 +42,5 @@ public interface ISpredCastNewView {
 
     Boolean getSpredCastIsNow();
 
-    void finish();
+    void finishPostSpredCast();
 }

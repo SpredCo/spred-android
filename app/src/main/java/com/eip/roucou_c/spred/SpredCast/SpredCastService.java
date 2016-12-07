@@ -3,8 +3,6 @@ package com.eip.roucou_c.spred.SpredCast;
 import android.util.Log;
 
 import com.eip.roucou_c.spred.DAO.Manager;
-import com.eip.roucou_c.spred.Entities.ConversationEntity;
-import com.eip.roucou_c.spred.Entities.MessageEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
@@ -101,10 +99,12 @@ public class SpredCastService extends MyService{
             @Override
             public void onResponse(Call<SpredCastEntity> call, Response<SpredCastEntity> response) {
                 if (response.isSuccess()) {
-                    SpredCastEntity spredCastEntity = response.body();
+//                    SpredCastEntity spredCastEntity = response.body();
 
+                    Log.d("yo", "yo");
+                    _iSpredCastNewView.finishPostSpredCast();
                 }
-                _iSpredCastNewView.finish();
+
             }
 
             @Override

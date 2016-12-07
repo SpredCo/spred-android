@@ -90,4 +90,26 @@ public class HomeService extends MyService{
         });
     }
 
+    public void getAbo() {
+        Call<UserEntity> call = _api.getProfile();
+        call.enqueue(new Callback<UserEntity>() {
+            @Override
+            public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
+
+                if (!response.isSuccess()) {
+
+                }
+                else {
+                    UserEntity userEntity = response.body();
+                    _view.setAbo(userEntity.get_followingUserEntity());
+                    _view.cancelRefresh();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<UserEntity> call, Throwable t) {
+            }
+        });
+    }
 }

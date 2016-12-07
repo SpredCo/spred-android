@@ -57,20 +57,31 @@
                     android:id="@+id/profile_edit"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:layout_marginTop="16dp"
                     android:clickable="true"
-                    android:layout_toLeftOf="@+id/drop_down_option_menu"
+                    android:layout_alignParentRight="true"
                     android:src="@drawable/ic_edit_white_24dp" />
 
                 <ImageView
-                    android:id="@+id/drop_down_option_menu"
+                    android:id="@+id/profile_follow"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_more_vert_white_24dp" />
+                    android:clickable="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_person_add_white_24dp"
+                    android:visibility="gone"/>
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/drop_down_option_menu"-->
+                    <!--android:layout_width="30dp"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_marginTop="16dp"-->
+                    <!--android:src="@drawable/ic_more_vert_white_24dp" />-->
 
                 <TextView
                     android:id="@+id/profile_name_textView"

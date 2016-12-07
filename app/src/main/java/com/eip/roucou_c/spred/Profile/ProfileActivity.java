@@ -6,6 +6,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.List;
 import java.util.Objects;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -37,6 +39,10 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
     private MaterialEditText _profile_edit_firstName;
     private UserEntity _userEntity;
     private String _curentStep;
+    private boolean _ownUser;
+    private ImageView _follow;
+    private UserEntity _userEntityProfile;
+    private ImageView _profile_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,22 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         _profilePresenter = new ProfilePresenter(this, _manager, tokenEntity);
 
 
+        _userEntityProfile = (UserEntity) getIntent().getSerializableExtra("userEntityProfile");
+
+        Log.d("followingProfile", String.valueOf(_userEntityProfile.get_following()));
+
         changeStep("profile");
+
+        if (_userEntityProfile != null) {
+            Log.d("_userEntityProfile", _userEntityProfile.get_email());
+            _ownUser = false;
+            this.populateProfile(_userEntityProfile);
+        }
+        else {
+            _ownUser = true;
+        }
+        _profilePresenter.getProfile(_ownUser);
+
     }
 
     @Override
@@ -62,12 +83,13 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
                 _profile_name_textView = (TextView) findViewById(R.id.profile_name_textView);
                 _profile_pseudo_textView = (TextView) findViewById(R.id.profile_pseudo_textView);
 
-                _profilePresenter.getProfile();
+                Log.d("_ownUser", String.valueOf(_ownUser));
+                _profile_edit = (ImageView) findViewById(R.id.profile_edit);
+                if (_ownUser) {
+                    _profile_edit.setOnClickListener(this);
 
-                ImageView profile_edit = (ImageView) findViewById(R.id.profile_edit);
-                profile_edit.setOnClickListener(this);
-
-                getSupportActionBar().setTitle(getString(R.string.profile_title));
+                    getSupportActionBar().setTitle(getString(R.string.profile_title));
+                }
                 break;
             case "editProfile":
                 setContentView(R.layout.profile_edit);
@@ -122,8 +144,6 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
 
     @Override
     public void populateProfile(UserEntity userEntity) {
-        _userEntity = userEntity;
-
         _profile_email_textView.setText(userEntity.get_email());
         String name = userEntity.get_last_name()+" "+userEntity.get_first_name();
         _profile_name_textView.setText(name);
@@ -171,6 +191,18 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
             case R.id.profile_edit:
                 changeStep("editProfile");
                 break;
+            case R.id.profile_follow:
+                if (_userEntity != null) {
+                    List<UserEntity> followingList = _userEntity.get_followingUserEntity();
+                    boolean contain = false;
+                    for (UserEntity userEntity : followingList) {
+                        if (Objects.equals(userEntity.get_id(), _userEntityProfile.get_id())) {
+                            contain = true;
+                        }
+                    }
+                    _profilePresenter.follow(_userEntityProfile.get_id(), !contain);
+                }
+                break;
             case R.id.profile_edit_submit:
                 _profilePresenter.onSaveClicked();
                 break;
@@ -195,6 +227,48 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         if (coordinatorLayout != null) {
             Snackbar snackbar = Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_LONG);
             snackbar.show();
+        }
+    }
+
+    @Override
+    public void follow(boolean isFollow) {
+        if (_follow != null) {
+            if (isFollow) {
+                _follow.setImageDrawable(getDrawable(R.drawable.ic_star_white_24dp));
+            }
+            else {
+                _follow.setImageDrawable(getDrawable(R.drawable.ic_star_border_white_24dp));
+            }
+        }
+        _profilePresenter.getProfile(false);
+    }
+
+    @Override
+    public void setUserEntity(UserEntity userEntity) {
+
+        _userEntity = userEntity;
+
+        if (!_ownUser) {
+            boolean contain = false;
+
+            for (UserEntity userEntityTmp : userEntity.get_followingUserEntity()) {
+                if (Objects.equals(userEntityTmp.get_id(), _userEntityProfile.get_id())) {
+                    contain = true;
+                }
+            }
+            if (_profile_edit != null) {
+                _profile_edit.setVisibility(View.GONE);
+                _follow = (ImageView) findViewById(R.id.profile_follow);
+                _follow.setOnClickListener(this);
+                _follow.setVisibility(View.VISIBLE);
+                if (contain) {
+                    _follow.setImageDrawable(getDrawable(R.drawable.ic_star_white_24dp));
+                }
+                else {
+                    _follow.setImageDrawable(getDrawable(R.drawable.ic_star_border_white_24dp));
+                }
+            }
+
         }
     }
 }

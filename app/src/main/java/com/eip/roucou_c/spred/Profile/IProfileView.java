@@ -28,4 +28,8 @@ public interface IProfileView {
     void setError(int resId);
 
     void changeStep(String step);
+
+    void follow(boolean b);
+
+    void setUserEntity(UserEntity userEntity);
 }

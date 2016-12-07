@@ -26,8 +26,8 @@ public class ProfilePresenter {
 
     }
 
-    public void getProfile() {
-        _profileService.getProfile();
+    public void getProfile(boolean populate) {
+        _profileService.getProfile(populate);
     }
 
     public void onSaveClicked() {
@@ -83,5 +83,9 @@ public class ProfilePresenter {
         if (email != null && !email.isEmpty() && userEntity != null && !Objects.equals(userEntity.get_email(), email)) {
             this._profileService.checkEmail(email);
         }
+    }
+
+    public void follow(String user_id, boolean isFollow) {
+        _profileService.follow(user_id, isFollow);
     }
 }

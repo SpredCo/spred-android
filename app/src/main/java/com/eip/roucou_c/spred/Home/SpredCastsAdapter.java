@@ -1,6 +1,7 @@
 package com.eip.roucou_c.spred.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
+import com.eip.roucou_c.spred.Inbox.InboxActivity;
+import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.SpredCast.ShowSpredCastActivity;
 import com.kd.dynamic.calendar.generator.ImageGenerator;
 
 import java.text.ParseException;
@@ -50,7 +54,8 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         _imageGenerator.setMonthColor(Color.WHITE);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        private final RelativeLayout _spredCast_relativeLayout;
         public TextView _name;
         public TextView _description;
         public TextView _tags;
@@ -58,6 +63,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         public TextView _persons;
 
         public ImageView _calendar;
+        public ImageView _photo;
         public TextView _time;
 
         private String _spredcast_id;
@@ -72,21 +78,14 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
             _timelapse = (TextView) view.findViewById(R.id.spredcasts_timelapse);
             _persons = (TextView) view.findViewById(R.id.spredcasts_person);
 
+            _photo = (ImageView) view.findViewById(R.id.profile_photo);
+
             _calendar = (ImageView) view.findViewById(R.id.spredcast_calendar);
             _time = (TextView) view.findViewById(R.id.spredcasts_time);
 
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.spredcasts);
-            relativeLayout.setOnClickListener(this);
+            _spredCast_relativeLayout = (RelativeLayout) view.findViewById(R.id.spredcasts);
         }
 
-        @Override
-        public void onClick(View v) {
-//            switch (v.getId()) {
-//                case R.id.inbox_conversation:
-//                    _IInboxView.conversationSelected(_conversation_id);
-//                    break;
-//            }
-        }
     }
 
     public void set_spredCastEntities(List<SpredCastEntity> _spredCastEntities) {
@@ -108,7 +107,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        SpredCastEntity spredCastEntity = _spredCastEntities.get(position);
+        final SpredCastEntity spredCastEntity = _spredCastEntities.get(position);
 //        if (_state == spredCastEntity.get_state()) {
 
         if (_state == 1) {
@@ -132,6 +131,15 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+            holder._photo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(_context,ProfileActivity.class);
+                    intent.putExtra("userEntityProfile", spredCastEntity.get_creator());
+                    _context.startActivity(intent);
+                }
+            });
         }
         if (_state == 0) {
             holder._spredcast_id = spredCastEntity.get_id();
@@ -166,6 +174,15 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         } else {
             holder._tags.setVisibility(View.GONE);
         }
+        holder._spredCast_relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(_context,ShowSpredCastActivity.class);
+                intent.putExtra("spredCast", spredCastEntity);
+                _context.startActivity(intent);
+            }
+        });
+
 //        }
     }
 

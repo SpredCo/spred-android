@@ -85,6 +85,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     @Override
     protected void onResume() {
         super.onResume();
+        _homePresenter.getAbo();
+        _homePresenter.getSpredCasts();
     }
 
     @Override
@@ -236,10 +238,23 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         fragment.cancelRefresh();
         fragment = _viewPagerAdapter.getItem(1);
         fragment.cancelRefresh();
+        fragment = _viewPagerAdapter.getItem(2);
+        fragment.cancelRefresh();
     }
 
     @Override
     public void getSpredCasts() {
         _homePresenter.getSpredCasts();
+    }
+
+    @Override
+    public void getAbo() {
+        _homePresenter.getAbo();
+    }
+
+    @Override
+    public void setAbo(List<UserEntity> followingUserEntity) {
+        ViewPagerAdapter.TabFragment fragment = _viewPagerAdapter.getItem(2);
+        fragment.populateAbo(followingUserEntity);
     }
 }

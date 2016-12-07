@@ -4,9 +4,13 @@ package com.eip.roucou_c.spred.Entities;
  * Created by roucou_c on 09/09/2016.
  */
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +32,9 @@ public class UserEntity implements Serializable{
 
     @SerializedName("pseudo")
     private String _pseudo = null;
+
     @SerializedName("following") // todo gere le probleme de serialzage du foolowing
-    private List<String> _following = new ArrayList<>();
+    private List<Object> _following = new ArrayList<>();
 
     public String get_pseudo() {
         return _pseudo;
@@ -39,11 +44,26 @@ public class UserEntity implements Serializable{
         this._pseudo = _pseudo;
     }
 
-    public List<String> get_following() {
+    public List<Object> get_following() {
         return _following;
     }
 
-    public void set_following(List<String> _following) {
+    public List<UserEntity> get_followingUserEntity() {
+        List<UserEntity> userEntities = new ArrayList<>();
+
+        for (Object user : _following) {
+            Gson gson = new Gson();
+            String json = gson.toJson(user);
+            UserEntity userEntity = gson.fromJson(json, UserEntity.class);
+            userEntities.add(userEntity);
+        }
+        return userEntities;
+    }
+
+    public static void main(Object user) {
+    }
+
+    public void set_following(List<Object> _following) {
         this._following = _following;
     }
 

@@ -7,10 +7,10 @@ import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Errors.ApiError;
 import com.eip.roucou_c.spred.MyService;
-import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -20,6 +20,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -28,6 +29,8 @@ import retrofit2.http.Path;
 public class ProfileService extends MyService {
     private final IProfileView _view;
     private IProfileService _api;
+
+
 
     public interface IProfileService {
         @Headers("Content-Type: application/json")
@@ -41,6 +44,14 @@ public class ProfileService extends MyService {
         @Headers("Content-Type: application/json")
         @GET("users/check/email/{email}")
         Call<String> checkEmail(@Path("email") String email);
+
+        @Headers("Content-Type: application/json")
+        @POST("users/{user_id}/follow")
+        Call<Void> follow(@Path("user_id") String user_id);
+
+        @Headers("Content-Type: application/json")
+        @POST("users/{user_id}/unfollow")
+        Call<Void> unfollow(@Path("user_id") String user_id);
     }
 
     public ProfileService(IProfileView view, Manager manager, TokenEntity tokenEntity) {
@@ -49,7 +60,7 @@ public class ProfileService extends MyService {
         this._api = ServiceGeneratorApi.createService(IProfileService.class, "api", tokenEntity, manager);
     }
 
-    protected void getProfile() {
+    protected void getProfile(final boolean populate) {
         Call<UserEntity> call = _api.getProfile();
         call.enqueue(new Callback<UserEntity>() {
             @Override
@@ -60,7 +71,10 @@ public class ProfileService extends MyService {
                 }
                 else {
                     UserEntity userEntity = response.body();
-                    _view.populateProfile(userEntity);
+                    _view.setUserEntity(userEntity);
+                    if (populate) {
+                        _view.populateProfile(userEntity);
+                    }
                 }
 
             }
@@ -117,6 +131,32 @@ public class ProfileService extends MyService {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+            }
+        });
+    }
+
+    public void follow(String user_id, final boolean isFollow) {
+        Call<Void> call;
+
+        if (isFollow) {
+            call = _api.follow(user_id);
+        }
+        else {
+            call = _api.unfollow(user_id);
+        }
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                if (response.isSuccess()) {
+                    _view.follow(isFollow);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("error", t.getMessage());
             }
         });
     }

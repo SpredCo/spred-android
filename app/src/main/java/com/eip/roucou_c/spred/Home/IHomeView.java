@@ -16,4 +16,8 @@ public interface IHomeView {
     void cancelRefresh();
 
     void getSpredCasts();
+
+    void getAbo();
+
+    void setAbo(List<UserEntity> followingUserEntity);
 }

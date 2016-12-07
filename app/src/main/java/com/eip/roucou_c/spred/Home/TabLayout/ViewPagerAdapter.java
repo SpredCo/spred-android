@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
+import com.eip.roucou_c.spred.Entities.UserEntity;
+import com.eip.roucou_c.spred.Home.AboAdapter;
+import com.eip.roucou_c.spred.Home.IHomeAboView;
 import com.eip.roucou_c.spred.Home.IHomeSpredCastView;
 import com.eip.roucou_c.spred.Home.IHomeView;
 import com.eip.roucou_c.spred.Home.SpredCastsAdapter;
@@ -57,7 +60,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         return "to";
     }
 
-    public static class TabFragment extends Fragment implements IHomeSpredCastView{
+    public static class TabFragment extends Fragment implements IHomeSpredCastView, IHomeAboView{
 
         private String step;
         public IHomeView _iHomeView;
@@ -68,6 +71,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private SwipeRefreshLayout _spredCast_swipeRefreshLayout;
         private RecyclerView _spredCast_recycler_view;
         private SpredCastsAdapter _spredCast_adapter;
+        private SwipeRefreshLayout _abo_swipeRefreshLayout;
+        private RecyclerView _abo_recycler_view;
+        private AboAdapter _abo_adapter;
 
         public static TabFragment newInstance(String step, IHomeView iHomeView) {
             TabFragment fragment = new TabFragment();
@@ -130,6 +136,23 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                     break;
                 case "3":
                     rootView = inflater.inflate(R.layout.tab_abo, container, false);
+
+                    _abo_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+                    _abo_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            _iHomeView.getAbo();
+                        }
+                    });
+                    _abo_recycler_view = (RecyclerView) rootView.findViewById(R.id.abo_recycler_view);
+
+                    _abo_adapter = new AboAdapter(this, getContext());
+                    RecyclerView.LayoutManager mLayoutManager3 = new LinearLayoutManager(getContext());
+                    _abo_recycler_view.setLayoutManager(mLayoutManager3);
+                    _abo_recycler_view.setItemAnimator(new DefaultItemAnimator());
+                    _abo_recycler_view.setAdapter(_abo_adapter);
+
+                    _iHomeView.getAbo();
                     break;
             }
             return rootView;
@@ -146,7 +169,22 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         @Override
         public void cancelRefresh() {
-            _spredCast_swipeRefreshLayout.setRefreshing(false);
+            if (_spredCast_swipeRefreshLayout != null) {
+                _spredCast_swipeRefreshLayout.setRefreshing(false);
+            }
+            if (_abo_swipeRefreshLayout != null) {
+                _abo_swipeRefreshLayout.setRefreshing(false);
+            }
+        }
+
+        @Override
+        public void populateAbo(List<UserEntity> followingUserEntity) {
+            if (_abo_adapter != null) {
+                _abo_adapter.set_userEntities(followingUserEntity);
+                _abo_adapter.notifyDataSetChanged();
+            }
         }
     }
+
+
 }
