@@ -4,30 +4,41 @@ import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.SignUp.SignUpService;
 
+import java.util.HashMap;
+
 /**
  * Created by roucou_c on 14/09/2016.
  */
-public class HomePresenter {
+class HomePresenter {
 
     private final Manager _manager;
     private final IHomeView _view;
     private final HomeService _homeService;
 
-    public HomePresenter(IHomeView view, Manager manager, TokenEntity tokenEntity) {
+    HomePresenter(IHomeView view, Manager manager, TokenEntity tokenEntity) {
         _view = view;
         _manager = manager;
         this._homeService = new HomeService(view, manager, tokenEntity);
     }
 
-    public void getProfile() {
+    void getProfile() {
         _homeService.getProfile();
     }
 
-    public void getSpredCasts() {
-        _homeService.getSpredCasts();
+    void getSpredCasts(int state) {
+        _homeService.getSpredCasts(state);
     }
 
-    public void getAbo() {
+    void getAbo() {
         _homeService.getAbo();
+    }
+
+    void getSpredCastsAndShow(String url) {
+        _homeService.getSpredCastsAndShow(url);
+
+    }
+
+    void getUserAndShow(String objectID) {
+        _homeService.getUserAndShow(objectID);
     }
 }

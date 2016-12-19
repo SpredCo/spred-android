@@ -1,5 +1,6 @@
 package com.eip.roucou_c.spred.SpredCast;
 
+import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 
 import java.util.Calendar;
@@ -24,7 +25,7 @@ public interface ISpredCastNewView {
 
     int getSpredCastDuration();
 
-    List<String> getSpredCastTags();
+    List<TagEntity> getSpredCastTags();
 
     List<String> getSpredCastMembers();
 
@@ -43,4 +44,6 @@ public interface ISpredCastNewView {
     Boolean getSpredCastIsNow();
 
     void finishPostSpredCast();
+
+    void populateTags(List<TagEntity> tagEntities);
 }

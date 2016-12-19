@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
-import com.eip.roucou_c.spred.Inbox.InboxActivity;
+import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
-import com.eip.roucou_c.spred.SpredCast.ShowSpredCastActivity;
+import com.eip.roucou_c.spred.SpredCast.SpredCastDetailsActivity;
 import com.kd.dynamic.calendar.generator.ImageGenerator;
 
 import java.text.ParseException;
@@ -25,13 +24,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by roucou_c on 11/11/2016.
  */
-public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.MyViewHolder> {
+public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int _state;
     private final ImageGenerator _imageGenerator;
@@ -54,71 +52,97 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         _imageGenerator.setMonthColor(Color.WHITE);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         private final RelativeLayout _spredCast_relativeLayout;
-        public TextView _name;
-        public TextView _description;
-        public TextView _tags;
-        public TextView _timelapse;
-        public TextView _persons;
+        TextView _name;
+        TextView _description;
+        TextView _tags;
+        TextView _persons;
 
-        public ImageView _calendar;
-        public ImageView _photo;
-        public TextView _time;
+        String _spredcast_id;
 
-        private String _spredcast_id;
-
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
 
             _name = (TextView) view.findViewById(R.id.spredcasts_name);
             _description = (TextView) view.findViewById(R.id.spredcasts_description);
             _tags = (TextView) view.findViewById(R.id.spredcasts_tags);
 
-            _timelapse = (TextView) view.findViewById(R.id.spredcasts_timelapse);
             _persons = (TextView) view.findViewById(R.id.spredcasts_person);
-
-            _photo = (ImageView) view.findViewById(R.id.profile_photo);
-
-            _calendar = (ImageView) view.findViewById(R.id.spredcast_calendar);
-            _time = (TextView) view.findViewById(R.id.spredcasts_time);
 
             _spredCast_relativeLayout = (RelativeLayout) view.findViewById(R.id.spredcasts);
         }
 
     }
 
+    private class MyViewHolderLive extends MyViewHolder {
+
+        TextView _timelapse;
+        ImageView _photo;
+
+        MyViewHolderLive(View view) {
+            super(view);
+            _timelapse = (TextView) view.findViewById(R.id.spredcasts_timelapse);
+            _photo = (ImageView) view.findViewById(R.id.profile_photo);
+        }
+
+    }
+
+    private class MyViewHolderCome extends MyViewHolder {
+        ImageView _calendar;
+        TextView _time;
+
+        MyViewHolderCome(View view) {
+            super(view);
+            _calendar = (ImageView) view.findViewById(R.id.spredcast_calendar);
+            _time = (TextView) view.findViewById(R.id.spredcasts_time);
+        }
+
+    }
+
+
     public void set_spredCastEntities(List<SpredCastEntity> _spredCastEntities) {
         this._spredCastEntities = _spredCastEntities;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = null;
-        if (_state == 1) {
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spredcast_single_row_live, parent, false);
-        }
-        if (_state == 0) {
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spredcast_single_row_come, parent, false);
-        }
+    public int getItemViewType(int position) {
+        SpredCastEntity spredCastEntity = _spredCastEntities.get(position);
 
-        return new MyViewHolder(itemView);
+        return spredCastEntity.get_state();
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView;
+
+        if (viewType == 1) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spredcast_single_row_live, parent, false);
+            return new MyViewHolderLive(itemView);
+        }
+        if (viewType == 0) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spredcast_single_row_come, parent, false);
+            return new MyViewHolderCome(itemView);
+        }
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         final SpredCastEntity spredCastEntity = _spredCastEntities.get(position);
-//        if (_state == spredCastEntity.get_state()) {
 
-        if (_state == 1) {
-            holder._spredcast_id = spredCastEntity.get_id();
-            holder._name.setText(spredCastEntity.get_name());
-            holder._description.setText(spredCastEntity.get_description());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.FRANCE);
+        Date date = null;
 
-            holder._persons.setText(String.valueOf(spredCastEntity.get_members().size()));
+        if (holder.getItemViewType() == 1) {
+            MyViewHolderLive holderLive = (MyViewHolderLive) holder;
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.FRANCE);
-            Date date = null;
+            holderLive._spredcast_id = spredCastEntity.get_id();
+            holderLive._name.setText(spredCastEntity.get_name());
+            holderLive._description.setText(spredCastEntity.get_description());
+
+            holderLive._persons.setText(String.valueOf(spredCastEntity.get_members().size()));
+
             try {
                 date = format.parse(spredCastEntity.get_date());
 
@@ -127,63 +151,63 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
 
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
 
-                holder._timelapse.setText(String.valueOf(minutes) + " min");
+                holderLive._timelapse.setText(String.valueOf(minutes) + " min");
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
-            holder._photo.setOnClickListener(new View.OnClickListener() {
+            holderLive._photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(_context,ProfileActivity.class);
+                    Intent intent = new Intent(_context, ProfileActivity.class);
                     intent.putExtra("userEntityProfile", spredCastEntity.get_creator());
                     _context.startActivity(intent);
                 }
             });
         }
-        if (_state == 0) {
-            holder._spredcast_id = spredCastEntity.get_id();
-            holder._name.setText(spredCastEntity.get_name()+" by @"+spredCastEntity.get_creator().get_pseudo());
-            holder._description.setText(spredCastEntity.get_description());
+        else if (holder.getItemViewType() == 0) {
+            MyViewHolderCome holderCome = (MyViewHolderCome) holder;
 
-            holder._persons.setText(String.valueOf(spredCastEntity.get_user_capacity() == 0 ? "illimité" : spredCastEntity.get_user_capacity()));
+            holderCome._spredcast_id = spredCastEntity.get_id();
+            holderCome._name.setText(spredCastEntity.get_name() + " by @" + spredCastEntity.get_creator().get_pseudo());
+            holderCome._description.setText(spredCastEntity.get_description());
+
+            holderCome._persons.setText(String.valueOf(spredCastEntity.get_user_capacity() == 0 ? "illimité" : spredCastEntity.get_user_capacity()));
 
             Calendar cal = Calendar.getInstance();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.FRANCE);
-            Date date = null;
 
             try {
                 date = format.parse(spredCastEntity.get_date());
                 cal.setTime(date);
-                holder._calendar.setImageBitmap(_imageGenerator.generateDateImage(cal, R.drawable.empty_calendar));
+                holderCome._calendar.setImageBitmap(_imageGenerator.generateDateImage(cal, R.drawable.empty_calendar));
 
                 SimpleDateFormat hour_min = new SimpleDateFormat("hh:mm", Locale.FRANCE);
-                holder._time.setText(hour_min.format(date));
+                holderCome._time.setText(hour_min.format(date));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
         }
+
+        MyViewHolder myViewHolder = (MyViewHolder) holder;
+
         if (spredCastEntity.get_tags() != null && !spredCastEntity.get_tags().isEmpty()) {
             String tags = "";
-            for (String tag : spredCastEntity.get_tags()) {
-                tags += "#" + tag + " ";
+            for (TagEntity tagEntity : spredCastEntity.get_tags()) {
+                tags += "#" + tagEntity.get_name() + " ";
             }
-            holder._tags.setText(tags);
-            holder._tags.setVisibility(View.VISIBLE);
+            myViewHolder._tags.setText(tags);
+            myViewHolder._tags.setVisibility(View.VISIBLE);
         } else {
-            holder._tags.setVisibility(View.GONE);
+            myViewHolder._tags.setVisibility(View.GONE);
         }
-        holder._spredCast_relativeLayout.setOnClickListener(new View.OnClickListener() {
+        myViewHolder._spredCast_relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(_context,ShowSpredCastActivity.class);
+                Intent intent = new Intent(_context,SpredCastDetailsActivity.class);
                 intent.putExtra("spredCast", spredCastEntity);
                 _context.startActivity(intent);
             }
         });
-
-//        }
     }
 
     @Override
@@ -191,8 +215,8 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         int item = 0;
         if (_spredCastEntities != null) {
             for (SpredCastEntity spredCastEntity : _spredCastEntities) {
-//                if (_state == spredCastEntity.get_state())
-                ++item;
+                if (_state == spredCastEntity.get_state() || _state == 2)
+                    ++item;
             }
         }
         return item;

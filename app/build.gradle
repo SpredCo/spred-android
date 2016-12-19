@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId "com.eip.roucou_c.spred"
-        minSdkVersion 23
-        targetSdkVersion 23
+        minSdkVersion 25
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -24,19 +24,24 @@ def retrofitVersion = '2.0.0-beta4'
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'com.github.medyo:fancybuttons:1.8.1'
-    compile 'com.facebook.android:facebook-android-sdk:4.13.0'
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+
     compile 'com.facebook.android:facebook-android-sdk:4.13.0'
-    compile 'com.google.android.gms:play-services-auth:9.4.0'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
+
+    compile 'com.algolia:algoliasearch-android:3.5'
+
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.github.medyo:fancybuttons:1.8.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile "com.splitwise:tokenautocomplete:2.0.8@aar"
+    compile 'com.splitwise:tokenautocomplete:2.0.8@aar'
     compile 'com.github.sillebille:dynamic-calendar:1.0.1'
+    compile 'com.github.mancj:MaterialSearchBar:0.3.5-beta'
 }
 apply plugin: 'com.google.gms.google-services'

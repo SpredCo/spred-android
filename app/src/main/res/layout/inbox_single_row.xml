@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="29/01/1993"
+                android:text="18/12/2016"
                 android:layout_centerInParent="true"
                 />
 

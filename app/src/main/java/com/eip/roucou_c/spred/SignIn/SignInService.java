@@ -28,9 +28,8 @@ import retrofit2.http.POST;
  */
 public class SignInService extends MyService {
 
-    private ISignInService _api;
 
-    public interface ISignInService {
+    interface ISignInService {
         @Headers("Content-Type: application/json")
         @POST("oauth2/token")
         Call<TokenEntity> signIn(@Body Map<String, String> params);
@@ -50,17 +49,10 @@ public class SignInService extends MyService {
         @Headers("Content-Type: application/json")
         @POST("users/google")
         Call<TokenEntity> signUpGoogle(@Body Map<String, String> params);
-
-//
-//
-//        @Headers("Content-Type: application/json")
-//        @POST("oauth2/token")
-//        Call<TokenEntity> refreshToken(@Body Map<String, String> params);
-//
-//        @GET("users/me")
-//        Call<ProfileEntity> getProfile();
-//
     }
+
+    private ISignInService _api;
+
     private final ISignInView _view;
     private final ISignInSignUpView _iSignInSignUpView;
 //    private SignUpService _signUpService;

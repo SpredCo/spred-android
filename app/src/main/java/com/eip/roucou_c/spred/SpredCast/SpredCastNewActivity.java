@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
+import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
@@ -50,7 +51,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
      */
     private String _sredcast_name;
     private String _sredcast_description;
-    private List<String> _sredcast_tags;
+    private List<TagEntity> _sredcast_tags;
 
     /**
      * Step 2
@@ -75,7 +76,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
         Manager _manager = Manager.getInstance(getApplicationContext());
 
         TokenEntity tokenEntity = _manager._tokenManager.select();
-        _spredCastPresenter = new SpredCastPresenter(null, this, _manager, tokenEntity);
+        _spredCastPresenter = new SpredCastPresenter(null, this, null, null, _manager, tokenEntity);
 
         _userEntity = (UserEntity) getIntent().getSerializableExtra("userEntity");
 
@@ -166,6 +167,8 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
                 finishPostSpredCast();
             }
         });
+
+        _spredCastPresenter.getTags();
     }
 
     private boolean validatePager(int page) {
@@ -178,7 +181,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
                 case "1":
                     _sredcast_name = fragment.get_spredcast_name().getText().toString();
                     _sredcast_description = fragment.get_spredcast_description().getText().toString();
-                    _sredcast_tags = fragment.get_spredcast_tagsList();
+                    _sredcast_tags = fragment.get_spredcast_tagsEntities();
                     isError = _spredCastPresenter.checkNewSpredCastStep1(_sredcast_name, _sredcast_description, _sredcast_tags);
                     break;
                 case "2":
@@ -341,7 +344,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
     }
 
     @Override
-    public List<String> getSpredCastTags() {
+    public List<TagEntity> getSpredCastTags() {
         return _sredcast_tags;
     }
 
@@ -353,5 +356,10 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
     @Override
     public void finishPostSpredCast() {
         this.finish();
+    }
+
+    @Override
+    public void populateTags(List<TagEntity> tagEntities) {
+        mSectionsPagerAdapter.populateTags(tagEntities);
     }
 }

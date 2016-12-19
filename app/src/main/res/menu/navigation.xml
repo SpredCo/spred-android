@@ -25,9 +25,6 @@
                     android:id="@+id/navigation_inbox"
                     android:title="Messagerie"/>
                 <item
-                    android:id="@+id/navigation_settings"
-                    android:title="Paramètres"/>
-                <item
                     android:id="@+id/navigation_logout"
                     android:title="Déconnexion"/>
             </group>

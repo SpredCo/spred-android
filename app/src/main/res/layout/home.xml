@@ -17,6 +17,33 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/navbar_background"/>
 
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            app:speechMode="false"
+            app:hint="Rechercher ..."
+            app:maxSuggestionsCount="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navIconEnabled="true"
+            android:id="@+id/searchBar" />
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/search_coordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:visibility="gone"
+            android:layout_marginTop="-20dp"
+            android:layout_below="@id/searchBar"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:elevation="2dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/search_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:elevation="20dp"
+                />
+        </android.support.design.widget.CoordinatorLayout>
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"

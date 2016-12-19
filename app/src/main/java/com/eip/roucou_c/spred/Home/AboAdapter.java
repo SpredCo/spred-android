@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.eip.roucou_c.spred.Entities.FollowEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
@@ -23,14 +24,12 @@ import java.util.List;
  */
 public class AboAdapter extends RecyclerView.Adapter<AboAdapter.MyViewHolder> {
 
-    private final IHomeAboView _iHomeAboView;
     private final Context _context;
 
-    private List<UserEntity> _userEntities;
+    private List<FollowEntity> _followEntities;
 
 
-    public AboAdapter(IHomeAboView iHomeAboView, Context context) {
-        this._iHomeAboView = iHomeAboView;
+    public AboAdapter(Context context) {
         this._context = context;
     }
 
@@ -42,8 +41,9 @@ public class AboAdapter extends RecyclerView.Adapter<AboAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(AboAdapter.MyViewHolder holder, int position) {
-        final UserEntity userEntity = _userEntities.get(position);
-        if (userEntity != null) {
+        final FollowEntity followEntity = _followEntities.get(position);
+        if (followEntity != null) {
+            final UserEntity userEntity = followEntity.get_following();
             String pseudo = "@"+userEntity.get_pseudo();
             holder._pseudo.setText(pseudo);
             String name = userEntity.get_last_name()+" "+userEntity.get_last_name();
@@ -63,17 +63,17 @@ public class AboAdapter extends RecyclerView.Adapter<AboAdapter.MyViewHolder> {
 
     @Override
     public int getItemCount() {
-        return _userEntities == null ? 0 : _userEntities.size();
+        return _followEntities == null ? 0 : _followEntities.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final RelativeLayout _abo_relativeLayout;
-        public ImageView _photo;
-        public TextView _pseudo;
-        public TextView _name;
+        ImageView _photo;
+        TextView _pseudo;
+        TextView _name;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
 
             _photo = (ImageView) itemView.findViewById(R.id.profile_photo);
@@ -84,7 +84,7 @@ public class AboAdapter extends RecyclerView.Adapter<AboAdapter.MyViewHolder> {
         }
     }
 
-    public void set_userEntities(List<UserEntity> _userEntities) {
-        this._userEntities = _userEntities;
+    public void set_followEntities(List<FollowEntity> _followEntities) {
+        this._followEntities = _followEntities;
     }
 }

@@ -3,33 +3,55 @@ package com.eip.roucou_c.spred.Home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.algolia.search.saas.AlgoliaException;
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.CompletionHandler;
+import com.algolia.search.saas.Index;
+import com.algolia.search.saas.Query;
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.FollowEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
+import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
 import com.eip.roucou_c.spred.Inbox.InboxActivity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
-import com.eip.roucou_c.spred.SpredCast.SpredCastActivity;
+import com.eip.roucou_c.spred.SpredCast.*;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by roucou_c on 09/09/2016.
  */
-public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener, MaterialSearchBar.OnSearchActionListener {
 
     private Manager _manager;
     public HomePresenter _homePresenter;
@@ -45,6 +67,14 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     private ActionBarDrawerToggle _drawerToggle;
     private UserEntity _userEntity;
     private NavigationView _navigation;
+
+
+    private Client client;
+    private CompletionHandler completionHandler;
+    private MaterialSearchBar searchBar;
+    private RecyclerView _search_recycler_view;
+    private SearchAdapter _search_adapter;
+    private CoordinatorLayout _search_coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +109,82 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         _viewPager.addOnPageChangeListener(this);
         _tabLayout.setOnTabSelectedListener(this);
 
+
+        initSearch();
+
         _homePresenter.getProfile();
+    }
+
+    private void initSearch() {
+        _search_recycler_view = (RecyclerView) findViewById(R.id.search_recyclerView);
+        _search_coordinatorLayout = (CoordinatorLayout) findViewById(R.id.search_coordinatorLayout);
+        _search_adapter = new SearchAdapter(this, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        _search_recycler_view.setLayoutManager(mLayoutManager);
+        _search_recycler_view.setAdapter(_search_adapter);
+
+        searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
+        searchBar.setOnSearchActionListener(this);
+
+        client = new Client("KGZYQKI2SD", "a8583e100dbd3bb6e5a64d76462d1f5b");
+
+        final Index index = client.initIndex("global");
+
+        EditText searchEdit = (EditText) searchBar.findViewById(com.mancj.materialsearchbar.R.id.mt_editText);
+
+        searchEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() != 0){
+                    Query query = new Query(String.valueOf(charSequence));
+                    index.searchAsync(query, completionHandler);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() == 0) {
+                    _search_coordinatorLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        completionHandler = new CompletionHandler() {
+            @Override
+            public void requestCompleted(JSONObject content, AlgoliaException error) {
+                try {
+                    Log.d("json", String.valueOf(content.getJSONArray("hits")));
+
+                    JSONArray jsonArray = content.getJSONArray("hits");
+                    ArrayList<String> listdata = new ArrayList<String>();
+                    if (jsonArray != null) {
+                        for (int i=0;i<jsonArray.length();i++){
+                            listdata.add(jsonArray.getString(i));
+                        }
+                    }
+                    if (listdata.size() != 0) {
+                        _search_coordinatorLayout.setVisibility(View.VISIBLE);
+                    }
+                    _search_adapter.set_searchList(listdata);
+                    _search_adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         _homePresenter.getAbo();
-        _homePresenter.getSpredCasts();
+        _homePresenter.getSpredCasts(1);
     }
 
     @Override
@@ -95,6 +193,16 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
             _drawerLayout.closeDrawers();
         }
         super.onStop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.search, menu);
+//        // Retrieve the SearchView and plug it into SearchManager
+//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+//        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        return true;
     }
 
     @Override
@@ -189,6 +297,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.navigation_profile:
                 Intent intent = new Intent(this, ProfileActivity.class);
                 startActivity(intent);
@@ -243,8 +352,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     }
 
     @Override
-    public void getSpredCasts() {
-        _homePresenter.getSpredCasts();
+    public void getSpredCasts(int state) {
+        _homePresenter.getSpredCasts(state);
     }
 
     @Override
@@ -253,8 +362,57 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     }
 
     @Override
-    public void setAbo(List<UserEntity> followingUserEntity) {
+    public void setAbo(List<FollowEntity> followEntities) {
         ViewPagerAdapter.TabFragment fragment = _viewPagerAdapter.getItem(2);
-        fragment.populateAbo(followingUserEntity);
+        fragment.populateAbo(followEntities);
+    }
+
+    @Override
+    public void onSearchStateChanged(boolean b) {
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence charSequence) {
+    }
+
+    @Override
+    public void onButtonClicked(int i) {
+        switch (i) {
+            case MaterialSearchBar.BUTTON_NAVIGATION:
+                _drawerLayout.openDrawer(GravityCompat.START);
+                break;
+        }
+    }
+
+    @Override
+    public void getSpredCastsAndShow(String url) {
+        _homePresenter.getSpredCastsAndShow(url);
+    }
+
+    @Override
+    public void getUserAndShow(String objectID) {
+        _homePresenter.getUserAndShow(objectID);
+
+    }
+
+    @Override
+    public void startProfileActivity(UserEntity userEntity) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("userEntityProfile", userEntity);
+        this.startActivity(intent);
+    }
+
+    @Override
+    public void startSpredCastDetailActivity(SpredCastEntity spredCastEntity) {
+        Intent intent = new Intent(this, SpredCastDetailsActivity.class);
+        intent.putExtra("spredCast", spredCastEntity);
+        this.startActivity(intent);
+    }
+
+    @Override
+    public void startSpredCastByTagActivity(String tag_name) {
+        Intent intent = new Intent(this, SpredCastByTagActivity.class);
+        intent.putExtra("tag_name", tag_name);
+        this.startActivity(intent);
     }
 }

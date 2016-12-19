@@ -1,5 +1,6 @@
 package com.eip.roucou_c.spred.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.CoordinatorLayout;
@@ -10,12 +11,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.FollowEntity;
+import com.eip.roucou_c.spred.Entities.FollowerEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.SpredCast.SpredCastActivity;
+import com.eip.roucou_c.spred.SpredCast.SpredCastNewActivity;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.List;
@@ -26,7 +32,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 /**
  * Created by roucou_c on 27/09/2016.
  */
-public class ProfileActivity extends AppCompatActivity implements IProfileView, View.OnClickListener, View.OnFocusChangeListener {
+public class ProfileActivity extends AppCompatActivity implements IProfileView, View.OnClickListener, View.OnFocusChangeListener, IFollowersView{
 
     private Toolbar _toolbar;
     private Manager _manager;
@@ -43,6 +49,9 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
     private ImageView _follow;
     private UserEntity _userEntityProfile;
     private ImageView _profile_edit;
+    private List<FollowEntity> _followEntities;
+    private TextView _profile_nbFollowers;
+    private LinearLayout _profile_linearLayout_followers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +60,10 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         _manager = Manager.getInstance(getApplicationContext());
 
         TokenEntity tokenEntity = _manager._tokenManager.select();
-        _profilePresenter = new ProfilePresenter(this, _manager, tokenEntity);
+        _profilePresenter = new ProfilePresenter(this, this, _manager, tokenEntity);
 
 
         _userEntityProfile = (UserEntity) getIntent().getSerializableExtra("userEntityProfile");
-
-        Log.d("followingProfile", String.valueOf(_userEntityProfile.get_following()));
 
         changeStep("profile");
 
@@ -67,9 +74,10 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         }
         else {
             _ownUser = true;
+            _profilePresenter.getFollowers();
         }
         _profilePresenter.getProfile(_ownUser);
-
+        _profilePresenter.getFollowing();
     }
 
     @Override
@@ -83,12 +91,18 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
                 _profile_name_textView = (TextView) findViewById(R.id.profile_name_textView);
                 _profile_pseudo_textView = (TextView) findViewById(R.id.profile_pseudo_textView);
 
-                Log.d("_ownUser", String.valueOf(_ownUser));
+                _profile_nbFollowers = (TextView) findViewById(R.id.profile_nbfollowers);
+                _profile_linearLayout_followers = (LinearLayout) findViewById(R.id.profile_linearLayout_followers);
+                _profile_linearLayout_followers.setOnClickListener(this);
+
                 _profile_edit = (ImageView) findViewById(R.id.profile_edit);
                 if (_ownUser) {
                     _profile_edit.setOnClickListener(this);
 
                     getSupportActionBar().setTitle(getString(R.string.profile_title));
+                }
+                else {
+                    _profile_linearLayout_followers.setVisibility(View.GONE);
                 }
                 break;
             case "editProfile":
@@ -193,10 +207,9 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
                 break;
             case R.id.profile_follow:
                 if (_userEntity != null) {
-                    List<UserEntity> followingList = _userEntity.get_followingUserEntity();
                     boolean contain = false;
-                    for (UserEntity userEntity : followingList) {
-                        if (Objects.equals(userEntity.get_id(), _userEntityProfile.get_id())) {
+                    for (FollowEntity followEntity : _followEntities) {
+                        if (Objects.equals(followEntity.get_following().get_id(), _userEntityProfile.get_id())) {
                             contain = true;
                         }
                     }
@@ -205,6 +218,10 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
                 break;
             case R.id.profile_edit_submit:
                 _profilePresenter.onSaveClicked();
+                break;
+            case R.id.profile_linearLayout_followers:
+                Intent intent = new Intent(ProfileActivity.this, FollowersActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -247,12 +264,17 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
     public void setUserEntity(UserEntity userEntity) {
 
         _userEntity = userEntity;
+    }
+
+    @Override
+    public void setFollowing(List<FollowEntity> followEntities) {
+        _followEntities = followEntities;
 
         if (!_ownUser) {
             boolean contain = false;
 
-            for (UserEntity userEntityTmp : userEntity.get_followingUserEntity()) {
-                if (Objects.equals(userEntityTmp.get_id(), _userEntityProfile.get_id())) {
+            for (FollowEntity followEntity : followEntities) {
+                if (Objects.equals(followEntity.get_following().get_id(), _userEntityProfile.get_id())) {
                     contain = true;
                 }
             }
@@ -270,5 +292,12 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
             }
 
         }
+    }
+
+    @Override
+    public void setFollowers(List<FollowerEntity> followerEntities) {
+        _profile_linearLayout_followers.setVisibility(View.VISIBLE);
+        int nb = followerEntities != null ? followerEntities.size() : 0;
+        _profile_nbFollowers.setText(String.valueOf(nb));
     }
 }

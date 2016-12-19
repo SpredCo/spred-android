@@ -11,37 +11,37 @@ import java.util.List;
 public class SpredCastEntity implements Serializable {
 
     @SerializedName("id")
-    protected String _id = null;
+    private String _id = null;
 
     @SerializedName("name")
-    protected String _name = null;
+    private String _name = null;
 
     @SerializedName("description")
-    protected String _description = null;
+    private String _description = null;
 
     @SerializedName("tags")
-    protected List<String> _tags = null;
+    private List<TagEntity> _tags = null;
 
     @SerializedName("date")
-    protected String _date = null;
+    private String _date = null;
 
     @SerializedName("is_public")
-    protected boolean _public;
+    private boolean _public;
 
     @SerializedName("members")
-    protected List<String> _members;
+    private List<String> _members;
 
     @SerializedName("duration")
-    protected int _duration;
+    private int _duration;
 
     @SerializedName("state")
-    protected int _state;
+    private int _state;
 
     @SerializedName("creator")
-    protected UserEntity _creator;
+    private UserEntity _creator;
 
     @SerializedName("user_capacity")
-    protected int _user_capacity;
+    private int _user_capacity;
 
     public String get_id() {
         return _id;
@@ -67,11 +67,11 @@ public class SpredCastEntity implements Serializable {
         this._description = _description;
     }
 
-    public List<String> get_tags() {
+    public List<TagEntity> get_tags() {
         return _tags;
     }
 
-    public void set_tags(List<String> _tags) {
+    public void set_tags(List<TagEntity> _tags) {
         this._tags = _tags;
     }
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.eip.roucou_c.spred.Entities.ConversationEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
+import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Inbox.IInboxView;
 import com.eip.roucou_c.spred.R;
@@ -75,8 +76,8 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
 
         if (spredCastEntity.get_tags() != null && !spredCastEntity.get_tags().isEmpty()) {
             String tags = "";
-            for (String tag : spredCastEntity.get_tags()) {
-                tags += "#" + tag + ", ";
+            for (TagEntity tagEntity : spredCastEntity.get_tags()) {
+                tags += "#" + tagEntity.get_name() + ", ";
             }
             tags = tags.substring(0, tags.length() - 2);
             holder._tags.setText(tags);

@@ -3,6 +3,8 @@ package com.eip.roucou_c.spred.Profile;
 import android.util.Log;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.FollowEntity;
+import com.eip.roucou_c.spred.Entities.FollowerEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Errors.ApiError;
@@ -26,13 +28,12 @@ import retrofit2.http.Path;
 /**
  * Created by roucou_c on 27/09/2016.
  */
-public class ProfileService extends MyService {
+class ProfileService extends MyService {
     private final IProfileView _view;
+    private final IFollowersView _iFollowersView;
     private IProfileService _api;
 
-
-
-    public interface IProfileService {
+    interface IProfileService {
         @Headers("Content-Type: application/json")
         @GET("users/me")
         Call<UserEntity> getProfile();
@@ -46,21 +47,30 @@ public class ProfileService extends MyService {
         Call<String> checkEmail(@Path("email") String email);
 
         @Headers("Content-Type: application/json")
+        @GET("users/follow")
+        Call<List<FollowEntity>> getFollowing();
+
+        @Headers("Content-Type: application/json")
         @POST("users/{user_id}/follow")
         Call<Void> follow(@Path("user_id") String user_id);
 
         @Headers("Content-Type: application/json")
         @POST("users/{user_id}/unfollow")
         Call<Void> unfollow(@Path("user_id") String user_id);
+
+        @Headers("Content-Type: application/json")
+        @GET("users/follower")
+        Call<List<FollowerEntity>> getFollowers();
     }
 
-    public ProfileService(IProfileView view, Manager manager, TokenEntity tokenEntity) {
+    ProfileService(IProfileView view, IFollowersView iFollowersView, Manager manager, TokenEntity tokenEntity) {
         super(manager);
         this._view = view;
+        this._iFollowersView = iFollowersView;
         this._api = ServiceGeneratorApi.createService(IProfileService.class, "api", tokenEntity, manager);
     }
 
-    protected void getProfile(final boolean populate) {
+    void getProfile(final boolean populate) {
         Call<UserEntity> call = _api.getProfile();
         call.enqueue(new Callback<UserEntity>() {
             @Override
@@ -85,7 +95,7 @@ public class ProfileService extends MyService {
         });
     }
 
-    protected void patchProfile(HashMap<String, String> params) {
+    void patchProfile(HashMap<String, String> params) {
         Call<UserEntity> call = _api.patchProfile(params);
         call.enqueue(new Callback<UserEntity>() {
 
@@ -110,7 +120,7 @@ public class ProfileService extends MyService {
     }
 
 
-    public void checkEmail(String email) {
+    void checkEmail(String email) {
         IProfileService api = ServiceGeneratorApi.createService(IProfileService.class, "login", _manager);
 
         Call<String> call = api.checkEmail(email);
@@ -135,7 +145,7 @@ public class ProfileService extends MyService {
         });
     }
 
-    public void follow(String user_id, final boolean isFollow) {
+    void follow(String user_id, final boolean isFollow) {
         Call<Void> call;
 
         if (isFollow) {
@@ -160,4 +170,49 @@ public class ProfileService extends MyService {
             }
         });
     }
+
+    void getFollowing() {
+        Call<List<FollowEntity>> call = _api.getFollowing();
+        call.enqueue(new Callback<List<FollowEntity>>() {
+            @Override
+            public void onResponse(Call<List<FollowEntity>> call, Response<List<FollowEntity>> response) {
+
+                if (!response.isSuccess()) {
+
+                }
+                else {
+                    List<FollowEntity> followEntities = response.body();
+                    _view.setFollowing(followEntities);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FollowEntity>> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
+
+    void getFollowers() {
+        Call<List<FollowerEntity>> call = _api.getFollowers();
+        call.enqueue(new Callback<List<FollowerEntity>>() {
+            @Override
+            public void onResponse(Call<List<FollowerEntity>> call, Response<List<FollowerEntity>> response) {
+
+                if (!response.isSuccess()) {
+
+                }
+                else {
+                    List<FollowerEntity> followerEntities = response.body();
+                    _iFollowersView.setFollowers(followerEntities);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<FollowerEntity>> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
+
 }

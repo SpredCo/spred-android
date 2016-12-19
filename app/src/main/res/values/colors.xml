@@ -24,4 +24,9 @@
     <color name="green">#4CAF50</color>
     <color name="orange">#FF9800</color>
 
+
+    <color name="tag">#00BCD4</color>
+    <color name="cast">#4CAF50</color>
+    <color name="user">#FF9800</color>
+
 </resources>

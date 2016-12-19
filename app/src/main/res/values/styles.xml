@@ -26,14 +26,14 @@
     </style>
 
     <style name="SubmitButton">
-    <item name="fb_borderWidth">2dp</item>
-    <item name="fb_defaultColor">@color/background_submit</item>
-    <item name="fb_focusColor">#8cc9f8</item>
-    <item name="fb_borderColor">#fff</item>
-    <item name="fb_radius">0dp</item>
-    <item name="fb_textColor">#000</item>
+        <item name="fb_borderWidth">2dp</item>
+        <item name="fb_defaultColor">@color/background_submit</item>
+        <item name="fb_focusColor">#8cc9f8</item>
+        <item name="fb_borderColor">#fff</item>
+        <item name="fb_radius">0dp</item>
+        <item name="fb_textColor">#fff</item>
 
     </style>
 
     <color name="navbar_background">#55AA55</color>
-    </resources>
+</resources>

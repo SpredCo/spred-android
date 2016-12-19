@@ -79,8 +79,8 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent2 = new Intent(IntroActivity.this, SignUpActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.intro_skip:
-                break;
+//            case R.id.intro_skip:
+//                break;
         }
     }
 }

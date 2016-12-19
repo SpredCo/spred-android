@@ -6,7 +6,6 @@ import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
-import com.eip.roucou_c.spred.SignIn.SignInService;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
@@ -15,48 +14,49 @@ import java.util.Objects;
 /**
  * Created by roucou_c on 27/09/2016.
  */
-public class ProfilePresenter {
+class ProfilePresenter {
 
     private final ProfileService _profileService;
-    private final IProfileView _view;
+    private final IProfileView _iProfileView;
+    private final IFollowersView _iFollowersView;
 
-    public ProfilePresenter(IProfileView view, Manager manager, TokenEntity tokenEntity) {
-        this._view = view;
-        this._profileService = new ProfileService(view, manager, tokenEntity);
-
+    ProfilePresenter(IProfileView view, IFollowersView iFollowersView, Manager manager, TokenEntity tokenEntity) {
+        this._iProfileView = view;
+        this._iFollowersView = iFollowersView;
+        this._profileService = new ProfileService(view, iFollowersView, manager, tokenEntity);
     }
 
-    public void getProfile(boolean populate) {
+    void getProfile(boolean populate) {
         _profileService.getProfile(populate);
     }
 
-    public void onSaveClicked() {
-        String email = _view.getEmail();
-        String firstName = _view.getFirstName();
-        String lastName = _view.getLastName();
+    void onSaveClicked() {
+        String email = _iProfileView.getEmail();
+        String firstName = _iProfileView.getFirstName();
+        String lastName = _iProfileView.getLastName();
 
-        UserEntity userEntity = _view.getUserEntity();
+        UserEntity userEntity = _iProfileView.getUserEntity();
 
         boolean isError = false;
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             if (email.isEmpty()) {
-                _view.setErrorEmail(R.string.empty_input);
+                _iProfileView.setErrorEmail(R.string.empty_input);
             }
             else {
-                _view.setErrorEmail(R.string.invalid_email);
+                _iProfileView.setErrorEmail(R.string.invalid_email);
             }
             isError = true;
         }
         if (firstName.isEmpty()) {
-            _view.setErrorFirstName(R.string.empty_input);
+            _iProfileView.setErrorFirstName(R.string.empty_input);
             isError = true;
         }
         if (lastName.isEmpty()) {
-            _view.setErrorLastName(R.string.empty_input);
+            _iProfileView.setErrorLastName(R.string.empty_input);
             isError = true;
         }
 
-        MaterialEditText materialEditTextEmail = _view.getMaterialEditTextEmail();
+        MaterialEditText materialEditTextEmail = _iProfileView.getMaterialEditTextEmail();
 
         if (materialEditTextEmail.getError() == null && !isError) {
 
@@ -76,16 +76,24 @@ public class ProfilePresenter {
         }
     }
 
-    public void checkEmail() {
-        String email = _view.getEmail();
+    void checkEmail() {
+        String email = _iProfileView.getEmail();
 
-        UserEntity userEntity = _view.getUserEntity();
+        UserEntity userEntity = _iProfileView.getUserEntity();
         if (email != null && !email.isEmpty() && userEntity != null && !Objects.equals(userEntity.get_email(), email)) {
             this._profileService.checkEmail(email);
         }
     }
 
-    public void follow(String user_id, boolean isFollow) {
+    void follow(String user_id, boolean isFollow) {
         _profileService.follow(user_id, isFollow);
+    }
+
+    void getFollowing() {
+        _profileService.getFollowing();
+    }
+
+    void getFollowers() {
+        _profileService.getFollowers();
     }
 }

@@ -45,7 +45,7 @@ public class SpredCastActivity extends AppCompatActivity implements ISpredCastVi
         _manager = Manager.getInstance(getApplicationContext());
 
         TokenEntity tokenEntity = _manager._tokenManager.select();
-        _spredCastPresenter = new SpredCastPresenter(this, null, _manager, tokenEntity);
+        _spredCastPresenter = new SpredCastPresenter(this, null, null, null, _manager, tokenEntity);
 
         _userEntity = (UserEntity) getIntent().getSerializableExtra("userEntity");
 

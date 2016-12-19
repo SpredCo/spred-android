@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="MaterialSearchBar-0.3.5-beta">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.mancj/MaterialSearchBar/0.3.5-beta/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.mancj/MaterialSearchBar/0.3.5-beta/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

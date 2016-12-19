@@ -53,6 +53,29 @@
                 android:paddingBottom="24dp">
 
 
+                <LinearLayout
+                    android:id="@+id/profile_linearLayout_followers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="80dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:layout_alignParentRight="true"
+                    android:visibility="gone"
+                    android:gravity="center">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_person_white_24dp" />
+
+                    <TextView
+                        android:id="@+id/profile_nbfollowers"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textColor="#fff"
+                        android:textSize="20sp"
+                        android:text="2"/>
+                </LinearLayout>
                 <ImageView
                     android:id="@+id/profile_edit"
                     android:layout_width="30dp"
@@ -75,13 +98,13 @@
                     android:visibility="gone"/>
 
                 <!--<ImageView-->
-                    <!--android:id="@+id/drop_down_option_menu"-->
-                    <!--android:layout_width="30dp"-->
-                    <!--android:layout_height="30dp"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginLeft="16dp"-->
-                    <!--android:layout_marginTop="16dp"-->
-                    <!--android:src="@drawable/ic_more_vert_white_24dp" />-->
+                <!--android:id="@+id/drop_down_option_menu"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:src="@drawable/ic_more_vert_white_24dp" />-->
 
                 <TextView
                     android:id="@+id/profile_name_textView"

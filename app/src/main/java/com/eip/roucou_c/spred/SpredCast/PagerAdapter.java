@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.SpredCast.Tokenfield.ContactsCompletionView;
 import com.eip.roucou_c.spred.SpredCast.Tokenfield.TagsView;
@@ -73,6 +74,12 @@ class PagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
+    public void populateTags(List<TagEntity> tagEntities) {
+        if (fragmentList.size() != 0) {
+            fragmentList.get(0).setTags(tagEntities);
+        }
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -85,9 +92,9 @@ class PagerAdapter extends FragmentPagerAdapter {
          */
         private MaterialEditText _spredcast_name;
         private MaterialEditText _spredcast_description;
-        private List<String> _spredcast_tagsList;
+        private List<TagEntity> _spredcast_tagsEntities;
         private TagsView _tagView;
-        private FilteredArrayAdapter<String> _adapterTags;
+        private FilteredArrayAdapter<TagEntity> _adapterTags;
 
         /**
          * Step 2
@@ -106,6 +113,7 @@ class PagerAdapter extends FragmentPagerAdapter {
         private ArrayList<String> _spredcast_membersList;
         private FilteredArrayAdapter<String> _adapterMembers;
         private ContactsCompletionView _membersView;
+        private ArrayList<TagEntity> _tagsEntities;
 
 
         public PlaceholderFragment() {
@@ -220,15 +228,10 @@ class PagerAdapter extends FragmentPagerAdapter {
         }
 
         private void initTag(View view) {
-            _spredcast_tagsList = new ArrayList<>();
-            List<String> tagsList = new ArrayList<>();
-            tagsList.add("tag1");
-            tagsList.add("tag2");
-            tagsList.add("tag3");
-            tagsList.add("tag4");
-            tagsList.add("tag5");
-            tagsList.add("tag6");
-            _adapterTags = new FilteredArrayAdapter<String>(this.getContext(), R.layout.tokenfield_single_row, tagsList) {
+            _spredcast_tagsEntities = new ArrayList<>();
+            _tagsEntities = new ArrayList<>();
+
+            _adapterTags = new FilteredArrayAdapter<TagEntity>(this.getContext(), R.layout.tokenfield_single_row, _tagsEntities) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     if (convertView == null) {
@@ -237,32 +240,32 @@ class PagerAdapter extends FragmentPagerAdapter {
                         convertView = l.inflate(R.layout.tokenfield_single_row, parent, false);
                     }
 
-                    String tag = getItem(position);
-                    ((TextView) convertView.findViewById(R.id.name)).setText(tag);
+                    TagEntity tagEntity = getItem(position);
+                    ((TextView) convertView.findViewById(R.id.name)).setText(tagEntity.get_name());
                     (convertView.findViewById(R.id.email)).setVisibility(View.GONE);
 
                     return convertView;
                 }
 
                 @Override
-                protected boolean keepObject(String tag, String mask) {
+                protected boolean keepObject(TagEntity tag, String mask) {
                     mask = mask.toLowerCase();
-                    return tag.toLowerCase().startsWith(mask);
+                    return tag.get_name().startsWith(mask);
                 }
             };
 
             _tagView = (TagsView) view.findViewById(R.id.spredcast_tags);
             _tagView.setAdapter(_adapterTags);
             _tagView.setSplitChar(';');
-            _tagView.setTokenListener(new TokenCompleteTextView.TokenListener<String>() {
+            _tagView.setTokenListener(new TokenCompleteTextView.TokenListener<TagEntity>() {
                 @Override
-                public void onTokenAdded(String token) {
-                    _spredcast_tagsList.add(token);
+                public void onTokenAdded(TagEntity tagEntity) {
+                    _spredcast_tagsEntities.add(tagEntity);
                 }
 
                 @Override
-                public void onTokenRemoved(String token) {
-                    _spredcast_tagsList.remove(token);
+                public void onTokenRemoved(TagEntity tagEntity) {
+                    _spredcast_tagsEntities.remove(tagEntity);
                 }
             });
             _tagView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -274,6 +277,7 @@ class PagerAdapter extends FragmentPagerAdapter {
             _tagView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
             _tagView.setThreshold(0);
             _tagView.allowDuplicates(false);
+
         }
 
         private void initMembers(View view) {
@@ -338,8 +342,8 @@ class PagerAdapter extends FragmentPagerAdapter {
             return _spredcast_description;
         }
 
-        public List<String> get_spredcast_tagsList() {
-            return _spredcast_tagsList;
+        public List<TagEntity> get_spredcast_tagsEntities() {
+            return _spredcast_tagsEntities;
         }
 
         public SwitchCompat get_spredcast_now() {
@@ -413,6 +417,12 @@ class PagerAdapter extends FragmentPagerAdapter {
 
         public FilteredArrayAdapter<String> get_adapterMembers() {
             return _adapterMembers;
+        }
+
+        public void setTags(List<TagEntity> tagEntities) {
+            _tagsEntities.addAll(tagEntities);
+            _adapterTags.addAll(tagEntities);
+            _adapterTags.notifyDataSetChanged();
         }
     }
 }

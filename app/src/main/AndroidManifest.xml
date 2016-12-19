@@ -19,11 +19,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUp.SignUpActivity"/>
-        <activity android:name=".Home.HomeActivity"/>
+        <activity android:name=".Home.HomeActivity">
+            <meta-data android:name="android.app.searchable"
+                android:resource="@layout/search" />
+        </activity>
         <activity android:name=".SignIn.SignInActivity"/>
         <activity android:name=".Profile.ProfileActivity" />
+        <activity android:name=".Profile.FollowersActivity" />
         <activity android:name=".Inbox.InboxActivity" />
         <activity android:name=".SpredCast.SpredCastActivity" />
+        <activity android:name=".SpredCast.SpredCastByTagActivity" />
+        <activity android:name=".SpredCast.SpredCastDetailsActivity" />
         <activity android:name=".SpredCast.SpredCastNewActivity" android:screenOrientation="portrait"/>
 
         <activity android:name="com.facebook.FacebookActivity"

@@ -1,11 +1,13 @@
 package com.eip.roucou_c.spred.SpredCast;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,12 +21,16 @@ public class SpredCastPresenter {
     private final Manager _manager;
     private final SpredCastService _spredCastService;
     private final ISpredCastNewView _iSpredCastNewView;
+    private final ISpredCastDetailsView _iSpredCastDetailsView;
+    private final ISpredCastByTagView _iSpredCastByTagView;
 
-    public SpredCastPresenter(ISpredCastView iSpredCastView, ISpredCastNewView iSpredCastNewView, Manager manager, TokenEntity tokenEntity) {
+    public SpredCastPresenter(ISpredCastView iSpredCastView, ISpredCastNewView iSpredCastNewView, ISpredCastDetailsView iSpredCastDetailsView, ISpredCastByTagView iSpredCastByTagView, Manager manager, TokenEntity tokenEntity) {
         _iSpredCastView = iSpredCastView;
         _iSpredCastNewView = iSpredCastNewView;
+        _iSpredCastDetailsView = iSpredCastDetailsView;
+        _iSpredCastByTagView = iSpredCastByTagView;
         _manager = manager;
-        this._spredCastService = new SpredCastService(iSpredCastView, iSpredCastNewView, manager, tokenEntity);
+        this._spredCastService = new SpredCastService(iSpredCastView, iSpredCastNewView, iSpredCastByTagView, manager, tokenEntity);
     }
 
     public void getSpredCast() {
@@ -46,13 +52,13 @@ public class SpredCastPresenter {
         Date date = _iSpredCastNewView.getSpredCastDate();
         Date time = _iSpredCastNewView.getSpredCastTime();
         int duration = _iSpredCastNewView.getSpredCastDuration();
-        List<String> tagsList = _iSpredCastNewView.getSpredCastTags();
+        List<TagEntity> tagsEntities = _iSpredCastNewView.getSpredCastTags();
         List<String> membersList = _iSpredCastNewView.getSpredCastMembers();
         String user_capacity = _iSpredCastNewView.getSpredCastUserCapacity();
 
         boolean isError = false;
 
-        if (!checkNewSpredCastStep1(name, description, tagsList)) {
+        if (!checkNewSpredCastStep1(name, description, tagsEntities)) {
             isError = true;
         }
         else if (!checkNewSpredCastStep2(is_now, date, time, duration)) {
@@ -66,6 +72,12 @@ public class SpredCastPresenter {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'");
 
             HashMap<String, Object> params = new HashMap<>();
+
+            List<String> tagsList = new ArrayList<>();
+
+            for (TagEntity tagEntity : tagsEntities) {
+                tagsList.add(tagEntity.get_id());
+            }
 
             params.put("name", name);
             params.put("description", description);
@@ -82,7 +94,7 @@ public class SpredCastPresenter {
         }
     }
 
-    public boolean checkNewSpredCastStep1(String name, String description, List<String> tags) {
+    public boolean checkNewSpredCastStep1(String name, String description, List<TagEntity> tags) {
 
         boolean isError = false;
 
@@ -131,4 +143,23 @@ public class SpredCastPresenter {
         return !isError;
     }
 
+    public void getTags() {
+        _spredCastService.getTags();
+    }
+
+    public void getSpredCastsByTag(String tag) {
+        _spredCastService.getSpredCastsByTag(tag);
+    }
+
+    public void getTag(String tag_name) {
+        _spredCastService.getTag(tag_name);
+    }
+
+    public void getIsSubscriptionTag(String id) {
+        _spredCastService.getIsSubscriptionTag(id);
+    }
+
+    public void subscriptionTag(boolean isSub, String tag_id) {
+        _spredCastService.subscriptionTag(isSub, tag_id);
+    }
 }

@@ -16,25 +16,21 @@ import java.util.List;
 
 public class UserEntity implements Serializable{
     @SerializedName("id")
-    protected String _id = null;
+    private String _id = null;
     @SerializedName("email")
-    protected String _email = null;
+    private String _email = null;
     @SerializedName("first_name")
-    protected String _first_name = null;
+    private String _first_name = null;
     @SerializedName("last_name")
-    protected String _last_name = null;
+    private String _last_name = null;
     @SerializedName("picture_url")
-    protected String _picture_url = null;
+    private String _picture_url = null;
     @SerializedName("created_at")
-    protected String _created_at = null;
+    private String _created_at = null;
     @SerializedName("updated_at")
-    protected String _updated_at = null;
-
+    private String _updated_at = null;
     @SerializedName("pseudo")
     private String _pseudo = null;
-
-    @SerializedName("following") // todo gere le probleme de serialzage du foolowing
-    private List<Object> _following = new ArrayList<>();
 
     public String get_pseudo() {
         return _pseudo;
@@ -44,27 +40,7 @@ public class UserEntity implements Serializable{
         this._pseudo = _pseudo;
     }
 
-    public List<Object> get_following() {
-        return _following;
-    }
-
-    public List<UserEntity> get_followingUserEntity() {
-        List<UserEntity> userEntities = new ArrayList<>();
-
-        for (Object user : _following) {
-            Gson gson = new Gson();
-            String json = gson.toJson(user);
-            UserEntity userEntity = gson.fromJson(json, UserEntity.class);
-            userEntities.add(userEntity);
-        }
-        return userEntities;
-    }
-
     public static void main(Object user) {
-    }
-
-    public void set_following(List<Object> _following) {
-        this._following = _following;
     }
 
     public String get_id() {
