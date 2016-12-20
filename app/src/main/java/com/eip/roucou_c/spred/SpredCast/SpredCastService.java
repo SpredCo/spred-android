@@ -3,6 +3,8 @@ package com.eip.roucou_c.spred.SpredCast;
 import android.util.Log;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.Reminder;
+import com.eip.roucou_c.spred.Entities.ReminderEntity;
 import com.eip.roucou_c.spred.Entities.ResultEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TagEntity;
@@ -27,6 +29,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by roucou_c on 07/11/2016.
@@ -37,8 +40,13 @@ public class SpredCastService extends MyService{
     private final ISpredCastView _iSpredCastView;
     private final ISpredCastNewView _iSpredCastNewView;
     private final ISpredCastByTagView _iSpredCastByTagView;
+    private final ISpredCastDetailsView _iSpredCastDetailsView;
 
     public interface ISpredCastService {
+        @Headers("Content-Type: application/json")
+        @GET("users/me")
+        Call<UserEntity> getProfile();
+
         @Headers("Content-Type: application/json")
         @GET("users/search/pseudo/{partial_pseudo}")
         Call<List<UserEntity>> searchPartialPseudo(@Path("partial_pseudo") String partial_pseudo);
@@ -74,15 +82,53 @@ public class SpredCastService extends MyService{
         @Headers("Content-Type: application/json")
         @DELETE("tags/{tag_id}/subscription")
         Call<Void> deleteSubscription(@Path("tag_id") String tag_id);
+
+        @Headers("Content-Type: application/json")
+        @GET("spredcasts/{cast_id}/remind")
+        Call<ResultEntity> getIsRemind(@Path("cast_id") String cast_id);
+
+
+        @Headers("Content-Type: application/json")
+        @POST("spredcasts/{cast_id}/remind")
+        Call<Void> postReminder(@Path("cast_id") String tag_id);
+
+        @Headers("Content-Type: application/json")
+        @DELETE("spredcasts/{cast_id}/remind")
+        Call<Void> deleteReminder(@Path("cast_id") String tag_id);
+
+
+        @Headers("Content-Type: application/json")
+        @GET("spredcasts/{cast_id}/reminders")
+        Call<List<ReminderEntity>> getReminders(@Path("cast_id") String tag_id);
+
     }
 
-    public SpredCastService(ISpredCastView iSpredCastView, ISpredCastNewView iSpredCastNewView, ISpredCastByTagView iSpredCastByTagView, Manager manager, TokenEntity tokenEntity) {
+    public SpredCastService(ISpredCastView iSpredCastView, ISpredCastNewView iSpredCastNewView, ISpredCastDetailsView iSpredCastDetailsView, ISpredCastByTagView iSpredCastByTagView, Manager manager, TokenEntity tokenEntity) {
         super(manager);
         this._iSpredCastView = iSpredCastView;
         this._iSpredCastNewView = iSpredCastNewView;
+        this._iSpredCastDetailsView = iSpredCastDetailsView;
         this._iSpredCastByTagView = iSpredCastByTagView;
         this._api = ServiceGeneratorApi.createService(ISpredCastService.class, "api", tokenEntity, manager);
         this._login = ServiceGeneratorApi.createService(ISpredCastService.class, "login", manager);
+    }
+
+    public void getUser() {
+        Call<UserEntity> call = _api.getProfile();
+        call.enqueue(new Callback<UserEntity>() {
+            @Override
+            public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
+
+                if (response.isSuccessful()) {
+                    UserEntity userEntity = response.body();
+                    _iSpredCastDetailsView.setUserEntity(userEntity);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserEntity> call, Throwable t) {
+            }
+        });
     }
 
     public void getSpredCast() {
@@ -90,7 +136,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<List<SpredCastEntity>>() {
             @Override
             public void onResponse(Call<List<SpredCastEntity>> call, Response<List<SpredCastEntity>> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     List<SpredCastEntity> spredCastEntities = response.body();
 
                     _iSpredCastView.populateSpredCasts(spredCastEntities);
@@ -111,7 +157,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<List<UserEntity>>() {
             @Override
             public void onResponse(Call<List<UserEntity>> call, Response<List<UserEntity>> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     List<UserEntity> userEntities = response.body();
 
                     _iSpredCastNewView.populateSearchPseudo(userEntities);
@@ -131,7 +177,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<SpredCastEntity>() {
             @Override
             public void onResponse(Call<SpredCastEntity> call, Response<SpredCastEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
 //                    SpredCastEntity spredCastEntity = response.body();
 
                     Log.d("yo", "yo");
@@ -152,7 +198,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<List<TagEntity>>() {
             @Override
             public void onResponse(Call<List<TagEntity>> call, Response<List<TagEntity>> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     List<TagEntity> tagEntities = response.body();
 
                     _iSpredCastNewView.populateTags(tagEntities);
@@ -172,7 +218,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<List<SpredCastEntity>>() {
             @Override
             public void onResponse(Call<List<SpredCastEntity>> call, Response<List<SpredCastEntity>> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     List<SpredCastEntity> spredCastEntities = response.body();
 
                     _iSpredCastView.populateSpredCasts(spredCastEntities);
@@ -193,7 +239,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<TagEntity>() {
             @Override
             public void onResponse(Call<TagEntity> call, Response<TagEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     TagEntity tagEntity = response.body();
 
                     _iSpredCastByTagView.setTag(tagEntity);
@@ -213,7 +259,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<ResultEntity>() {
             @Override
             public void onResponse(Call<ResultEntity> call, Response<ResultEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     ResultEntity resultEntity = response.body();
 
                     _iSpredCastByTagView.setIsSub(resultEntity.get_result());
@@ -240,7 +286,7 @@ public class SpredCastService extends MyService{
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     _iSpredCastByTagView.setIsSub(isSub);
                 }
             }
@@ -251,4 +297,70 @@ public class SpredCastService extends MyService{
             }
         });
     }
+
+    public void getIsRemind(final String cast_id) {
+        Call<ResultEntity> call = _api.getIsRemind(cast_id);
+        call.enqueue(new Callback<ResultEntity>() {
+            @Override
+            public void onResponse(Call<ResultEntity> call, Response<ResultEntity> response) {
+                if (response.isSuccessful()) {
+                    ResultEntity resultEntity = response.body();
+                    _iSpredCastDetailsView.setIsRemind(resultEntity.get_result());
+
+//                    for (Reminder reminder : reminders) {
+//                        if (Objects.equals(reminder.get_id(), cast_id)) {
+//                        }
+//                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultEntity> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
+
+    public void setReminder(final boolean isRemind, String tag_id) {
+        Call<Void> call;
+        if (isRemind) {
+            call = _api.postReminder(tag_id);
+        }
+        else {
+            call = _api.deleteReminder(tag_id);
+        }
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    _iSpredCastDetailsView.setIsRemind(isRemind);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
+
+    public void getReminders(String cast_id) {
+        Call<List<ReminderEntity>> call = _api.getReminders(cast_id);
+        call.enqueue(new Callback<List<ReminderEntity>>() {
+            @Override
+            public void onResponse(Call<List<ReminderEntity>> call, Response<List<ReminderEntity>> response) {
+                if (response.isSuccessful()) {
+                    List<ReminderEntity> reminderEntities = response.body();
+                    _iSpredCastDetailsView.setReminders(reminderEntities);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ReminderEntity>> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
+
 }

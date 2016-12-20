@@ -29,7 +29,7 @@ import java.util.Objects;
 /**
  * Created by roucou_c on 19/11/2016.
  */
-public class SpredCastNewActivity extends AppCompatActivity implements ISpredCastNewView, ISpredCastView{
+public class SpredCastNewActivity extends AppCompatActivity implements ISpredCastNewView{
 
     private SpredCastPresenter _spredCastPresenter;
     private UserEntity _userEntity;
@@ -219,7 +219,7 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
     public void populateSearchPseudo(List<UserEntity> userEntities) {
         PagerAdapter.PlaceholderFragment fragment = mSectionsPagerAdapter.getItem(page);
 
-        List<String> tmpMembers = new ArrayList<>();
+        List<UserEntity> tmpMembers = new ArrayList<>();
 
         ArrayList<String> spredcast_membersList = fragment.get_spredcast_membersList();
         if (spredcast_membersList != null) {
@@ -234,24 +234,14 @@ public class SpredCastNewActivity extends AppCompatActivity implements ISpredCas
                             insert = false;
                         }
                     }
-                    if (insert && !tmpMembers.contains(userEntity.get_pseudo())) {
-                        tmpMembers.add(userEntity.get_pseudo());
+                    if (insert && !tmpMembers.contains(userEntity)) {
+                        tmpMembers.add(userEntity);
                     }
                 }
             }
         }
         fragment.get_adapterMembers().clear();
         fragment.get_adapterMembers().addAll(tmpMembers);
-    }
-
-    @Override
-    public void populateSpredCasts(List<SpredCastEntity> spredCastEntities) {
-
-    }
-
-    @Override
-    public void cancelRefresh() {
-
     }
 
     @Override

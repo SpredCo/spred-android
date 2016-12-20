@@ -14,8 +14,13 @@ import com.eip.roucou_c.spred.Entities.ConversationEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by roucou_c on 29/09/2016.
@@ -32,6 +37,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView _object;
         public TextView _members_pseudo;
+        public TextView _date;
         private String _conversation_id;
         public ImageView _read;
 
@@ -39,6 +45,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
             super(view);
             _object = (TextView) view.findViewById(R.id.inbox_object);
             _members_pseudo = (TextView) view.findViewById(R.id.inbox_members_pseudo);
+            _date = (TextView) view.findViewById(R.id.inbox_date);
             _read = (ImageView) view.findViewById(R.id.inbox_read);
 
             LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.inbox_conversation);
@@ -92,6 +99,22 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         members_pseudo = members_pseudo.substring(0, members_pseudo.length()-2);
 
         holder._members_pseudo.setText(members_pseudo);
+
+        Calendar cal = Calendar.getInstance();
+
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.FRANCE);
+
+            Date date = format.parse(conversationEntity.get_last_msg());
+            cal.setTime(date);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+            SimpleDateFormat hour_min = new SimpleDateFormat("HH:mm", Locale.FRANCE);
+
+            holder._date.setText(dateFormat.format(date)+" "+hour_min.format(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

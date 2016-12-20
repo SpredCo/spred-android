@@ -85,7 +85,7 @@ public class SignInService extends MyService {
         call.enqueue(new Callback<TokenEntity>() {
             @Override
             public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     signInOnResponse(response);
                 }
                 else {
@@ -116,7 +116,7 @@ public class SignInService extends MyService {
             call.enqueue(new Callback<TokenEntity>() {
                 @Override
                 public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
-                    if (response.isSuccess()) {
+                    if (response.isSuccessful()) {
                         signInOnResponse(response);
                     }
                     else {
@@ -159,7 +159,7 @@ public class SignInService extends MyService {
                 @Override
                 public void onResponse(Call<TokenEntity> call, Response<TokenEntity> response) {
 
-                    if (response.isSuccess()) {
+                    if (response.isSuccessful()) {
                         signInExternalApi(params, api);
                     }
                     else {

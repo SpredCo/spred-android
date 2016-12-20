@@ -3,6 +3,7 @@ package com.eip.roucou_c.spred.SpredCast;
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
+import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
 
 import java.text.DateFormat;
@@ -30,7 +31,7 @@ public class SpredCastPresenter {
         _iSpredCastDetailsView = iSpredCastDetailsView;
         _iSpredCastByTagView = iSpredCastByTagView;
         _manager = manager;
-        this._spredCastService = new SpredCastService(iSpredCastView, iSpredCastNewView, iSpredCastByTagView, manager, tokenEntity);
+        this._spredCastService = new SpredCastService(iSpredCastView, iSpredCastNewView, iSpredCastDetailsView, iSpredCastByTagView, manager, tokenEntity);
     }
 
     public void getSpredCast() {
@@ -161,5 +162,21 @@ public class SpredCastPresenter {
 
     public void subscriptionTag(boolean isSub, String tag_id) {
         _spredCastService.subscriptionTag(isSub, tag_id);
+    }
+
+    public void getIsRemind(String cast_id) {
+        _spredCastService.getIsRemind(cast_id);
+    }
+
+    public void getUser() {
+        _spredCastService.getUser();
+    }
+
+    public void setReminder(boolean isRemind, String tag_id) {
+        _spredCastService.setReminder(isRemind, tag_id);
+    }
+
+    public void getReminders(String cast_id) {
+        _spredCastService.getReminders(cast_id);
     }
 }

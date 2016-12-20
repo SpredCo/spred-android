@@ -24,6 +24,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by roucou_c on 14/09/2016.
@@ -32,7 +33,6 @@ public class InboxService extends MyService{
     private final IHomeService _api;
 
     private final IInboxView _view;
-
 
 
     public interface IHomeService {
@@ -55,6 +55,10 @@ public class InboxService extends MyService{
         @Headers("Content-Type: application/json")
         @POST("inbox/conversation/{conversation_id}/message")
         Call<MessageEntity> replyConversation(@Body HashMap<String, Object> params, @Path("conversation_id") String conversation_id);
+
+        @Headers("Content-Type: application/json")
+        @PATCH("/v1/inbox/conversation/{conversation_id}/read")
+        Call<Void> updateReadState(@Path("conversation_id") String conversation_id, @Body HashMap<String, Object> params);
     }
     public InboxService(IInboxView view, Manager manager, TokenEntity tokenEntity) {
         super(manager);
@@ -67,7 +71,7 @@ public class InboxService extends MyService{
         call.enqueue(new Callback<List<ConversationEntity>>() {
             @Override
             public void onResponse(Call<List<ConversationEntity>> call, Response<List<ConversationEntity>> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     List<ConversationEntity> conversationEntities = response.body();
 
                     _view.populateInbox(conversationEntities);
@@ -88,7 +92,7 @@ public class InboxService extends MyService{
         call.enqueue(new Callback<ConversationEntity>() {
             @Override
             public void onResponse(Call<ConversationEntity> call, Response<ConversationEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     ConversationEntity conversationEntity = response.body();
 
                     _view.changeStep("inbox");
@@ -109,7 +113,7 @@ public class InboxService extends MyService{
         call.enqueue(new Callback<List<UserEntity>>() {
             @Override
             public void onResponse(Call<List<UserEntity>> call, Response<List<UserEntity>> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     List<UserEntity> userEntities = response.body();
 
                     _view.populateSearchPseudo(userEntities);
@@ -135,7 +139,7 @@ public class InboxService extends MyService{
         call.enqueue(new Callback<ConversationEntity>() {
             @Override
             public void onResponse(Call<ConversationEntity> call, Response<ConversationEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     ConversationEntity conversationEntity = response.body();
 
                     _view.setCurrentConversation(conversationEntity);
@@ -157,14 +161,11 @@ public class InboxService extends MyService{
         call.enqueue(new Callback<MessageEntity>() {
             @Override
             public void onResponse(Call<MessageEntity> call, Response<MessageEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     MessageEntity messageEntity = response.body();
 
                     _view.addMessageToConversation(messageEntity);
                     _view.clearMessageConversation();
-
-//                    _view.setCurrentConversation(conversationEntity);
-//                    _view.changeStep("inbox_conversation");
                 }
 
             }
@@ -177,4 +178,22 @@ public class InboxService extends MyService{
 
     }
 
+    public void updateReadState(String conversationEntity_id) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("read", true);
+        Call<Void> call = _api.updateReadState(conversationEntity_id, params);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
 }

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.eip.roucou_c.spred.Entities.TagEntity;
+import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.SpredCast.Tokenfield.ContactsCompletionView;
 import com.eip.roucou_c.spred.SpredCast.Tokenfield.TagsView;
@@ -111,7 +112,7 @@ class PagerAdapter extends FragmentPagerAdapter {
         private SwitchCompat _spredcast_private;
         private MaterialEditText _spredcast_user_capacity;
         private ArrayList<String> _spredcast_membersList;
-        private FilteredArrayAdapter<String> _adapterMembers;
+        private FilteredArrayAdapter<UserEntity> _adapterMembers;
         private ContactsCompletionView _membersView;
         private ArrayList<TagEntity> _tagsEntities;
 
@@ -282,7 +283,7 @@ class PagerAdapter extends FragmentPagerAdapter {
 
         private void initMembers(View view) {
             _spredcast_membersList = new ArrayList<>();
-            _adapterMembers = new FilteredArrayAdapter<String>(getContext(), R.layout.tokenfield_single_row, new ArrayList<String>()) {
+            _adapterMembers = new FilteredArrayAdapter<UserEntity>(getContext(), R.layout.tokenfield_single_row, new ArrayList<UserEntity>()) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     if (convertView == null) {
@@ -290,32 +291,32 @@ class PagerAdapter extends FragmentPagerAdapter {
                         convertView = l.inflate(R.layout.tokenfield_single_row, parent, false);
                     }
 
-                    String tag = getItem(position);
-                    ((TextView) convertView.findViewById(R.id.name)).setText(tag);
+                    UserEntity userEntity = getItem(position);
+                    ((TextView) convertView.findViewById(R.id.name)).setText("@"+userEntity.get_pseudo());
                     (convertView.findViewById(R.id.email)).setVisibility(View.GONE);
 
                     return convertView;
                 }
 
                 @Override
-                protected boolean keepObject(String tag, String mask) {
+                protected boolean keepObject(UserEntity userEntity, String mask) {
                     mask = mask.toLowerCase();
-                    return tag.toLowerCase().startsWith(mask);
+                    return userEntity.get_pseudo().toLowerCase().startsWith(mask);
                 }
             };
 
             _membersView = (ContactsCompletionView) view.findViewById(R.id.spredcast_members);
             _membersView.setAdapter(_adapterMembers);
             _membersView.setSplitChar(';');
-            _membersView.setTokenListener(new TokenCompleteTextView.TokenListener<String>() {
+            _membersView.setTokenListener(new TokenCompleteTextView.TokenListener<UserEntity>() {
                 @Override
-                public void onTokenAdded(String token) {
-                    _spredcast_membersList.add(token);
+                public void onTokenAdded(UserEntity userEntity) {
+                    _spredcast_membersList.add(userEntity.get_id());
                 }
 
                 @Override
-                public void onTokenRemoved(String token) {
-                    _spredcast_membersList.remove(token);
+                public void onTokenRemoved(UserEntity userEntity) {
+                    _spredcast_membersList.remove(userEntity.get_id());
                 }
             });
             _membersView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -415,7 +416,7 @@ class PagerAdapter extends FragmentPagerAdapter {
             this._spredcast_membersList = spredcast_membersList;
         }
 
-        public FilteredArrayAdapter<String> get_adapterMembers() {
+        public FilteredArrayAdapter<UserEntity> get_adapterMembers() {
             return _adapterMembers;
         }
 

@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -80,6 +81,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/spredcast_details_creator_cardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
@@ -267,6 +269,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/spredcast_details_members_linearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -314,6 +317,7 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
+                    android:id="@+id/spredcast_details_reminder_cardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
@@ -326,12 +330,34 @@
                         android:gravity="center_horizontal">
 
                         <mehdi.sakout.fancybuttons.FancyButton
-                            android:id="@+id/spredcast_details_submit"
+                            android:id="@+id/spredcast_details_reminder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
-                            fancy:fb_text="Participer"
+                            fancy:fb_text="Me notifier"
                             style="@style/SubmitButton" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/spredcast_details_delete_cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    app:contentPadding="15dp">
+
+                    <RelativeLayout
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+
+                        <mehdi.sakout.fancybuttons.FancyButton
+                            android:id="@+id/spredcast_details_delete"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            fancy:fb_text="Supprimer"
+                            style="@style/DeleteButton" />
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>

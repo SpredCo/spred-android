@@ -15,7 +15,7 @@ import com.tokenautocomplete.TokenCompleteTextView;
 /**
  * Created by roucou_c on 07/10/2016.
  */
-public class ContactsCompletionView extends TokenCompleteTextView<String> {
+public class ContactsCompletionView extends TokenCompleteTextView<UserEntity> {
 
     public ContactsCompletionView(Context context) {
         super(context);
@@ -30,15 +30,15 @@ public class ContactsCompletionView extends TokenCompleteTextView<String> {
     }
 
     @Override
-    protected View getViewForObject(String value) {
+    protected View getViewForObject(UserEntity userEntity) {
         LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         TokenTextView token = (TokenTextView) l.inflate(R.layout.contact_token, (ViewGroup) getParent(), false);
-        token.setText("@"+value);
+        token.setText("@"+userEntity.get_pseudo());
         return token;
     }
 
     @Override
-    protected String defaultObject(String completionText) {
+    protected UserEntity defaultObject(String completionText) {
         return null;
     }
 }

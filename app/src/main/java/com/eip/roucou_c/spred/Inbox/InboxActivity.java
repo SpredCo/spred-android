@@ -348,6 +348,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     @Override
     public void setCurrentConversation(ConversationEntity conversationEntity) {
         _currentConversation = conversationEntity;
+        _inboxPresenter.updateReadState(conversationEntity.get_id());
     }
 
     @Override

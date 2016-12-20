@@ -181,7 +181,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 cal.setTime(date);
                 holderCome._calendar.setImageBitmap(_imageGenerator.generateDateImage(cal, R.drawable.empty_calendar));
 
-                SimpleDateFormat hour_min = new SimpleDateFormat("hh:mm", Locale.FRANCE);
+                SimpleDateFormat hour_min = new SimpleDateFormat("HH:mm", Locale.FRANCE);
                 holderCome._time.setText(hour_min.format(date));
             } catch (ParseException e) {
                 e.printStackTrace();

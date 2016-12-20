@@ -71,7 +71,7 @@ public class HomeService extends MyService{
             @Override
             public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
 
                 }
                 else {
@@ -87,15 +87,15 @@ public class HomeService extends MyService{
         });
     }
 
-    void getSpredCasts(int state) {
+    void getSpredCasts(final int state) {
         Call<List<SpredCastEntity>> call = _login.getSpredCasts(String.valueOf(state));
         call.enqueue(new Callback<List<SpredCastEntity>>() {
             @Override
             public void onResponse(Call<List<SpredCastEntity>> call, Response<List<SpredCastEntity>> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     List<SpredCastEntity> spredCastEntities = response.body();
 
-                    _view.populateSpredCasts(spredCastEntities);
+                    _view.populateSpredCasts(spredCastEntities, state);
                     _view.cancelRefresh();
                 }
 
@@ -114,7 +114,7 @@ public class HomeService extends MyService{
             @Override
             public void onResponse(Call<List<FollowEntity>> call, Response<List<FollowEntity>> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
 
                 }
                 else {
@@ -137,7 +137,7 @@ public class HomeService extends MyService{
             @Override
             public void onResponse(Call<SpredCastEntity> call, Response<SpredCastEntity> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
 
                 }
                 else {
@@ -159,7 +159,7 @@ public class HomeService extends MyService{
             @Override
             public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
 
                 }
                 else {

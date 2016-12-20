@@ -107,4 +107,8 @@ public class InboxPresenter {
             _inboxService.replyConversation(params, conversation_id);
         }
     }
+
+    public void updateReadState(String conversationEntity_id) {
+        _inboxService.updateReadState(conversationEntity_id);
+    }
 }

@@ -69,7 +69,7 @@ public class SignUpService extends MyService {
             @Override
             public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
 
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     UserEntity userEntity = response.body();
 
                     if (userEntity != null) {
@@ -113,7 +113,7 @@ public class SignUpService extends MyService {
                 @Override
                 public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
 
-                    if (response.isSuccess()) {
+                    if (response.isSuccessful()) {
                         UserEntity userEntity = response.body();
 
                        if (userEntity != null) {
@@ -142,7 +142,7 @@ public class SignUpService extends MyService {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
                     ApiError apiError = new ApiError(response.errorBody(), response.code(), "signUp");
 
                     _view.setErrorEmail(apiError.get_target_message());

@@ -76,7 +76,7 @@ class ProfileService extends MyService {
             @Override
             public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
 
                 }
                 else {
@@ -101,7 +101,7 @@ class ProfileService extends MyService {
 
             @Override
             public void onResponse(Call<UserEntity> call, Response<UserEntity> response) {
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                    UserEntity userEntity = response.body();
                     _view.changeStep("profile");
                 }
@@ -128,7 +128,7 @@ class ProfileService extends MyService {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
                     ApiError apiError = new ApiError(response.errorBody(), response.code(), "signUp");
 
                     _view.setErrorEmail(apiError.get_target_message());
@@ -159,7 +159,7 @@ class ProfileService extends MyService {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
 
-                if (response.isSuccess()) {
+                if (response.isSuccessful()) {
                     _view.follow(isFollow);
                 }
             }
@@ -177,7 +177,7 @@ class ProfileService extends MyService {
             @Override
             public void onResponse(Call<List<FollowEntity>> call, Response<List<FollowEntity>> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
 
                 }
                 else {
@@ -199,7 +199,7 @@ class ProfileService extends MyService {
             @Override
             public void onResponse(Call<List<FollowerEntity>> call, Response<List<FollowerEntity>> response) {
 
-                if (!response.isSuccess()) {
+                if (!response.isSuccessful()) {
 
                 }
                 else {

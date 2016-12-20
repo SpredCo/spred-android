@@ -119,4 +119,11 @@ public class SpredCastActivity extends AppCompatActivity implements ISpredCastVi
             _spredCast_adapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void startSpredCastDetailActivity(SpredCastEntity spredCastEntity) {
+        Intent intent = new Intent(this, SpredCastDetailsActivity.class);
+        intent.putExtra("spredCast", spredCastEntity);
+        this.startActivity(intent);
+    }
 }

@@ -1,9 +1,10 @@
 package com.eip.roucou_c.spred.Home.TabLayout;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,37 +28,33 @@ import java.util.List;
 /**
  * Created by roucou_c on 21/09/2016.
  */
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter  {
 
-    List<TabFragment> fragmentList = new ArrayList<>();
+    private List<TabFragment> fragmentList = new ArrayList<>();
+    private List<String> fragmentTitles = new ArrayList<>();
 
-    private IHomeView _iHomeView;
-
-    public ViewPagerAdapter(FragmentManager fm, IHomeView iHomeView) {
+    public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
-        _iHomeView = iHomeView;
     }
 
     public TabFragment getItem(int position) {
-        TabFragment fragment = fragmentList.size() > position ? fragmentList.get(position) : null;
-
-        if (fragment == null) {
-            String step = String.valueOf((position + 1));
-            fragment = TabFragment.newInstance(step, _iHomeView);
-            fragmentList.add(fragment);
-        }
-
-        return fragment;
+        return fragmentList.get(position);
     }
+
 
     @Override
     public int getCount() {
-        return 3;
+        return fragmentList.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "to";
+        return fragmentTitles.get(position);
+    }
+
+    public void addTab(TabFragment tabFragment, String title) {
+        fragmentList.add(tabFragment);
+        fragmentTitles.add(title);
     }
 
     public static class TabFragment extends Fragment implements IHomeSpredCastView, IHomeAboView{
@@ -85,14 +82,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setRetainInstance(true);
+//            setRetainInstance(true);
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = null;
 
-            switch (this.step) {
+            switch (step) {
                 case "1":
                     rootView = inflater.inflate(R.layout.tab_spredcast, container, false);
 
@@ -182,6 +179,20 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             if (_abo_adapter != null) {
                 _abo_adapter.set_followEntities(followEntities);
                 _abo_adapter.notifyDataSetChanged();
+            }
+        }
+
+        public void update() {
+            switch (step) {
+                case "1":
+                    _iHomeView.getSpredCasts(0);
+                    break;
+                case "2":
+                    _iHomeView.getSpredCasts(1);
+                    break;
+                case "3":
+                    _iHomeView.getAbo();
+                    break;
             }
         }
     }

@@ -3,12 +3,16 @@ package com.eip.roucou_c.spred.SpredCast;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eip.roucou_c.spred.DAO.Manager;
+import com.eip.roucou_c.spred.Entities.ReminderEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
@@ -19,8 +23,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
  * Created by roucou_c on 07/12/2016.
@@ -42,6 +50,13 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
     private TextView _spredCast_details_timelapse;
     private TextView _spredCast_details_members;
     private TextView _spredCast_details_private;
+    private UserEntity _userEntity;
+    private FancyButton _spredCast_details_reminder;
+    private FancyButton _spredCast_details_delete;
+    private CardView _spredCast_details_creator_cardView;
+    private boolean _owner = false;
+    private CardView _spredCast_details_reminder_cardView;
+    private CardView _spredCast_details_delete_cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +69,7 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
         TokenEntity tokenEntity = _manager._tokenManager.select();
         _spredCastPresenter = new SpredCastPresenter(null, null, this, null, _manager, tokenEntity);
 
+        _spredCastPresenter.getUser();
         _spredCast = (SpredCastEntity) getIntent().getSerializableExtra("spredCast");
 
         _spredCast_details_name = (TextView) findViewById(R.id.spredcast_details_name);
@@ -68,13 +84,22 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
         _spredCast_details_members = (TextView) findViewById(R.id.spredcast_details_members);
         _spredCast_details_private = (TextView) findViewById(R.id.spredcast_details_private);
 
+        _spredCast_details_creator_cardView = (CardView) findViewById(R.id.spredcast_details_creator_cardView);
+        _spredCast_details_reminder_cardView = (CardView) findViewById(R.id.spredcast_details_reminder_cardView);
+        _spredCast_details_delete_cardView = (CardView) findViewById(R.id.spredcast_details_delete_cardView);
+
+        _spredCast_details_reminder = (FancyButton) findViewById(R.id.spredcast_details_reminder);
+        _spredCast_details_delete = (FancyButton) findViewById(R.id.spredcast_details_delete);
+
         this.populateSpredCast(_spredCast);
+        _spredCastPresenter.getIsRemind(_spredCast.get_id());
     }
 
     private void populateSpredCast(SpredCastEntity spredCastEntity) {
 
         _spredCast_details_name.setText(spredCastEntity.get_name());
         _spredCast_details_descritpion.setText(spredCastEntity.get_description());
+
         UserEntity userEntity = spredCastEntity.get_creator();
         String pseudo = "@"+userEntity.get_pseudo();
         String name = userEntity.get_last_name()+" "+userEntity.get_first_name();
@@ -101,7 +126,7 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
             _spredCast_details_date.setText(dateFormat.format(date));
-            SimpleDateFormat hour_min = new SimpleDateFormat("hh:mm", Locale.FRANCE);
+            SimpleDateFormat hour_min = new SimpleDateFormat("HH:mm", Locale.FRANCE);
             _spredCast_details_time.setText(hour_min.format(date));
 
             Date now = new Date();
@@ -144,5 +169,48 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
                 this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setIsRemind(final boolean result) {
+        if (result) {
+            _spredCast_details_reminder.setText("Annuler la notification");
+            _spredCast_details_reminder.setBackgroundColor(getColor(R.color.cancel));
+        }
+        else {
+            _spredCast_details_reminder.setText("Me notifier");
+            _spredCast_details_reminder.setBackgroundColor(getColor(R.color.navbar_background));
+        }
+        _spredCast_details_reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                _spredCastPresenter.setReminder(!result, _spredCast.get_id());
+            }
+        });
+    }
+
+    @Override
+    public void setUserEntity(UserEntity userEntity) {
+        _userEntity = userEntity;
+
+        if (Objects.equals(_spredCast.get_creator().get_id(), userEntity.get_id())) {
+            _owner = true;
+        }
+
+        if (_owner) {
+            _spredCastPresenter.getReminders(_spredCast.get_id());
+            _spredCast_details_creator_cardView.setVisibility(View.GONE);
+            _spredCast_details_reminder_cardView.setVisibility(View.GONE);
+        }
+        else {
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.spredcast_details_members_linearLayout);
+            linearLayout.setVisibility(View.GONE);
+            _spredCast_details_delete_cardView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void setReminders(List<ReminderEntity> reminderEntities) {
+        _spredCast_details_members.setText(reminderEntities.size()+" Personnes participerons");
     }
 }

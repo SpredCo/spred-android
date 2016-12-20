@@ -1,5 +1,6 @@
 package com.eip.roucou_c.spred.SpredCast;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,8 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         this._iSpredCastView = iSpredCastView;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        private final RelativeLayout _relativeLayout;
         public TextView _name;
         public TextView _description;
         public TextView _tags;
@@ -41,18 +43,9 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
             _description = (TextView) view.findViewById(R.id.spredcasts_description);
             _tags = (TextView) view.findViewById(R.id.spredcasts_tags);
 
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.spredcasts);
-            relativeLayout.setOnClickListener(this);
+            _relativeLayout = (RelativeLayout) view.findViewById(R.id.spredcasts);
         }
 
-        @Override
-        public void onClick(View v) {
-//            switch (v.getId()) {
-//                case R.id.inbox_conversation:
-//                    _IInboxView.conversationSelected(_conversation_id);
-//                    break;
-//            }
-        }
     }
 
     public void set_spredCastEntities(List<SpredCastEntity> _spredCastEntities) {
@@ -68,7 +61,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        SpredCastEntity spredCastEntity = _spredCastEntities.get(position);
+        final SpredCastEntity spredCastEntity = _spredCastEntities.get(position);
 
         holder._spredcast_id = spredCastEntity.get_id();
         holder._name.setText(spredCastEntity.get_name());
@@ -85,6 +78,12 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         else {
             holder._tags.setVisibility(View.GONE);
         }
+        holder._relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                _iSpredCastView.startSpredCastDetailActivity(spredCastEntity);
+            }
+        });
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.List;
 public interface IHomeView {
     void setProfile(UserEntity userEntity);
 
-    void populateSpredCasts(List<SpredCastEntity> spredCastEntities);
+    void populateSpredCasts(List<SpredCastEntity> spredCastEntities, int state);
 
     void cancelRefresh();
 

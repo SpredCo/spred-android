@@ -26,7 +26,7 @@ import java.util.List;
  * Created by roucou_c on 15/12/2016.
  */
 
-public class SpredCastByTagActivity extends AppCompatActivity implements ISpredCastView, IHomeSpredCastView, ISpredCastByTagView {
+public class SpredCastByTagActivity extends AppCompatActivity implements IHomeSpredCastView, ISpredCastByTagView {
 
     private SwipeRefreshLayout _spredCast_swipeRefreshLayout;
     private SpredCastsAdapter _spredCast_adapter;
@@ -41,7 +41,7 @@ public class SpredCastByTagActivity extends AppCompatActivity implements ISpredC
         Manager _manager = Manager.getInstance(getApplicationContext());
 
         TokenEntity tokenEntity = _manager._tokenManager.select();
-        _spredCastPresenter = new SpredCastPresenter(this, null, null, this, _manager, tokenEntity);
+        _spredCastPresenter = new SpredCastPresenter(null, null, null, this, _manager, tokenEntity);
 
         setContentView(R.layout.spredcast_by_tag);
 

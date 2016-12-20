@@ -15,4 +15,6 @@ public interface ISpredCastView {
     void populateSpredCasts(List<SpredCastEntity> spredCastEntities);
 
     void cancelRefresh();
+
+    void startSpredCastDetailActivity(SpredCastEntity spredCastEntity);
 }
