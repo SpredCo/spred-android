@@ -1,5 +1,6 @@
 package com.eip.roucou_c.spred.SpredCast;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,9 @@ import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
+import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.Stream.StreamActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +60,9 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
     private boolean _owner = false;
     private CardView _spredCast_details_reminder_cardView;
     private CardView _spredCast_details_delete_cardView;
+    private CardView _spredCast_details_launch_cardView;
+    private FancyButton _spredCast_details_launch;
+    private TextView _tags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +75,6 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
         TokenEntity tokenEntity = _manager._tokenManager.select();
         _spredCastPresenter = new SpredCastPresenter(null, null, this, null, _manager, tokenEntity);
 
-        _spredCastPresenter.getUser();
         _spredCast = (SpredCastEntity) getIntent().getSerializableExtra("spredCast");
 
         _spredCast_details_name = (TextView) findViewById(R.id.spredcast_details_name);
@@ -87,15 +92,41 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
         _spredCast_details_creator_cardView = (CardView) findViewById(R.id.spredcast_details_creator_cardView);
         _spredCast_details_reminder_cardView = (CardView) findViewById(R.id.spredcast_details_reminder_cardView);
         _spredCast_details_delete_cardView = (CardView) findViewById(R.id.spredcast_details_delete_cardView);
+        _spredCast_details_launch_cardView = (CardView) findViewById(R.id.spredcast_details_launch_cardView);
 
         _spredCast_details_reminder = (FancyButton) findViewById(R.id.spredcast_details_reminder);
         _spredCast_details_delete = (FancyButton) findViewById(R.id.spredcast_details_delete);
+        _spredCast_details_launch = (FancyButton) findViewById(R.id.spredcast_details_launch);
+
+
+        if (tokenEntity == null) {
+            _spredCast_details_reminder_cardView.setVisibility(View.GONE);
+            _spredCast_details_delete_cardView.setVisibility(View.GONE);
+            _spredCast_details_launch_cardView.setVisibility(View.GONE);
+        }
+        else {
+            _spredCastPresenter.getUser();
+        }
+
+        _spredCast_details_launch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SpredCastDetailsActivity.this, StreamActivity.class);
+                intent.putExtra("spredCast", _spredCast);
+                intent.putExtra("userEntity", _userEntity);
+                startActivity(intent);
+            }
+        });
 
         this.populateSpredCast(_spredCast);
-        _spredCastPresenter.getIsRemind(_spredCast.get_id());
+
+        if (_userEntity != null)
+        {
+            _spredCastPresenter.getIsRemind(_spredCast.get_id());
+        }
     }
 
-    private void populateSpredCast(SpredCastEntity spredCastEntity) {
+    private void populateSpredCast(final SpredCastEntity spredCastEntity) {
 
         _spredCast_details_name.setText(spredCastEntity.get_name());
         _spredCast_details_descritpion.setText(spredCastEntity.get_description());
@@ -139,6 +170,16 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
             e.printStackTrace();
         }
 
+        if (spredCastEntity.get_user_capacity() == 0) {
+            LinearLayout spredcast_details_capacity_linearLayout = (LinearLayout) findViewById(R.id.spredcast_details_capacity_linearLayout);
+            spredcast_details_capacity_linearLayout.setVisibility(View.GONE);
+        }
+        else {
+            TextView spredcast_details_capacity = (TextView) findViewById(R.id.spredcast_details_capacity);
+            String capacity = spredCastEntity.get_user_capacity()+" places";
+            spredcast_details_capacity.setText(capacity);
+        }
+
         String nbMembers = String.valueOf(spredCastEntity.get_members().size())+" personnes participerons";
         _spredCast_details_members.setText(nbMembers);
         if (!spredCastEntity.is_public()) {
@@ -147,6 +188,28 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
             TextView spredcast_details_private = (TextView) findViewById(R.id.spredcast_details_private);
             spredcast_details_private.setText("Ce SpredCast est privé");
         }
+
+        if (spredCastEntity.get_tags() != null && !spredCastEntity.get_tags().isEmpty()) {
+            String tags = "";
+            for (TagEntity tagEntity : spredCastEntity.get_tags()) {
+                tags += "#" + tagEntity.get_name() + " ";
+            }
+            _spredCast_details_tags.setText(tags);
+            _spredCast_details_tags.setVisibility(View.VISIBLE);
+        } else {
+            _spredCast_details_tags.setVisibility(View.GONE);
+        }
+
+        _spredCast_details_creator_cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra("userEntityProfile", spredCastEntity.get_creator());
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     @Override
@@ -197,15 +260,32 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
             _owner = true;
         }
 
+        _spredCast_details_launch_cardView.setVisibility(View.GONE);
+
+        _spredCast_details_delete_cardView.setVisibility(View.GONE);
+
         if (_owner) {
-            _spredCastPresenter.getReminders(_spredCast.get_id());
+            if (_spredCast.is_public()) {
+                _spredCastPresenter.getReminders(_spredCast.get_id());
+            }
             _spredCast_details_creator_cardView.setVisibility(View.GONE);
             _spredCast_details_reminder_cardView.setVisibility(View.GONE);
+            _spredCast_details_delete_cardView.setVisibility(View.VISIBLE);
         }
         else {
+
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.spredcast_details_members_linearLayout);
             linearLayout.setVisibility(View.GONE);
-            _spredCast_details_delete_cardView.setVisibility(View.GONE);
+
+            if (_spredCast.get_state() == 1) {
+                _spredCast_details_launch_cardView.setVisibility(View.VISIBLE);
+                _spredCast_details_delete_cardView.setVisibility(View.GONE);
+                _spredCast_details_reminder_cardView.setVisibility(View.GONE);
+            }
+            else if (_spredCast.get_state() == 0) {
+                _spredCast_details_launch_cardView.setVisibility(View.GONE);
+                _spredCastPresenter.getIsRemind(_spredCast.get_id());
+            }
         }
     }
 

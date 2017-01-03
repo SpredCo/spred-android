@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
@@ -54,7 +56,7 @@ public class SpredCastByTagActivity extends AppCompatActivity implements IHomeSp
         });
         RecyclerView _spredCast_recycler_view = (RecyclerView) findViewById(R.id.spredcast_recycler_view);
 
-        _spredCast_adapter = new com.eip.roucou_c.spred.Home.SpredCastsAdapter(this, 2, getApplicationContext());
+        _spredCast_adapter = new com.eip.roucou_c.spred.Home.SpredCastsAdapter(this, 2, getApplicationContext(), tokenEntity == null);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         _spredCast_recycler_view.setLayoutManager(mLayoutManager);
         _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
@@ -126,5 +128,15 @@ public class SpredCastByTagActivity extends AppCompatActivity implements IHomeSp
                 _spredCastPresenter.subscriptionTag(!isSub, _tagEntity.get_id());
             }
         });
+    }
+
+    @Override
+    public void getImageProfile(String url, ImageView photo) {
+
+    }
+
+    @Override
+    public void IsRemind(String id, LinearLayout reminder) {
+
     }
 }

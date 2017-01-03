@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.eip.roucou_c.spred.Api.ApiLogin;
 import com.eip.roucou_c.spred.DAO.Manager;
@@ -20,6 +21,7 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
 
     private FancyButton _intro_signUp;
     private FancyButton _intro_signIn;
+    private LinearLayout _intro_skip;
     private Manager _manager;
 
     @Override
@@ -38,15 +40,13 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
 
         _intro_signIn = (FancyButton) findViewById(R.id.intro_signIn);
         _intro_signIn.setOnClickListener(this);
+
+        _intro_skip = (LinearLayout) findViewById(R.id.intro_skip);
+        _intro_skip.setOnClickListener(this);
     }
 
     private void autoLogin() {
         TokenEntity tokenEntity = _manager._tokenManager.select();
-
-//        this.finish();
-//        Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//        startActivity(intent);
 
         if (tokenEntity != null) {
             if (isValidAccessToken(tokenEntity.get_expire_access_token())) {
@@ -79,8 +79,11 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent2 = new Intent(IntroActivity.this, SignUpActivity.class);
                 startActivity(intent2);
                 break;
-//            case R.id.intro_skip:
-//                break;
+            case R.id.intro_skip:
+                Intent intent3 = new Intent(IntroActivity.this, HomeActivity.class);
+                _manager._tokenManager.delete();
+                startActivity(intent3);
+                break;
         }
     }
 }

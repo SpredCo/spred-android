@@ -19,10 +19,13 @@ public class ServiceGeneratorApi {
     /**
      * DEDIEE
      */
-    public static final String API_BASE_URL = "sharemyscreen.fr";
-    public final static String CLIENT = "dfbDgOnQjjqRgISU";
-    public final static String SECRET = "eXmWuVBcoo6llNDUcvFf6pXaoJrjS6cu";
-    public final static String PORT = ":3000";
+    public static final String API_BASE_URL = "spred.tv";
+//    public final static String CLIENT = "dfbDgOnQjjqRgISU";
+//    public final static String SECRET = "eXmWuVBcoo6llNDUcvFf6pXaoJrjS6cu";
+
+    public final static String CLIENT = "iZzvsqXU2tO30A93";
+    public final static String SECRET = "YXZyjptxwhsiHdGKapbX6NpeoGz8YWDW";
+    public final static String PORT = ":80";
 
 
     public static  <S> S createService(Class<S> serviceClass, String subDomain, Manager manager) {

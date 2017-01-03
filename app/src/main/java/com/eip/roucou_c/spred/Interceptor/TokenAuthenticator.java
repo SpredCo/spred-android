@@ -32,15 +32,13 @@ public class TokenAuthenticator implements Authenticator {
         }
         SignInService signInService = new SignInService(null, null, _manager);
 
-        //TODO faire le test sur l'expiration du refresh Token
+        String newAccessToken = signInService.refreshTokenSync(_tokenEntity);
 
-//        String newAccessToken = signInService.refreshTokenSync(_tokenEntity);
+        if (newAccessToken == null) {
+            throw new IOException();
+        }
 
-//        if (newAccessToken == null) {
-//            throw new IOException();
-//        }
-//
-//        _tokenEntity.set_access_token(newAccessToken);
+        _tokenEntity.set_access_token(newAccessToken);
 
         return response.request().newBuilder().build();
     }

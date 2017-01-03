@@ -21,15 +21,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eip.roucou_c.spred.Entities.MessageEntity;
+import com.eip.roucou_c.spred.Home.HomeActivity;
 import com.eip.roucou_c.spred.Inbox.Tokenfield.ContactsCompletionView;
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.ConversationEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.tokenautocomplete.FilteredArrayAdapter;
 import com.tokenautocomplete.TokenCompleteTextView;
@@ -38,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
@@ -70,6 +76,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     private EditText _inbox_conversation_message;
     private ConversationEntity _currentConversation = null;
     private RecyclerView _inbox_conversation_recyclerView;
+    private DisplayImageOptions _displayImageOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +88,12 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
         _inboxPresenter = new InboxPresenter(this, _manager, tokenEntity);
 
         _userEntity = (UserEntity) getIntent().getSerializableExtra("userEntity");
+
+        HomeActivity.SSLCertificateHandler.nuke();
+        _displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
 
         changeStep("inbox");
     }
@@ -116,11 +129,12 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
                 _inbox_floatActionButton.setOnClickListener(this);
 
                 _inboxPresenter.getInbox();
+                getSupportActionBar().setTitle("Messagerie");
                 break;
             case "inbox_conversation":
                 setContentView(R.layout.inbox_conversation);
 
-                _adapterInboxMessage = new AdapterInboxMessage(_currentConversation, _userEntity);
+                _adapterInboxMessage = new AdapterInboxMessage(_currentConversation, _userEntity, this);
 
                 _inbox_conversation_send = (Button) findViewById(R.id._inbox_conversation_send);
                 _inbox_conversation_send.setOnClickListener(this);
@@ -141,6 +155,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
                     }
                 });
                 _inbox_conversation_recyclerView.scrollToPosition(_inbox_conversation_recyclerView.getAdapter().getItemCount()-1);
+                getSupportActionBar().setTitle(_currentConversation.get_object());
                 break;
             case "inbox_create_conversation":
                 setContentView(R.layout.inbox_create_conversation);
@@ -184,7 +199,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
                 _inbox_create_conversation_message = (MaterialEditText) findViewById(R.id.inbox_create_conversation_message);
                 _inbox_create_conversation_submit = (FancyButton) findViewById(R.id.inbox_create_conversation_submit);
                 _inbox_create_conversation_submit.setOnClickListener(this);
-
+                getSupportActionBar().setTitle("Nouveau message");
                 break;
         }
     }
@@ -364,5 +379,16 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     @Override
     public void clearMessageConversation() {
         _inbox_conversation_message.setText(null);
+    }
+
+    @Override
+    public void getImageProfile(String url, ImageView profile) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        imageLoader.displayImage(url, profile, _displayImageOptions);
     }
 }

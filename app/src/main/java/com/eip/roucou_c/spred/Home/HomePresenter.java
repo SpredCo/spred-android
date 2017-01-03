@@ -1,5 +1,7 @@
 package com.eip.roucou_c.spred.Home;
 
+import android.widget.LinearLayout;
+
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.SignUp.SignUpService;
@@ -40,5 +42,9 @@ class HomePresenter {
 
     void getUserAndShow(String objectID) {
         _homeService.getUserAndShow(objectID);
+    }
+
+    public void isRemind(String id, LinearLayout reminder) {
+        _homeService.isRemind(id, reminder);
     }
 }

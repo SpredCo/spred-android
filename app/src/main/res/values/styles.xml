@@ -8,7 +8,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/navbar_background</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/navbar_background</item>
 
     </style>
 
@@ -16,9 +16,10 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/navbar_background</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="colorAccent">@color/navbar_background</item>
+        <item name="textColor">#fff</item>
     </style>
+
 
     <style name="EditText">
         <item name="met_floatingLabel">normal</item>

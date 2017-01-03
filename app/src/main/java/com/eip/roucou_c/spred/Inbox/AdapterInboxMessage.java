@@ -12,6 +12,7 @@ import com.eip.roucou_c.spred.Entities.ConversationEntity;
 import com.eip.roucou_c.spred.Entities.MessageEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.ServiceGeneratorApi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,23 +30,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class AdapterInboxMessage extends RecyclerView.Adapter<AdapterInboxMessage.ViewHolder> {
 
+    private final IInboxView _iInboxView;
     private ConversationEntity _conversationEntity;
     private UserEntity _userEntity = null;
 
-    public AdapterInboxMessage(ConversationEntity conversationEntity, UserEntity userEntity) {
+    public AdapterInboxMessage(ConversationEntity conversationEntity, UserEntity userEntity, IInboxView iInboxView) {
         _conversationEntity = conversationEntity;
         _userEntity = userEntity;
+        _iInboxView = iInboxView;
     }
 
     @Override
     public AdapterInboxMessage.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemLayoutView;
-        if (viewType == 1) {
-            itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inbox_conversation_message_right, parent, false);
-        }
-        else {
-            itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inbox_conversation_message_left, parent, false);
-        }
+        View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inbox_conversation_message, parent, false);
         return new ViewHolder(itemLayoutView);
     }
 
@@ -54,29 +51,35 @@ public class AdapterInboxMessage extends RecyclerView.Adapter<AdapterInboxMessag
         this.notifyDataSetChanged();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        MessageEntity messageEntity = _conversationEntity.get_msg().get(position);
-
-        if (Objects.equals(messageEntity.get_from(), _userEntity.get_id())) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        MessageEntity messageEntity = _conversationEntity.get_msg().get(position);
+//
+//        if (Objects.equals(messageEntity.get_from(), _userEntity.get_id())) {
+//            return 1;
+//        }
+//        else {
+//            return 0;
+//        }
+//    }
 
     @Override
     public void onBindViewHolder(AdapterInboxMessage.ViewHolder holder, int position) {
 
         MessageEntity messageEntity = _conversationEntity.get_msg().get(position);
+
+        if (position != 0) {
+            MessageEntity messageEntityPrev = _conversationEntity.get_msg().get(position-1);
+            if (Objects.equals(messageEntityPrev.get_from(), messageEntity.get_from())) {
+                holder.lblFrom.setVisibility(View.GONE);
+                holder.profile.setVisibility(View.GONE);
+            }
+        }
         for (UserEntity userEntity : _conversationEntity.get_members()) {
             if (Objects.equals(userEntity.get_id(), messageEntity.get_from())) {
                 holder.lblFrom.setText("@"+userEntity.get_pseudo());
 
-                String message = messageEntity.get_created_at().replace("T", " ").replace("Z", "");
-                message = message.substring(0, message.length()-7);
-                holder.date.setText(message);
+
 //                URL newurl = null;
 //                try {
 //                    newurl = new URL(userEntity.get_picture_url());
@@ -91,7 +94,18 @@ public class AdapterInboxMessage extends RecyclerView.Adapter<AdapterInboxMessag
 
             }
         }
+        String message = messageEntity.get_created_at().replace("T", " ").replace("Z", "");
+        message = message.substring(0, message.length()-7);
+        holder.date.setText(message);
         holder.txtMsg.setText(messageEntity.get_content());
+
+        for (UserEntity userEntity : _conversationEntity.get_members()) {
+            if (Objects.equals(userEntity.get_id(), messageEntity.get_from())) {
+                String url = userEntity.get_picture_url().contains("http") ? userEntity.get_picture_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+userEntity.get_picture_url();
+                _iInboxView.getImageProfile(url, holder.profile);
+            }
+        }
+
     }
 
     @Override

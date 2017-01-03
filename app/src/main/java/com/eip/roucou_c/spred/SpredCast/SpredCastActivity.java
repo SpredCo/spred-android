@@ -13,12 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
+import com.eip.roucou_c.spred.Home.HomeActivity;
 import com.eip.roucou_c.spred.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.List;
 
@@ -37,6 +43,8 @@ public class SpredCastActivity extends AppCompatActivity implements ISpredCastVi
     private FloatingActionButton _spredCast_floatActionButton;
     private Menu _menu;
     private SpredCastsAdapter _spredCast_adapter;
+    private DisplayImageOptions _displayImageOptions;
+    private TextView _empty_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +72,22 @@ public class SpredCastActivity extends AppCompatActivity implements ISpredCastVi
         _spredCast_floatActionButton = (FloatingActionButton) findViewById(R.id.spredcast_floatActionButton);
         _spredCast_floatActionButton.setOnClickListener(this);
 
+        HomeActivity.SSLCertificateHandler.nuke();
+        _displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+
+        _empty_view = (TextView) findViewById(R.id.empty_view);
+
         _spredCastPresenter.getSpredCast();
 
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        _spredCastPresenter.getSpredCast();
     }
 
     @Override
@@ -117,6 +139,14 @@ public class SpredCastActivity extends AppCompatActivity implements ISpredCastVi
         if (_spredCast_adapter != null) {
             _spredCast_adapter.set_spredCastEntities(spredCastEntities);
             _spredCast_adapter.notifyDataSetChanged();
+            if (spredCastEntities.size() == 0) {
+                _spredCast_recycler_view.setVisibility(View.GONE);
+                _empty_view.setVisibility(View.VISIBLE);
+            }
+            else {
+                _spredCast_recycler_view.setVisibility(View.VISIBLE);
+                _empty_view.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -125,5 +155,16 @@ public class SpredCastActivity extends AppCompatActivity implements ISpredCastVi
         Intent intent = new Intent(this, SpredCastDetailsActivity.class);
         intent.putExtra("spredCast", spredCastEntity);
         this.startActivity(intent);
+    }
+
+    @Override
+    public void getImageProfile(String url, ImageView photo_profile) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        imageLoader.displayImage(url, photo_profile, _displayImageOptions);
     }
 }

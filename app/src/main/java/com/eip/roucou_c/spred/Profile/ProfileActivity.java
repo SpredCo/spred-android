@@ -19,9 +19,14 @@ import com.eip.roucou_c.spred.Entities.FollowEntity;
 import com.eip.roucou_c.spred.Entities.FollowerEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
+import com.eip.roucou_c.spred.Home.HomeActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.ServiceGeneratorApi;
 import com.eip.roucou_c.spred.SpredCast.SpredCastActivity;
 import com.eip.roucou_c.spred.SpredCast.SpredCastNewActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.List;
@@ -52,6 +57,8 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
     private List<FollowEntity> _followEntities;
     private TextView _profile_nbFollowers;
     private LinearLayout _profile_linearLayout_followers;
+    private DisplayImageOptions _displayImageOptions;
+    private ImageView _profile_photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +75,6 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         changeStep("profile");
 
         if (_userEntityProfile != null) {
-            Log.d("_userEntityProfile", _userEntityProfile.get_email());
             _ownUser = false;
             this.populateProfile(_userEntityProfile);
         }
@@ -78,6 +84,12 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         }
         _profilePresenter.getProfile(_ownUser);
         _profilePresenter.getFollowing();
+
+        _displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+
     }
 
     @Override
@@ -94,6 +106,8 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
                 _profile_nbFollowers = (TextView) findViewById(R.id.profile_nbfollowers);
                 _profile_linearLayout_followers = (LinearLayout) findViewById(R.id.profile_linearLayout_followers);
                 _profile_linearLayout_followers.setOnClickListener(this);
+
+                _profile_photo = (ImageView) findViewById(R.id.profile_photo);
 
                 _profile_edit = (ImageView) findViewById(R.id.profile_edit);
                 if (_ownUser) {
@@ -162,6 +176,10 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         String name = userEntity.get_last_name()+" "+userEntity.get_first_name();
         _profile_name_textView.setText(name);
         _profile_pseudo_textView.setText(userEntity.get_pseudo());
+
+        String url = userEntity.get_picture_url().contains("http") ? userEntity.get_picture_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+userEntity.get_picture_url();
+
+        getImageProfile(url, _profile_photo);
     }
 
     @Override
@@ -257,6 +275,7 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
                 _follow.setImageDrawable(getDrawable(R.drawable.ic_star_border_white_24dp));
             }
         }
+        _profilePresenter.getFollowing();
         _profilePresenter.getProfile(false);
     }
 
@@ -300,4 +319,15 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         int nb = followerEntities != null ? followerEntities.size() : 0;
         _profile_nbFollowers.setText(String.valueOf(nb));
     }
+
+    public void getImageProfile(String url, ImageView photo) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        imageLoader.displayImage(url, photo, _displayImageOptions);
+    }
+
 }

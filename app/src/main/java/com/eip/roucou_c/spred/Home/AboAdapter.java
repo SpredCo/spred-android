@@ -16,6 +16,7 @@ import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.ServiceGeneratorApi;
 
 import java.util.List;
 
@@ -25,12 +26,14 @@ import java.util.List;
 public class AboAdapter extends RecyclerView.Adapter<AboAdapter.MyViewHolder> {
 
     private final Context _context;
+    private final IHomeView _iHomeView;
 
     private List<FollowEntity> _followEntities;
 
 
-    public AboAdapter(Context context) {
+    public AboAdapter(Context context, IHomeView iHomeView) {
         this._context = context;
+        _iHomeView = iHomeView;
     }
 
     @Override
@@ -58,6 +61,10 @@ public class AboAdapter extends RecyclerView.Adapter<AboAdapter.MyViewHolder> {
                     _context.startActivity(intent);
                 }
             });
+
+            String url = followEntity.get_following().get_picture_url().contains("http") ? followEntity.get_following().get_picture_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+followEntity.get_following().get_picture_url();
+
+            _iHomeView.getImageProfile(url, holder._photo);
         }
     }
 
@@ -79,6 +86,7 @@ public class AboAdapter extends RecyclerView.Adapter<AboAdapter.MyViewHolder> {
             _photo = (ImageView) itemView.findViewById(R.id.profile_photo);
             _pseudo = (TextView) itemView.findViewById(R.id.abo_pseudo);
             _name = (TextView) itemView.findViewById(R.id.abo_name);
+
 
             _abo_relativeLayout = (RelativeLayout) itemView.findViewById(R.id.abo);
         }

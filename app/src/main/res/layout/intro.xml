@@ -40,29 +40,33 @@
                 android:layout_marginRight="40dp"
                 style="@style/SubmitButton"/>
 
-            <!--<TextView-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="ou"/>-->
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="ou"/>
 
-            <!--<TextView-->
-                <!--android:id="@+id/intro_skip"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="@string/without"-->
-                <!--android:textSize="14dp"-->
-                <!--android:textStyle="bold"/>-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/intro_skip"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/without"
+                android:textSize="14dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
     </LinearLayout>
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:hint="@string/help"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:layout_margin="30dp"-->
-        <!--android:textStyle="italic"-->
-        <!--android:textSize="12dp"/>-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/help"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_margin="30dp"
+        android:textStyle="italic"
+        android:textSize="12dp"/>
 </RelativeLayout>

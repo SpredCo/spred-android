@@ -11,6 +11,7 @@ import com.eip.roucou_c.spred.SignUp.SignUpPresenter;
 import com.eip.roucou_c.spred.SignUp.SignUpService;
 import com.facebook.login.LoginManager;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class SignInService extends MyService {
 
     private final ISignInView _view;
     private final ISignInSignUpView _iSignInSignUpView;
-//    private SignUpService _signUpService;
+//    private LoginGuestService _loginGuestService;
 
     public SignInService(ISignInView view, ISignInSignUpView iSignInSignUpView, Manager manager) {
         super(manager);
@@ -64,7 +65,7 @@ public class SignInService extends MyService {
         this._api = ServiceGeneratorApi.createService(ISignInService.class, "login", manager);
 
 //        if (_view != null) {
-//            _signUpService = new SignUpService(null, _iSignInSignUpView, _manager);
+//            _loginGuestService = new LoginGuestService(null, _iSignInSignUpView, _manager);
 //        }
     }
 
@@ -216,36 +217,36 @@ public class SignInService extends MyService {
 //        });
 //    }
 //
-//    public String refreshTokenSync(TokenEntity tokenEntity) {
-//        if (tokenEntity == null || tokenEntity.get_refresh_token() == null) {
-//            return null;
-//        }
-//
-//        HashMap<String, String> params = new HashMap<>();
-//
-//        params.put("grant_type", "refresh_token");
-//        params.put("refresh_token", tokenEntity.get_refresh_token());
-//
-//        this._api = ServiceGeneratorApi.createService(ISignInService.class, "login",_manager);
-//
-//        Call<TokenEntity> call = _api.refreshToken(params);
-//
-//        TokenEntity resTokenEntity = null;
-//        try {
-//            Response<TokenEntity> execute = call.execute();
-//            resTokenEntity = execute.body();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (resTokenEntity == null) {
-//            return null;
-//        }
-//
-//        tokenEntity.set_access_token(resTokenEntity.get_access_token());
-//        _manager._tokenManager.modify(tokenEntity);
-//        return resTokenEntity.get_access_token();
-//    }
+    public String refreshTokenSync(TokenEntity tokenEntity) {
+        if (tokenEntity == null || tokenEntity.get_refresh_token() == null) {
+            return null;
+        }
+
+        HashMap<String, String> params = new HashMap<>();
+
+        params.put("grant_type", "refresh_token");
+        params.put("refresh_token", tokenEntity.get_refresh_token());
+
+        this._api = ServiceGeneratorApi.createService(ISignInService.class, "login",_manager);
+
+        Call<TokenEntity> call = _api.signIn(params);
+
+        TokenEntity resTokenEntity = null;
+        try {
+            Response<TokenEntity> execute = call.execute();
+            resTokenEntity = execute.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (resTokenEntity == null) {
+            return null;
+        }
+
+        tokenEntity.set_access_token(resTokenEntity.get_access_token());
+        _manager._tokenManager.modify(tokenEntity);
+        return resTokenEntity.get_access_token();
+    }
 //
 //
 //    public void signInWithAccessTokenValid() {

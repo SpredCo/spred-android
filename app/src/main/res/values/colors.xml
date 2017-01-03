@@ -5,9 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#fff</color>
     <color name="background">#fff</color>
-    <color name="background_submit">#116611</color>
+    <color name="background_submit">#55AA55</color>
     <color name="border_submit">#55AA55</color>
-    <color name="editText_line">#116611</color>
+    <color name="editText_line">#55AA55</color>
 
 
 
@@ -28,5 +28,7 @@
     <color name="tag">#00BCD4</color>
     <color name="cast">#4CAF50</color>
     <color name="user">#FF9800</color>
+    <color name="red">#ff0000</color>
+    <color name="greeen">#4CAF50</color>
 
 </resources>

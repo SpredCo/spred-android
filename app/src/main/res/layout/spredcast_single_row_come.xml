@@ -19,7 +19,6 @@
             android:orientation="vertical">
 
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,19 +113,44 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:padding="10dp">
-                <TextView
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/spredcasts_tags"
-                    android:textColor="#55AA55"
-                    android:textStyle="italic"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="2"
+                    android:padding="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spredcasts_tags"
+                        android:textColor="#55AA55"
+                        android:textStyle="italic"
 
-                    android:text="#tag1 #tag1 #tag1 #tag1"/>
+                        android:text="#tag1 #tag1 #tag1 #tag1"/>
 
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.0"
+                    android:visibility="gone"
+                    android:id="@+id/spredcasts_reminder"
+                    android:padding="10dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_notifications_active_black_24dp"
+                        android:textColor="#55AA55"
+                        android:textStyle="italic"
+
+                        android:text="#tag1 #tag1 #tag1 #tag1"/>
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

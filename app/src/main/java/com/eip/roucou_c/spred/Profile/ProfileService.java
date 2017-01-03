@@ -162,6 +162,9 @@ class ProfileService extends MyService {
                 if (response.isSuccessful()) {
                     _view.follow(isFollow);
                 }
+                else {
+                    _view.follow(!isFollow);
+                }
             }
 
             @Override

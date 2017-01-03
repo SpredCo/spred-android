@@ -12,6 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.eip.roucou_c.spred.Entities.FollowEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
@@ -72,11 +75,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
         private RecyclerView _abo_recycler_view;
         private AboAdapter _abo_adapter;
 
-        public static TabFragment newInstance(String step, IHomeView iHomeView) {
+        private Boolean _guest;
+        private TextView _empty_view;
+
+        public static TabFragment newInstance(String step, IHomeView iHomeView, Boolean guest) {
             TabFragment fragment = new TabFragment();
             fragment.step = step;
             fragment._iHomeView = iHomeView;
-
+            fragment._guest = guest;
             return fragment;
         }
         @Override
@@ -102,11 +108,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
                     });
                     _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
 
-                    _spredCast_adapter = new SpredCastsAdapter(this, 1, getContext());
+                    _spredCast_adapter = new SpredCastsAdapter(this, 1, getContext(), _guest);
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                     _spredCast_recycler_view.setLayoutManager(mLayoutManager);
                     _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
                     _spredCast_recycler_view.setAdapter(_spredCast_adapter);
+
+                    _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
 
                     _iHomeView.getSpredCasts(1);
 
@@ -123,11 +131,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
                     });
                     _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
 
-                    _spredCast_adapter = new SpredCastsAdapter(this, 0, getContext());
+                    _spredCast_adapter = new SpredCastsAdapter(this, 0, getContext(), _guest);
                     RecyclerView.LayoutManager mLayoutManager2 = new LinearLayoutManager(getContext());
                     _spredCast_recycler_view.setLayoutManager(mLayoutManager2);
                     _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
                     _spredCast_recycler_view.setAdapter(_spredCast_adapter);
+
+                    _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
 
                     _iHomeView.getSpredCasts(0);
                     break;
@@ -143,11 +153,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
                     });
                     _abo_recycler_view = (RecyclerView) rootView.findViewById(R.id.abo_recycler_view);
 
-                    _abo_adapter = new AboAdapter(getContext());
+                    _abo_adapter = new AboAdapter(getContext(), _iHomeView);
                     RecyclerView.LayoutManager mLayoutManager3 = new LinearLayoutManager(getContext());
                     _abo_recycler_view.setLayoutManager(mLayoutManager3);
                     _abo_recycler_view.setItemAnimator(new DefaultItemAnimator());
                     _abo_recycler_view.setAdapter(_abo_adapter);
+
+                    _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
 
                     _iHomeView.getAbo();
                     break;
@@ -160,6 +172,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
             if (_spredCast_adapter != null) {
                 _spredCast_adapter.set_spredCastEntities(spredCastEntities);
                 _spredCast_adapter.notifyDataSetChanged();
+                if (spredCastEntities.size() == 0) {
+                    _spredCast_recycler_view.setVisibility(View.GONE);
+                    _empty_view.setVisibility(View.VISIBLE);
+                }
+                else {
+                    _spredCast_recycler_view.setVisibility(View.VISIBLE);
+                    _empty_view.setVisibility(View.GONE);
+                }
             }
 
         }
@@ -179,6 +199,15 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
             if (_abo_adapter != null) {
                 _abo_adapter.set_followEntities(followEntities);
                 _abo_adapter.notifyDataSetChanged();
+                if (followEntities.size() == 0) {
+                    _abo_recycler_view.setVisibility(View.GONE);
+                    _empty_view.setVisibility(View.VISIBLE);
+                }
+                else {
+                    _abo_recycler_view.setVisibility(View.VISIBLE);
+                    _empty_view.setVisibility(View.GONE);
+                }
+
             }
         }
 
@@ -194,6 +223,16 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
                     _iHomeView.getAbo();
                     break;
             }
+        }
+
+        @Override
+        public void getImageProfile(String url, ImageView photo) {
+            _iHomeView.getImageProfile(url, photo);
+        }
+
+        @Override
+        public void IsRemind(String id, LinearLayout reminder) {
+            _iHomeView.isRemind(id, reminder);
         }
     }
 

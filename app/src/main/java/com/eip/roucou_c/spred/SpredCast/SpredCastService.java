@@ -178,9 +178,6 @@ public class SpredCastService extends MyService{
             @Override
             public void onResponse(Call<SpredCastEntity> call, Response<SpredCastEntity> response) {
                 if (response.isSuccessful()) {
-//                    SpredCastEntity spredCastEntity = response.body();
-
-                    Log.d("yo", "yo");
                     _iSpredCastNewView.finishPostSpredCast();
                 }
 

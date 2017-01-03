@@ -99,7 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="25dp"
-                            android:text="Author"/>
+                            android:text="Créateur"/>
                         <View
                             android:layout_width="fill_parent"
                             android:layout_height="1dp"
@@ -292,6 +292,29 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/spredcast_details_capacity_linearLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:layout_weight="1.0">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:src="@drawable/ic_person_black_24dp"/>
+
+                            <TextView
+                                android:id="@+id/spredcast_details_capacity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16dp"
+                                android:text="50 places"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -335,6 +358,28 @@
                             android:layout_height="wrap_content"
                             android:padding="10dp"
                             fancy:fb_text="Me notifier"
+                            style="@style/SubmitButton" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/spredcast_details_launch_cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    app:contentPadding="15dp">
+
+                    <RelativeLayout
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal">
+
+                        <mehdi.sakout.fancybuttons.FancyButton
+                            android:id="@+id/spredcast_details_launch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            fancy:fb_text="Lancer"
                             style="@style/SubmitButton" />
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>

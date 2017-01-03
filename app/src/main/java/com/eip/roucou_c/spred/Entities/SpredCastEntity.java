@@ -1,5 +1,7 @@
 package com.eip.roucou_c.spred.Entities;
 
+import android.widget.LinearLayout;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -42,6 +44,9 @@ public class SpredCastEntity implements Serializable {
 
     @SerializedName("user_capacity")
     private int _user_capacity;
+
+    @SerializedName("user_count")
+    private int _user_count;
 
     public String get_id() {
         return _id;
@@ -129,6 +134,10 @@ public class SpredCastEntity implements Serializable {
 
     public void set_user_capacity(int _user_capacity) {
         this._user_capacity = _user_capacity;
+    }
+
+    public int get_user_count() {
+        return _user_count;
     }
 }
 

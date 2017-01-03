@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.ServiceGeneratorApi;
 import com.eip.roucou_c.spred.SpredCast.SpredCastDetailsActivity;
 import com.kd.dynamic.calendar.generator.ImageGenerator;
 
@@ -33,14 +35,16 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private final int _state;
     private final ImageGenerator _imageGenerator;
+    private final Boolean _guest;
     private Context _context;
     private List<SpredCastEntity> _spredCastEntities;
     private IHomeSpredCastView _iHomeSpredCastView;
 
-    public SpredCastsAdapter(IHomeSpredCastView iHomeSpredCastView, int state, Context context) {
+    public SpredCastsAdapter(IHomeSpredCastView iHomeSpredCastView, int state, Context context, Boolean guest) {
         this._iHomeSpredCastView = iHomeSpredCastView;
         this._state = state;
         this._context = context;
+        this._guest = guest;
         _imageGenerator = new ImageGenerator(context);
 
         _imageGenerator.setIconSize(60, 60);
@@ -54,6 +58,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private final RelativeLayout _spredCast_relativeLayout;
+        private final LinearLayout _reminder;
         TextView _name;
         TextView _description;
         TextView _tags;
@@ -70,6 +75,8 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             _persons = (TextView) view.findViewById(R.id.spredcasts_person);
 
+            _reminder = (LinearLayout) view.findViewById(R.id.spredcasts_reminder);
+
             _spredCast_relativeLayout = (RelativeLayout) view.findViewById(R.id.spredcasts);
         }
 
@@ -84,6 +91,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             super(view);
             _timelapse = (TextView) view.findViewById(R.id.spredcasts_timelapse);
             _photo = (ImageView) view.findViewById(R.id.profile_photo);
+
         }
 
     }
@@ -141,7 +149,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holderLive._name.setText(spredCastEntity.get_name());
             holderLive._description.setText(spredCastEntity.get_description());
 
-            holderLive._persons.setText(String.valueOf(spredCastEntity.get_members().size()));
+            holderLive._persons.setText(String.valueOf(spredCastEntity.get_user_count()));
 
             try {
                 date = format.parse(spredCastEntity.get_date());
@@ -156,14 +164,19 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 e.printStackTrace();
             }
 
-            holderLive._photo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(_context, ProfileActivity.class);
-                    intent.putExtra("userEntityProfile", spredCastEntity.get_creator());
-                    _context.startActivity(intent);
-                }
-            });
+            if (!_guest) {
+                holderLive._photo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(_context, ProfileActivity.class);
+                        intent.putExtra("userEntityProfile", spredCastEntity.get_creator());
+                        _context.startActivity(intent);
+                    }
+                });
+            }
+            String url = spredCastEntity.get_creator().get_picture_url().contains("http") ? spredCastEntity.get_creator().get_picture_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+spredCastEntity.get_creator().get_picture_url();
+
+            _iHomeSpredCastView.getImageProfile(url, holderLive._photo);
         }
         else if (holder.getItemViewType() == 0) {
             MyViewHolderCome holderCome = (MyViewHolderCome) holder;
@@ -208,17 +221,12 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 _context.startActivity(intent);
             }
         });
+
+        _iHomeSpredCastView.IsRemind(spredCastEntity.get_id(), myViewHolder._reminder);
     }
 
     @Override
     public int getItemCount() {
-        int item = 0;
-        if (_spredCastEntities != null) {
-            for (SpredCastEntity spredCastEntity : _spredCastEntities) {
-                if (_state == spredCastEntity.get_state() || _state == 2)
-                    ++item;
-            }
-        }
-        return item;
+        return _spredCastEntities == null ? 0 : _spredCastEntities.size();
     }
 }

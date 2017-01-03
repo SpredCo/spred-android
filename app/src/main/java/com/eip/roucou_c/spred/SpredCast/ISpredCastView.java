@@ -1,5 +1,7 @@
 package com.eip.roucou_c.spred.SpredCast;
 
+import android.widget.ImageView;
+
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 
@@ -17,4 +19,6 @@ public interface ISpredCastView {
     void cancelRefresh();
 
     void startSpredCastDetailActivity(SpredCastEntity spredCastEntity);
+
+    void getImageProfile(String url, ImageView photo_profile);
 }

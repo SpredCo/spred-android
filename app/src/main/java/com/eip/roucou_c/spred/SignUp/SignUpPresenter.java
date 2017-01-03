@@ -71,7 +71,7 @@ public class SignUpPresenter {
 //            userParams.put("password", password);
 //            userParams.put("email", email);
 //
-//            this._signUpService.createUser(userParams);
+//            this._loginGuestService.createUser(userParams);
 //        }
     }
 

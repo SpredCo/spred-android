@@ -93,7 +93,7 @@ public class InboxService extends MyService{
             @Override
             public void onResponse(Call<ConversationEntity> call, Response<ConversationEntity> response) {
                 if (response.isSuccessful()) {
-                    ConversationEntity conversationEntity = response.body();
+//                    ConversationEntity conversationEntity = response.body();
 
                     _view.changeStep("inbox");
                 }

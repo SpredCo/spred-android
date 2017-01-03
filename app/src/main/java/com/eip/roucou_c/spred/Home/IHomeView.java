@@ -1,5 +1,8 @@
 package com.eip.roucou_c.spred.Home;
 
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import com.eip.roucou_c.spred.Entities.FollowEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TagEntity;
@@ -32,5 +35,9 @@ public interface IHomeView {
     void startSpredCastDetailActivity(SpredCastEntity spredCastEntity);
 
     void startSpredCastByTagActivity(String tag_name);
+
+    void getImageProfile(String url, ImageView photo);
+
+    void isRemind(String id, LinearLayout reminder);
 }
 

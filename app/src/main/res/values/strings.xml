@@ -26,7 +26,7 @@
     <string name="signin_submit">Connexion</string>
     <string name="email_address_already_use">Adresse email déjà utilisé</string>
     <string name="wrong_length_password">Entre 4-20 caractères</string>
-    <string name="pseudo_already_use">Ce pseudo est déjè utilisé</string>
+    <string name="pseudo_already_use">Ce pseudo est déjà utilisé</string>
     <string name="wrong_email_or_password">Adresse email ou mot de passe incorrect</string>
     <string name="signin_step2_pseudo">Votre pseudo</string>
     <string name="signin_step2_submit">Valider</string>

@@ -122,7 +122,7 @@ public class SignUpService extends MyService {
                     }
                     else {
                         ApiError apiError = new ApiError(response.errorBody(), response.code(), "signUp");
-                        if (Objects.equals(apiError.get_target(), "pseudo")) {
+                        if (Objects.equals(apiError.get_target(), "pseudo") || Objects.equals(apiError.get_target(), "email")) {
                             _view.setErrorPseudo(apiError.get_target_message());
                         }
                     }

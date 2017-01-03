@@ -45,12 +45,5 @@
             android:layout_marginRight="40dp"
             style="@style/SubmitButton"/>
 
-        <CheckBox
-            android:layout_marginTop="10dp"
-            android:id="@+id/chkIos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/signup_step2_auto_connect" />
-
     </LinearLayout>
 </RelativeLayout>

@@ -1,6 +1,11 @@
 package com.eip.roucou_c.spred.Home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,7 +25,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.algolia.search.saas.AlgoliaException;
@@ -37,15 +45,40 @@ import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
 import com.eip.roucou_c.spred.Inbox.InboxActivity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.ServiceGeneratorApi;
+import com.eip.roucou_c.spred.SignIn.SignInActivity;
 import com.eip.roucou_c.spred.SpredCast.*;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import static com.facebook.share.internal.ShareConstants.IMAGE_URL;
 
 /**
  * Created by roucou_c on 09/09/2016.
@@ -74,57 +107,55 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     private RecyclerView _search_recycler_view;
     private SearchAdapter _search_adapter;
     private CoordinatorLayout _search_coordinatorLayout;
+    private DisplayImageOptions _displayImageOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+//        if (savedInstanceState == null) {
+
         _manager = Manager.getInstance(getApplicationContext());
 
         TokenEntity tokenEntity = _manager._tokenManager.select();
+        if (tokenEntity == null) {
+            _userEntity = null;
+        }
+
         _homePresenter = new HomePresenter(this, _manager, tokenEntity);
 
         _tabLayout = (TabLayout) findViewById(R.id.tabs);
         _viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("1", this), "En cours");
-        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("2", this), "Prévus");
-        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("3", this), "Abonnements");
-        _viewPager.setOffscreenPageLimit(3);
+        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("1", this, tokenEntity == null), "En cours");
+        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("2", this, tokenEntity == null), "Prévus");
+        if (tokenEntity != null){
+            _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("3", this, false), "Abonnements");
+            _viewPager.setOffscreenPageLimit(3);
+        }
+        else {
+            _viewPager.setOffscreenPageLimit(2);
+        }
+
         _viewPager.setAdapter(_viewPagerAdapter);
 
         _tabLayout.setupWithViewPager(_viewPager);
 
-//        for (int i = 0; i < _tabLayout.getTabCount(); i++) {
-//            TabLayout.Tab tab = _tabLayout.getTabAt(i);
-//            if (tab != null) {
-//                tab.setCustomView(_viewPagerAdapter.getTabView(i));
-//            }
-//        }
-
-//        _spredcast_live = _tabLayout.newTab();
-//        _spredcast_come = _tabLayout.newTab();
-//        _abo = _tabLayout.newTab();
-//
-//        _tabLayout.addTab(_spredcast_live, 0);
-//        _tabLayout.addTab(_spredcast_come, 1);
-//        _tabLayout.addTab(_abo, 2);
-//
-//        _viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(_tabLayout));
-//
-//        _spredcast_live.setIcon(R.drawable.ic_home_white_24dp);
-//        _spredcast_come.setIcon(R.drawable.ic_home_black_24dp);
-//        _abo.setIcon(R.drawable.ic_subscriptions_black_24dp);
-//
-//        _viewPager.addOnPageChangeListener(this);
-//        _tabLayout.setOnTabSelectedListener(this);
-
-
         initSearch();
 
-        _homePresenter.getProfile();
+        if (_userEntity == null)
+        {
+            _homePresenter.getProfile();
+            setHeaderNavigation(null);
+        }
+
+        SSLCertificateHandler.nuke();
+        _displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
     }
 
     private void initSearch() {
@@ -165,7 +196,6 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
                 }
             }
         });
-
 
         completionHandler = new CompletionHandler() {
             @Override
@@ -254,8 +284,12 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
             _drawerLayout.addDrawerListener(_drawerToggle);
 
             _navigation = (NavigationView) findViewById(R.id.navigation_view);
+
+            if (_userEntity == null) {
+                _navigation.inflateMenu(R.menu.navigation_deco);
+            }
+
             _navigation.inflateHeaderView(R.layout.navigation_header);
-            _navigation.inflateMenu(R.menu.navigation);
             _navigation.setNavigationItemSelectedListener(this);
         }
     }
@@ -328,6 +362,17 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
                 _manager._tokenManager.delete();
                 this.finish();
                 break;
+            case R.id.navigation_signIn:
+                this.finish();
+                Intent intent4 = new Intent(this, SignInActivity.class);
+                startActivity(intent4);
+                break;
+            case R.id.navigation_signUp:
+                this.finish();
+                Intent intent5 = new Intent(this, SignInActivity.class);
+                startActivity(intent5);
+                break;
+
         }
         return true;
     }
@@ -335,14 +380,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     @Override
     public void setProfile(UserEntity userEntity) {
         _userEntity = userEntity;
-
-        TextView name = (TextView) _navigation.getHeaderView(0).findViewById(R.id.user_profile_name);
-        TextView pseudo = (TextView) _navigation.getHeaderView(0).findViewById(R.id.user_profile_pseudo);
-
-        if (name != null && pseudo != null) {
-            name.setText(userEntity.get_last_name() + " " + userEntity.get_first_name());
-            pseudo.setText("@" + userEntity.get_pseudo());
-        }
+        this.setHeaderNavigation(userEntity);
+        _navigation.getMenu().clear();
+        _navigation.inflateMenu(R.menu.navigation);
+        _navigation.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -364,7 +405,9 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         fragment.cancelRefresh();
         fragment = _viewPagerAdapter.getItem(1);
         fragment.cancelRefresh();
-        fragment = _viewPagerAdapter.getItem(2);
+        if (_userEntity != null) {
+            fragment = _viewPagerAdapter.getItem(2);
+        }
         fragment.cancelRefresh();
     }
 
@@ -431,5 +474,78 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         Intent intent = new Intent(this, SpredCastByTagActivity.class);
         intent.putExtra("tag_name", tag_name);
         this.startActivity(intent);
+    }
+
+    public void setHeaderNavigation(UserEntity userEntity) {
+        TextView name = (TextView) _navigation.getHeaderView(0).findViewById(R.id.user_profile_name);
+        TextView pseudo = (TextView) _navigation.getHeaderView(0).findViewById(R.id.user_profile_pseudo);
+        final ImageView profile = (ImageView) _navigation.getHeaderView(0).findViewById(R.id.photo_profile);
+
+        String url_profile = "https://spred.tv/img/profile.jpg";
+
+        if (userEntity != null){
+            if (name != null && pseudo != null) {
+                name.setText(userEntity.get_last_name() + " " + userEntity.get_first_name());
+                pseudo.setText("@" + userEntity.get_pseudo());
+            }
+
+            String url = _userEntity.get_picture_url().contains("http") ? _userEntity.get_picture_url() : "https://"+ServiceGeneratorApi.API_BASE_URL+_userEntity.get_picture_url();
+
+            url_profile = url;
+        }
+
+        this.getImageProfile(url_profile, profile);
+    }
+
+    public static class SSLCertificateHandler {
+
+        /**
+         * Enables https connections
+         */
+        public static void nuke() {
+            try {
+                TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+                        X509Certificate[] myTrustedAnchors = new X509Certificate[0];
+                        return myTrustedAnchors;
+                    }
+
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                    }
+                } };
+
+                SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, trustAllCerts, new SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+                HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String arg0, SSLSession arg1) {
+                        return true;
+                    }
+                });
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    @Override
+    public void getImageProfile(String url, ImageView photo) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        imageLoader.displayImage(url, photo, _displayImageOptions);
+    }
+
+    @Override
+    public void isRemind(String id, LinearLayout reminder) {
+        _homePresenter.isRemind(id, reminder);
     }
 }

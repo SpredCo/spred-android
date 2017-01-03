@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.eip.roucou_c.spred.Entities.TagEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Inbox.IInboxView;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.ServiceGeneratorApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
         public TextView _name;
         public TextView _description;
         public TextView _tags;
+        public ImageView _photo_profile;
+
         private String _spredcast_id;
 
         public MyViewHolder(View view) {
@@ -42,6 +46,8 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
             _name = (TextView) view.findViewById(R.id.spredcasts_name);
             _description = (TextView) view.findViewById(R.id.spredcasts_description);
             _tags = (TextView) view.findViewById(R.id.spredcasts_tags);
+
+            _photo_profile = (ImageView) view.findViewById(R.id.profile_photo);
 
             _relativeLayout = (RelativeLayout) view.findViewById(R.id.spredcasts);
         }
@@ -84,6 +90,11 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<SpredCastsAdapter.My
                 _iSpredCastView.startSpredCastDetailActivity(spredCastEntity);
             }
         });
+
+        String url = spredCastEntity.get_creator().get_picture_url().contains("http") ? spredCastEntity.get_creator().get_picture_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+spredCastEntity.get_creator().get_picture_url();
+
+        _iSpredCastView.getImageProfile(url, holder._photo_profile);
+
     }
 
     @Override

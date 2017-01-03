@@ -1,9 +1,12 @@
 package com.eip.roucou_c.spred.Home;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.eip.roucou_c.spred.DAO.Manager;
 import com.eip.roucou_c.spred.Entities.FollowEntity;
+import com.eip.roucou_c.spred.Entities.ResultEntity;
 import com.eip.roucou_c.spred.Entities.SpredCastEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
@@ -56,10 +59,16 @@ public class HomeService extends MyService{
         @GET("users/follow")
         Call<List<FollowEntity>> getFollowing();
 
+
+        @Headers("Content-Type: application/json")
+        @GET("spredcasts/{id}/remind")
+        Call<ResultEntity> isRemind(@Path("id") String id);
+
     }
     HomeService(IHomeView view, Manager manager, TokenEntity tokenEntity) {
         super(manager);
         this._view = view;
+
         this._api = ServiceGeneratorApi.createService(IHomeService.class, "api", tokenEntity, manager);
         this._login = ServiceGeneratorApi.createService(IHomeService.class, "login", manager);
 
@@ -174,4 +183,32 @@ public class HomeService extends MyService{
             }
         });
     }
+
+    public void isRemind(String id, final LinearLayout reminder) {
+        Call<ResultEntity> call = _api.isRemind(id);
+        call.enqueue(new Callback<ResultEntity>() {
+            @Override
+            public void onResponse(Call<ResultEntity> call, Response<ResultEntity> response) {
+
+                if (!response.isSuccessful()) {
+
+                }
+                else {
+                    ResultEntity resultEntity = response.body();
+                    if (resultEntity.get_result()) {
+                        reminder.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        reminder.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultEntity> call, Throwable t) {
+            }
+        });
+    }
+
+
 }
