@@ -47,4 +47,8 @@ class HomePresenter {
     public void isRemind(String id, LinearLayout reminder) {
         _homeService.isRemind(id, reminder);
     }
+
+    public void getTrends() {
+        _homeService.getTrends();
+    }
 }

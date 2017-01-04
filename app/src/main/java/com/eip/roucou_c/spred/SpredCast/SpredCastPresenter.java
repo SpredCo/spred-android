@@ -87,6 +87,8 @@ public class SpredCastPresenter {
             params.put("tags", tagsList);
             params.put("members", membersList);
             params.put("duration", duration);
+            params.put("cover_url", "/img/cast.png");
+
             if (!user_capacity.isEmpty()) {
                 params.put("user_capacity", Integer.parseInt(user_capacity));
             }
@@ -178,5 +180,9 @@ public class SpredCastPresenter {
 
     public void getReminders(String cast_id) {
         _spredCastService.getReminders(cast_id);
+    }
+
+    public void deleteSpredCast(String spredCast_id) {
+        _spredCastService.deleteSpredCast(spredCast_id);
     }
 }

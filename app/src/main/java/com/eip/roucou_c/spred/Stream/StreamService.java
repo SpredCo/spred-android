@@ -5,6 +5,7 @@ import com.eip.roucou_c.spred.Entities.CastTokenEntity;
 import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.MyService;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
+import com.eip.roucou_c.spred.SpredCast.SpredCastService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,6 +20,7 @@ import retrofit2.http.Path;
 
 public class StreamService extends MyService {
 
+    private final IStreamService _login;
     private final IStreamService _api;
     IStreamView _iStreamView;
 
@@ -31,13 +33,23 @@ public class StreamService extends MyService {
 
     public StreamService(IStreamView iStreamView, Manager manager, TokenEntity tokenEntity) {
         super(manager);
+        this._login = ServiceGeneratorApi.createService(IStreamService.class, "login", manager);
+
         this._api = ServiceGeneratorApi.createService(IStreamService.class, "api", tokenEntity, manager);
 
         _iStreamView = iStreamView;
     }
 
     public void getCastToken(String spredCast_id) {
-        Call<CastTokenEntity> call = _api.getCastToken(spredCast_id);
+        TokenEntity tokenEntity = _manager._tokenManager.select();
+
+        Call<CastTokenEntity> call;
+        if (tokenEntity == null) {
+            call = _login.getCastToken(spredCast_id);
+        }
+        else {
+            call = _api.getCastToken(spredCast_id);
+        }
         call.enqueue(new Callback<CastTokenEntity>() {
             @Override
             public void onResponse(Call<CastTokenEntity> call, Response<CastTokenEntity> response) {

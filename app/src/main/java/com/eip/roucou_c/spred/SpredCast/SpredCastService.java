@@ -101,6 +101,10 @@ public class SpredCastService extends MyService{
         @GET("spredcasts/{cast_id}/reminders")
         Call<List<ReminderEntity>> getReminders(@Path("cast_id") String tag_id);
 
+        @Headers("Content-Type: application/json")
+        @DELETE("spredcasts/{cast_id}")
+        Call<ResultEntity> deleteSpredCast(@Path("cast_id") String cast_id);
+
     }
 
     public SpredCastService(ISpredCastView iSpredCastView, ISpredCastNewView iSpredCastNewView, ISpredCastDetailsView iSpredCastDetailsView, ISpredCastByTagView iSpredCastByTagView, Manager manager, TokenEntity tokenEntity) {
@@ -218,8 +222,8 @@ public class SpredCastService extends MyService{
                 if (response.isSuccessful()) {
                     List<SpredCastEntity> spredCastEntities = response.body();
 
-                    _iSpredCastView.populateSpredCasts(spredCastEntities);
-                    _iSpredCastView.cancelRefresh();
+                    _iSpredCastByTagView.populateSpredCasts(spredCastEntities);
+                    _iSpredCastByTagView.cancelRefresh();
                 }
 
             }
@@ -360,4 +364,20 @@ public class SpredCastService extends MyService{
         });
     }
 
+    public void deleteSpredCast(String cast_id) {
+        Call<ResultEntity> call = _api.deleteSpredCast(cast_id);
+        call.enqueue(new Callback<ResultEntity>() {
+            @Override
+            public void onResponse(Call<ResultEntity> call, Response<ResultEntity> response) {
+                if (response.isSuccessful()) {
+                    _iSpredCastDetailsView.spredCastDeleted();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultEntity> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
 }

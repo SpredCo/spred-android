@@ -102,7 +102,7 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
         if (tokenEntity == null) {
             _spredCast_details_reminder_cardView.setVisibility(View.GONE);
             _spredCast_details_delete_cardView.setVisibility(View.GONE);
-            _spredCast_details_launch_cardView.setVisibility(View.GONE);
+            _spredCast_details_launch_cardView.setVisibility(View.VISIBLE);
         }
         else {
             _spredCastPresenter.getUser();
@@ -271,6 +271,12 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
             _spredCast_details_creator_cardView.setVisibility(View.GONE);
             _spredCast_details_reminder_cardView.setVisibility(View.GONE);
             _spredCast_details_delete_cardView.setVisibility(View.VISIBLE);
+            _spredCast_details_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    _spredCastPresenter.deleteSpredCast(_spredCast.get_id());
+                }
+            });
         }
         else {
 
@@ -292,5 +298,10 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
     @Override
     public void setReminders(List<ReminderEntity> reminderEntities) {
         _spredCast_details_members.setText(reminderEntities.size()+" Personnes participerons");
+    }
+
+    @Override
+    public void spredCastDeleted() {
+        this.finish();
     }
 }

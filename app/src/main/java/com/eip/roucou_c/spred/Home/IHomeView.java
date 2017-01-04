@@ -39,5 +39,9 @@ public interface IHomeView {
     void getImageProfile(String url, ImageView photo);
 
     void isRemind(String id, LinearLayout reminder);
+
+    void getTrends();
+
+    void populateTrends(List<SpredCastEntity> spredCastEntities);
 }
 

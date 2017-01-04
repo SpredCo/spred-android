@@ -173,4 +173,8 @@ public final class ServiceWeb {
         JSONObject json = new JSONObject(params);
         this._webSocket._socket.emit(WebSocket.UP_QUESTION, json);
     }
+
+    public void disconnect() {
+        this._webSocket._socket.disconnect();
+    }
 }

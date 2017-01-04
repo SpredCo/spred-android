@@ -50,4 +50,5 @@
     <string name="spredcast_dateError">Veuillez sasir une date valide</string>
     <string name="spredcast_timeError">Veuillez saisir une heure valide</string>
     <string name="search_title">rechercher</string>
+    <string name="invalid_grant">Adresse email ou mot de passe incorrect</string>
 </resources>

@@ -6,6 +6,7 @@ import com.eip.roucou_c.spred.Errors.ApiError;
 import com.eip.roucou_c.spred.ISignInSignUpView;
 import com.eip.roucou_c.spred.Interceptor.AuthInterceptor;
 import com.eip.roucou_c.spred.MyService;
+import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
 import com.eip.roucou_c.spred.SignUp.SignUpPresenter;
 import com.eip.roucou_c.spred.SignUp.SignUpService;
@@ -90,6 +91,9 @@ public class SignInService extends MyService {
                     signInOnResponse(response);
                 }
                 else {
+                    if (response.code() == 403) {
+                        _view.setError(R.string.invalid_grant);
+                    }
                 }
             }
 

@@ -9,6 +9,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/navbar_background</item>
         <item name="colorAccent">@color/navbar_background</item>
+        <item name="colorControlNormal">@color/white</item>
 
     </style>
 
@@ -46,6 +47,11 @@
 
     </style>
 
+    <style name="ToolBarStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">#fff</item>
+        <item name="android:colorControlNormal">#fff</item>
+
+    </style>
     <color name="navbar_background">#55AA55</color>
     <color name="cancel">#ff000d</color>
 </resources>

@@ -200,6 +200,7 @@ public class StreamActivity extends AppCompatActivity implements IStreamView, Vi
 
         fragment.stopWebviewLoading();
 
+        _serviceWeb.disconnect();
         this.finish();
     }
 

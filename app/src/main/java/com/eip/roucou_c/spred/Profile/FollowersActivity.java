@@ -71,7 +71,7 @@ public class FollowersActivity extends AppCompatActivity implements IFollowersVi
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        _toolbar.setTitle("Vos followers");
+        getSupportActionBar().setTitle("Vos followers");
     }
 
     @Override

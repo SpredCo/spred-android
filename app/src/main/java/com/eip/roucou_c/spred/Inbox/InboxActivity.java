@@ -77,6 +77,7 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     private ConversationEntity _currentConversation = null;
     private RecyclerView _inbox_conversation_recyclerView;
     private DisplayImageOptions _displayImageOptions;
+    private TextView _empty_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +128,8 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
 
                 _inbox_floatActionButton = (FloatingActionButton) findViewById(R.id.inbox_floatActionButton);
                 _inbox_floatActionButton.setOnClickListener(this);
+
+                _empty_view = (TextView) findViewById(R.id.empty_view);
 
                 _inboxPresenter.getInbox();
                 getSupportActionBar().setTitle("Messagerie");
@@ -208,6 +211,14 @@ public class InboxActivity extends AppCompatActivity implements IInboxView, Swip
     public void populateInbox(List<ConversationEntity> conversationEntities) {
         if (conversationEntities.isEmpty()) {
             _inboxPresenter.addConversation();
+        }
+        if (conversationEntities.size() == 0) {
+            _empty_view.setVisibility(View.VISIBLE);
+            _inbox_recycler_view.setVisibility(View.GONE);
+        }
+        else {
+            _empty_view.setVisibility(View.GONE);
+            _inbox_recycler_view.setVisibility(View.VISIBLE);
         }
         if (_inbox_adapter != null) {
             _inbox_adapter.set_conversationEntities(conversationEntities);

@@ -3,12 +3,14 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:layout_alignParentTop="true"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
+        app:titleTextAppearance="@style/ToolBarStyle"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/navbar_background"/>
 
@@ -49,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/header_cover_image"
-                android:background="#ebef4a4a"
+                android:background="@color/navbar_background"
                 android:paddingBottom="24dp">
 
 

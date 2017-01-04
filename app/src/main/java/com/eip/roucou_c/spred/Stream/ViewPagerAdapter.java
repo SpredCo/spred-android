@@ -238,12 +238,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
         }
 
         public void stopWebviewLoading() {
-            mWebRTCWebView.clearHistory();
-            mWebRTCWebView.clearCache(true);
             mWebRTCWebView.loadUrl("about:blank");
-            mWebRTCWebView.freeMemory();
-            mWebRTCWebView.pauseTimers();
-            mWebRTCWebView = null;
         }
     }
 

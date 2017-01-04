@@ -174,7 +174,7 @@ public class SpredCastsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                 });
             }
-            String url = spredCastEntity.get_creator().get_picture_url().contains("http") ? spredCastEntity.get_creator().get_picture_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+spredCastEntity.get_creator().get_picture_url();
+            String url = spredCastEntity.get_cover_url().contains("http") ? spredCastEntity.get_cover_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+spredCastEntity.get_cover_url();
 
             _iHomeSpredCastView.getImageProfile(url, holderLive._photo);
         }

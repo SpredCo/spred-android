@@ -14,6 +14,7 @@
             android:layout_alignParentTop="true"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            app:titleTextAppearance="@style/ToolBarStyle"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/navbar_background"/>
 
@@ -34,7 +35,7 @@
             android:layout_marginTop="-20dp"
             android:layout_below="@id/searchBar"
             android:background="@android:drawable/dialog_holo_light_frame"
-            android:elevation="2dp">
+            android:elevation="11dp">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/search_recyclerView"

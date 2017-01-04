@@ -48,6 +48,10 @@ public class SpredCastEntity implements Serializable {
     @SerializedName("user_count")
     private int _user_count;
 
+    @SerializedName("cover_url")
+    private String _cover_url;
+
+
     public String get_id() {
         return _id;
     }
@@ -138,6 +142,10 @@ public class SpredCastEntity implements Serializable {
 
     public int get_user_count() {
         return _user_count;
+    }
+
+    public String get_cover_url() {
+        return _cover_url;
     }
 }
 

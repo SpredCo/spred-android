@@ -131,12 +131,13 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("1", this, tokenEntity == null), "En cours");
         _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("2", this, tokenEntity == null), "Prévus");
+        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("3", this, tokenEntity == null), "Tendance");
         if (tokenEntity != null){
-            _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("3", this, false), "Abonnements");
-            _viewPager.setOffscreenPageLimit(3);
+            _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance("4", this, false), "Abos");
+            _viewPager.setOffscreenPageLimit(4);
         }
         else {
-            _viewPager.setOffscreenPageLimit(2);
+            _viewPager.setOffscreenPageLimit(3);
         }
 
         _viewPager.setAdapter(_viewPagerAdapter);
@@ -225,8 +226,9 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     @Override
     protected void onResume() {
         super.onResume();
-//        _homePresenter.getAbo();
-//        _homePresenter.getSpredCasts(1);
+        _homePresenter.getAbo();
+        _homePresenter.getSpredCasts(1);
+        _homePresenter.getSpredCasts(0);
     }
 
     @Override
@@ -405,8 +407,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         fragment.cancelRefresh();
         fragment = _viewPagerAdapter.getItem(1);
         fragment.cancelRefresh();
+        fragment = _viewPagerAdapter.getItem(2);
+        fragment.cancelRefresh();
         if (_userEntity != null) {
-            fragment = _viewPagerAdapter.getItem(2);
+            fragment = _viewPagerAdapter.getItem(3);
         }
         fragment.cancelRefresh();
     }
@@ -423,7 +427,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
 
     @Override
     public void setAbo(List<FollowEntity> followEntities) {
-        ViewPagerAdapter.TabFragment fragment = _viewPagerAdapter.getItem(2);
+        ViewPagerAdapter.TabFragment fragment = _viewPagerAdapter.getItem(3);
         fragment.populateAbo(followEntities);
     }
 
@@ -547,5 +551,16 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
     @Override
     public void isRemind(String id, LinearLayout reminder) {
         _homePresenter.isRemind(id, reminder);
+    }
+
+    @Override
+    public void getTrends() {
+        _homePresenter.getTrends();
+    }
+
+    @Override
+    public void populateTrends(List<SpredCastEntity> spredCastEntities) {
+        ViewPagerAdapter.TabFragment fragment = _viewPagerAdapter.getItem(2);
+        fragment.populateSpredCasts(spredCastEntities);
     }
 }

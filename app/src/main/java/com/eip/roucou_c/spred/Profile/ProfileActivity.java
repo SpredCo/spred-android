@@ -110,14 +110,10 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
                 _profile_photo = (ImageView) findViewById(R.id.profile_photo);
 
                 _profile_edit = (ImageView) findViewById(R.id.profile_edit);
-                if (_ownUser) {
-                    _profile_edit.setOnClickListener(this);
+                _profile_edit.setOnClickListener(this);
 
-                    getSupportActionBar().setTitle(getString(R.string.profile_title));
-                }
-                else {
-                    _profile_linearLayout_followers.setVisibility(View.GONE);
-                }
+                getSupportActionBar().setTitle("Profil");
+                _profile_linearLayout_followers.setVisibility(View.GONE);
                 break;
             case "editProfile":
                 setContentView(R.layout.profile_edit);
@@ -152,6 +148,7 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
         setSupportActionBar(_toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Profil");
     }
 
 

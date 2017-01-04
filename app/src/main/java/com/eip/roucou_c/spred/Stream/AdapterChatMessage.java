@@ -56,7 +56,7 @@ public class AdapterChatMessage extends RecyclerView.Adapter<AdapterChatMessage.
     public int getItemViewType(int position) {
         ChatEntity chatEntity = chatEntities.get(position);
 
-        if (Objects.equals(chatEntity.get_sender(), _userEntity.get_pseudo())) {
+        if (_userEntity != null && Objects.equals(chatEntity.get_sender(), _userEntity.get_pseudo())) {
             return 1;
         }
         else {

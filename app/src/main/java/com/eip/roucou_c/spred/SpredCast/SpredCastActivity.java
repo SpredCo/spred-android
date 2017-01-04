@@ -99,6 +99,9 @@ public class SpredCastActivity extends AppCompatActivity implements ISpredCastVi
         setSupportActionBar(_toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setTitle("Mes SpredCasts");
+
     }
 
     @Override

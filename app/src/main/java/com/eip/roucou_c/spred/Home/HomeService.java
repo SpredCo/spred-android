@@ -64,6 +64,10 @@ public class HomeService extends MyService{
         @GET("spredcasts/{id}/remind")
         Call<ResultEntity> isRemind(@Path("id") String id);
 
+        @Headers("Content-Type: application/json")
+        @GET("feed/trend")
+        Call<List<SpredCastEntity>> getTrends();
+
     }
     HomeService(IHomeView view, Manager manager, TokenEntity tokenEntity) {
         super(manager);
@@ -210,5 +214,25 @@ public class HomeService extends MyService{
         });
     }
 
+    public void getTrends() {
+        Call<List<SpredCastEntity>> call = _login.getTrends();
+        call.enqueue(new Callback<List<SpredCastEntity>>() {
+            @Override
+            public void onResponse(Call<List<SpredCastEntity>> call, Response<List<SpredCastEntity>> response) {
+                if (response.isSuccessful()) {
+                    List<SpredCastEntity> spredCastEntities = response.body();
+
+                    _view.populateTrends(spredCastEntities);
+                    _view.cancelRefresh();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<SpredCastEntity>> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
 
 }

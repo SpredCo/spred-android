@@ -14,4 +14,6 @@ public interface ISpredCastDetailsView {
     void setUserEntity(UserEntity userEntity);
 
     void setReminders(List<ReminderEntity> reminderEntities);
+
+    void spredCastDeleted();
 }

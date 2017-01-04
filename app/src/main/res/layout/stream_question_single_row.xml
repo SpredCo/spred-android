@@ -52,11 +52,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
-                android:layout_marginRight="80dp"
+                android:layout_marginRight="20dp"
                 android:textColor="@color/title_gray"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="5dp"
+                android:hint="ezfmkj ezfj fmjkf zmefjzmefj efzmefjzfjefzlefh fezfezjkfzejkfze zejfh lzeflkjhzeflkjzefljkj"
                 android:paddingBottom="5dp"/>
 
         </LinearLayout>
@@ -66,7 +67,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_weight="0.5">
+        android:layout_marginEnd="10dp"
+        android:layout_weight="0">
 
         <ImageButton
             android:id="@+id/stream_question_down"
