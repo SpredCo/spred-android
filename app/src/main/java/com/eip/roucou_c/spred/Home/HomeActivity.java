@@ -43,6 +43,7 @@ import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Home.TabLayout.ViewPagerAdapter;
 import com.eip.roucou_c.spred.Inbox.InboxActivity;
+import com.eip.roucou_c.spred.IntroActivity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
 import com.eip.roucou_c.spred.ServiceGeneratorApi;
@@ -68,6 +69,7 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
@@ -119,6 +121,9 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
         _manager = Manager.getInstance(getApplicationContext());
 
         TokenEntity tokenEntity = _manager._tokenManager.select();
+
+        tokenEntity = autoLogin(tokenEntity);
+
         if (tokenEntity == null) {
             _userEntity = null;
         }
@@ -158,6 +163,27 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
                 .cacheOnDisk(true)
                 .build();
     }
+
+    private TokenEntity autoLogin(TokenEntity tokenEntity) {
+        if (tokenEntity != null) {
+            if (isValidAccessToken(tokenEntity.get_expire_access_token())) {
+            } else {
+                _manager._tokenManager.delete();
+                return null;
+            }
+        }
+        return tokenEntity;
+    }
+
+    public boolean isValidAccessToken(String expireAccess_token) {
+        Date date = new Date();
+
+        if (date.getTime() > Long.parseLong(expireAccess_token)) {
+            return false;
+        }
+        return true;
+    }
+
 
     private void initSearch() {
         _search_recycler_view = (RecyclerView) findViewById(R.id.search_recyclerView);
@@ -363,6 +389,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, ViewPa
             case R.id.navigation_logout:
                 _manager._tokenManager.delete();
                 this.finish();
+                Intent intent1 = getIntent();
+                startActivity(intent1);
                 break;
             case R.id.navigation_signIn:
                 this.finish();

@@ -1,6 +1,7 @@
 package com.eip.roucou_c.spred.Stream;
 
 import android.annotation.TargetApi;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +78,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
         private RecyclerView _stream_question_recyclerView;
         private CastTokenEntity _castTokenEntity;
         private WebView mWebRTCWebView;
+        private Toolbar _toolbar;
 
         public static TabFragment newInstance(int type, IStreamView iStreamView, UserEntity userEntity, SpredCastEntity spredCast) {
             TabFragment fragment = new TabFragment();
@@ -97,6 +100,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
             switch (_type) {
                 case 1:
                     rootView = inflater.inflate(R.layout.stream_chat, container, false);
+
+                    _toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+                    _toolbar.setTitle("Chat");
+
                     _adapterChatMessage = new AdapterChatMessage(_userEntity, _iStreamView);
 
                     _stream_chat_send = (Button) rootView.findViewById(R.id.stream_chat_send);
@@ -128,11 +135,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.stream_video, container, false);
+
+                    _toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+                    _toolbar.setTitle("Stream");
+
                     mWebRTCWebView = (WebView) rootView.findViewById(R.id.webview);
 
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.stream_qestions, container, false);
+
+                    _toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+                    _toolbar.setTitle("Questions");
 
                     _adapterQuestion = new AdapterQuestion(_userEntity, _iStreamView);
 
@@ -240,6 +254,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
         public void stopWebviewLoading() {
             mWebRTCWebView.loadUrl("about:blank");
         }
-    }
 
+        public void setTitle(String title) {
+            if (_toolbar != null) {
+                _toolbar.setTitle(title);
+            }
+        }
+    }
 }

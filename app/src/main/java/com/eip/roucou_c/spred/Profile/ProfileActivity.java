@@ -109,11 +109,15 @@ public class ProfileActivity extends AppCompatActivity implements IProfileView, 
 
                 _profile_photo = (ImageView) findViewById(R.id.profile_photo);
 
-                _profile_edit = (ImageView) findViewById(R.id.profile_edit);
-                _profile_edit.setOnClickListener(this);
+                if (_userEntity != null) {
+                    _profile_edit = (ImageView) findViewById(R.id.profile_edit);
+                    _profile_edit.setOnClickListener(this);
+                }
 
                 getSupportActionBar().setTitle("Profil");
                 _profile_linearLayout_followers.setVisibility(View.GONE);
+
+                _profilePresenter.getProfile(_ownUser);
                 break;
             case "editProfile":
                 setContentView(R.layout.profile_edit);

@@ -20,7 +20,11 @@ import com.eip.roucou_c.spred.Entities.TokenEntity;
 import com.eip.roucou_c.spred.Entities.UserEntity;
 import com.eip.roucou_c.spred.Profile.ProfileActivity;
 import com.eip.roucou_c.spred.R;
+import com.eip.roucou_c.spred.ServiceGeneratorApi;
 import com.eip.roucou_c.spred.Stream.StreamActivity;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,6 +67,7 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
     private CardView _spredCast_details_launch_cardView;
     private FancyButton _spredCast_details_launch;
     private TextView _tags;
+    private DisplayImageOptions _displayImageOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +129,11 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
         {
             _spredCastPresenter.getIsRemind(_spredCast.get_id());
         }
-    }
+
+        _displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();    }
 
     private void populateSpredCast(final SpredCastEntity spredCastEntity) {
 
@@ -209,7 +218,9 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
             }
         });
 
+        String url = spredCastEntity.get_creator().get_picture_url().contains("http") ? spredCastEntity.get_creator().get_picture_url() : "https://"+ ServiceGeneratorApi.API_BASE_URL+spredCastEntity.get_creator().get_picture_url();
 
+        this.getImageProfile(url, _spredCast_details_creator_photo);
     }
 
     @Override
@@ -304,4 +315,15 @@ public class SpredCastDetailsActivity extends AppCompatActivity implements ISpre
     public void spredCastDeleted() {
         this.finish();
     }
+
+    public void getImageProfile(String url, ImageView photo) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+
+        imageLoader.displayImage(url, photo, _displayImageOptions);
+    }
+
 }

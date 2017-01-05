@@ -15,7 +15,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <activity android:name=".IntroActivity">
+
+        <activity android:name=".Home.HomeActivity">
+            <meta-data android:name="android.app.searchable"
+                android:resource="@layout/search" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,10 +26,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUp.SignUpActivity"/>
-        <activity android:name=".Home.HomeActivity">
-            <meta-data android:name="android.app.searchable"
-                android:resource="@layout/search" />
-        </activity>
         <activity android:name=".SignIn.SignInActivity"/>
         <activity android:name=".Profile.ProfileActivity" />
         <activity android:name=".Profile.FollowersActivity" />

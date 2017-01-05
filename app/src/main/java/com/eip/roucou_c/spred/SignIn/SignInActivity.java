@@ -164,7 +164,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         this.finish();
-        Intent intent = new Intent(SignInActivity.this, IntroActivity.class);
+        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 

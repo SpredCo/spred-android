@@ -95,96 +95,98 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = null;
 
-            switch (step) {
-                case "1":
-                    rootView = inflater.inflate(R.layout.tab_spredcast, container, false);
+            if (step != null) {
+                switch (step) {
+                    case "1":
+                        rootView = inflater.inflate(R.layout.tab_spredcast, container, false);
 
-                    _spredCast_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
-                    _spredCast_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            _iHomeView.getSpredCasts(1);
-                        }
-                    });
-                    _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
+                        _spredCast_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+                        _spredCast_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                            @Override
+                            public void onRefresh() {
+                                _iHomeView.getSpredCasts(1);
+                            }
+                        });
+                        _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
 
-                    _spredCast_adapter = new SpredCastsAdapter(this, 1, getContext(), _guest);
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-                    _spredCast_recycler_view.setLayoutManager(mLayoutManager);
-                    _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
-                    _spredCast_recycler_view.setAdapter(_spredCast_adapter);
+                        _spredCast_adapter = new SpredCastsAdapter(this, 1, getContext(), _guest);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                        _spredCast_recycler_view.setLayoutManager(mLayoutManager);
+                        _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
+                        _spredCast_recycler_view.setAdapter(_spredCast_adapter);
 
-                    _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
+                        _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
 
-                    _iHomeView.getSpredCasts(1);
+                        _iHomeView.getSpredCasts(1);
 
-                    break;
-                case "2":
-                    rootView = inflater.inflate(R.layout.tab_spredcast, container, false);
+                        break;
+                    case "2":
+                        rootView = inflater.inflate(R.layout.tab_spredcast, container, false);
 
-                    _spredCast_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
-                    _spredCast_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            _iHomeView.getSpredCasts(0);
-                        }
-                    });
-                    _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
+                        _spredCast_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+                        _spredCast_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                            @Override
+                            public void onRefresh() {
+                                _iHomeView.getSpredCasts(0);
+                            }
+                        });
+                        _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
 
-                    _spredCast_adapter = new SpredCastsAdapter(this, 0, getContext(), _guest);
-                    RecyclerView.LayoutManager mLayoutManager2 = new LinearLayoutManager(getContext());
-                    _spredCast_recycler_view.setLayoutManager(mLayoutManager2);
-                    _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
-                    _spredCast_recycler_view.setAdapter(_spredCast_adapter);
+                        _spredCast_adapter = new SpredCastsAdapter(this, 0, getContext(), _guest);
+                        RecyclerView.LayoutManager mLayoutManager2 = new LinearLayoutManager(getContext());
+                        _spredCast_recycler_view.setLayoutManager(mLayoutManager2);
+                        _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
+                        _spredCast_recycler_view.setAdapter(_spredCast_adapter);
 
-                    _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
+                        _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
 
-                    _iHomeView.getSpredCasts(0);
-                    break;
-                case "3":
-                    rootView = inflater.inflate(R.layout.tab_spredcast, container, false);
+                        _iHomeView.getSpredCasts(0);
+                        break;
+                    case "3":
+                        rootView = inflater.inflate(R.layout.tab_spredcast, container, false);
 
-                    _spredCast_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
-                    _spredCast_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            _iHomeView.getTrends();
-                        }
-                    });
-                    _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
+                        _spredCast_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+                        _spredCast_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                            @Override
+                            public void onRefresh() {
+                                _iHomeView.getTrends();
+                            }
+                        });
+                        _spredCast_recycler_view = (RecyclerView) rootView.findViewById(R.id.spredcast_recycler_view);
 
-                    _spredCast_adapter = new SpredCastsAdapter(this, 0, getContext(), _guest);
-                    RecyclerView.LayoutManager mLayoutManager4 = new LinearLayoutManager(getContext());
-                    _spredCast_recycler_view.setLayoutManager(mLayoutManager4);
-                    _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
-                    _spredCast_recycler_view.setAdapter(_spredCast_adapter);
+                        _spredCast_adapter = new SpredCastsAdapter(this, 0, getContext(), _guest);
+                        RecyclerView.LayoutManager mLayoutManager4 = new LinearLayoutManager(getContext());
+                        _spredCast_recycler_view.setLayoutManager(mLayoutManager4);
+                        _spredCast_recycler_view.setItemAnimator(new DefaultItemAnimator());
+                        _spredCast_recycler_view.setAdapter(_spredCast_adapter);
 
-                    _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
+                        _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
 
-                    _iHomeView.getTrends();
-                    break;
-                case "4":
-                    rootView = inflater.inflate(R.layout.tab_abo, container, false);
+                        _iHomeView.getTrends();
+                        break;
+                    case "4":
+                        rootView = inflater.inflate(R.layout.tab_abo, container, false);
 
-                    _abo_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
-                    _abo_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            _iHomeView.getAbo();
-                        }
-                    });
-                    _abo_recycler_view = (RecyclerView) rootView.findViewById(R.id.abo_recycler_view);
+                        _abo_swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+                        _abo_swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                            @Override
+                            public void onRefresh() {
+                                _iHomeView.getAbo();
+                            }
+                        });
+                        _abo_recycler_view = (RecyclerView) rootView.findViewById(R.id.abo_recycler_view);
 
-                    _abo_adapter = new AboAdapter(getContext(), _iHomeView);
-                    RecyclerView.LayoutManager mLayoutManager3 = new LinearLayoutManager(getContext());
-                    _abo_recycler_view.setLayoutManager(mLayoutManager3);
-                    _abo_recycler_view.setItemAnimator(new DefaultItemAnimator());
-                    _abo_recycler_view.setAdapter(_abo_adapter);
+                        _abo_adapter = new AboAdapter(getContext(), _iHomeView);
+                        RecyclerView.LayoutManager mLayoutManager3 = new LinearLayoutManager(getContext());
+                        _abo_recycler_view.setLayoutManager(mLayoutManager3);
+                        _abo_recycler_view.setItemAnimator(new DefaultItemAnimator());
+                        _abo_recycler_view.setAdapter(_abo_adapter);
 
-                    _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
+                        _empty_view = (TextView) rootView.findViewById(R.id.empty_view);
 
-                    _iHomeView.getAbo();
-                    break;
+                        _iHomeView.getAbo();
+                        break;
+                }
             }
             return rootView;
         }

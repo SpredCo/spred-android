@@ -191,7 +191,6 @@ class ProfileService extends MyService {
 
             @Override
             public void onFailure(Call<List<FollowEntity>> call, Throwable t) {
-                Log.d("error", t.getMessage());
             }
         });
     }

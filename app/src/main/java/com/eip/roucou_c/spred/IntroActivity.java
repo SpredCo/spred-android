@@ -48,15 +48,6 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
     private void autoLogin() {
         TokenEntity tokenEntity = _manager._tokenManager.select();
 
-        if (tokenEntity != null) {
-            if (isValidAccessToken(tokenEntity.get_expire_access_token())) {
-                Intent intent = new Intent(IntroActivity.this, HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-            } else {
-
-            }
-        }
     }
 
     public boolean isValidAccessToken(String expireAccess_token) {

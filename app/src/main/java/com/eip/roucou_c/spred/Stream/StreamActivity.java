@@ -1,5 +1,6 @@
 package com.eip.roucou_c.spred.Stream;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
@@ -46,55 +47,61 @@ public class StreamActivity extends AppCompatActivity implements IStreamView, Vi
 
         setContentView(R.layout.stream);
 
-            _manager = Manager.getInstance(getApplicationContext());
-            TokenEntity tokenEntity = _manager._tokenManager.select();
-            _streamPresenter = new StreamPresenter(this, _manager, tokenEntity);
+        _manager = Manager.getInstance(getApplicationContext());
+        TokenEntity tokenEntity = _manager._tokenManager.select();
+        _streamPresenter = new StreamPresenter(this, _manager, tokenEntity);
 
-            _spredCast = (SpredCastEntity) getIntent().getSerializableExtra("spredCast");
-            _userEntity = (UserEntity) getIntent().getSerializableExtra("userEntity");
+        _spredCast = (SpredCastEntity) getIntent().getSerializableExtra("spredCast");
+        _userEntity = (UserEntity) getIntent().getSerializableExtra("userEntity");
 
-            if (_spredCast == null) {
-                this.finish();
-            }
+        if (_spredCast == null) {
+            this.finish();
+        }
 
-            _streamPresenter.getCastToken(_spredCast.get_id());
+        _streamPresenter.getCastToken(_spredCast.get_id());
 
-            _viewPager = (ViewPager) findViewById(R.id.viewpager);
+        _viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-            _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance(1, this, _userEntity, _spredCast));
-            _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance(2, this, _userEntity, _spredCast));
-            _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance(3, this, _userEntity, _spredCast));
-            _viewPager.setOffscreenPageLimit(3);
-            _viewPager.setAdapter(_viewPagerAdapter);
+        _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance(1, this, _userEntity, _spredCast));
+        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance(2, this, _userEntity, _spredCast));
+        _viewPagerAdapter.addTab(ViewPagerAdapter.TabFragment.newInstance(3, this, _userEntity, _spredCast));
+        _viewPager.setOffscreenPageLimit(3);
+        _viewPager.setAdapter(_viewPagerAdapter);
 
-            _viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    switch (position) {
-                        case 0:
-                            setTitle("Chat");
-                            break;
-                        case 1:
-                            setTitle("Stream");
-                            break;
-                        case 2:
-                            setTitle("Questions");
-                            break;
-
-                    }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
+//        ViewPagerAdapter.TabFragment tabFragment = _viewPagerAdapter.getItem(1);
+//        tabFragment.setTitle("Chat");
+//
+//        _viewPager.setCurrentItem(1);
+//        _viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                switch (position) {
+//                    case 0:
+//                        ViewPagerAdapter.TabFragment tabFragment = _viewPagerAdapter.getItem(0);
+//                        tabFragment.setTitle("Chat");
+//                        break;
+//                    case 1:
+//                        ViewPagerAdapter.TabFragment tabFragment2 = _viewPagerAdapter.getItem(1);
+//                        tabFragment2.setTitle("Stream");
+//                        break;
+//                    case 2:
+//                        ViewPagerAdapter.TabFragment tabFragment3 = _viewPagerAdapter.getItem(2);
+//                        tabFragment3.setTitle("Questions");
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
         HomeActivity.SSLCertificateHandler.nuke();
         _displayImageOptions = new DisplayImageOptions.Builder()
@@ -107,11 +114,13 @@ public class StreamActivity extends AppCompatActivity implements IStreamView, Vi
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        _toolbar = (Toolbar) findViewById(R.id.toolbar);
+//
+//        setSupportActionBar(_toolbar);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -200,7 +209,9 @@ public class StreamActivity extends AppCompatActivity implements IStreamView, Vi
 
         fragment.stopWebviewLoading();
 
-        _serviceWeb.disconnect();
+        if (_serviceWeb != null) {
+            _serviceWeb.disconnect();
+        }
         this.finish();
     }
 
